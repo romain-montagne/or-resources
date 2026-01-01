@@ -1,0 +1,13 @@
+---
+title: Quadratic Equations
+categories: [algebra]
+difficulty: easy
+---
+
+Solve \(x^2 - 5x + 6 = 0\).
+
+```{python}
+import sympy as sp
+x = sp.symbols("x")
+solution = sp.solve(x**2 - 5*x + 6, x)
+solution

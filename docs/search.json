@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "problems/quadratic.html",
+    "href": "problems/quadratic.html",
+    "title": "Quadratic Equations",
+    "section": "",
+    "text": "Solve (x^2 - 5x + 6 = 0).\nimport sympy as sp x = sp.symbols(“x”) solution = sp.solve(x**2 - 5*x + 6, x) solution"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to Math Problems",
+    "section": "",
+    "text": "Welcome to Math Problems\nThis site contains math problems with solutions powered by Quarto + Python."
+  },
+  {
+    "objectID": "problems/index.html",
+    "href": "problems/index.html",
+    "title": "Problems",
+    "section": "",
+    "text": "Quadratic equations\n\n\n\n\n\nShortest paths\nDynamic programming"
+  },
+  {
+    "objectID": "problems/index.html#browse-by-topic",
+    "href": "problems/index.html#browse-by-topic",
+    "title": "Problems",
+    "section": "",
+    "text": "Quadratic equations\n\n\n\n\n\nShortest paths\nDynamic programming"
+  },
+  {
+    "objectID": "problems/index.html#all-problems",
+    "href": "problems/index.html#all-problems",
+    "title": "Problems",
+    "section": "All problems",
+    "text": "All problems\n\nQuadratic equations\nDifficulty: Easy\nTags: algebra, equations"
+  }
+]

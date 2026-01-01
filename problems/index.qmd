@@ -1,0 +1,18 @@
+---
+title: Problems
+---
+
+## Browse by topic
+
+### Algebra
+- [Quadratic equations](quadratic.qmd)
+
+### Algorithms
+- Shortest paths
+- Dynamic programming
+
+## All problems
+
+- **Quadratic equations**  
+  Difficulty: Easy  
+  Tags: algebra, equations

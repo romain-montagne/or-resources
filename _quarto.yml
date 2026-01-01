@@ -1,0 +1,21 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Math Problems"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: problems/
+        text: Problems
+  search: true
+
+format:
+  html:
+    theme: flatly
+    toc: true
+
+execute:
+  freeze: auto
