@@ -1,37 +1,58 @@
 [
   {
-    "objectID": "problems/quadratic.html",
-    "href": "problems/quadratic.html",
-    "title": "Quadratic Equations",
+    "objectID": "problems/regle_saint_exuperienne.html",
+    "href": "problems/regle_saint_exuperienne.html",
+    "title": "The Saint-Exupéry ruler",
     "section": "",
-    "text": "Solve (x^2 - 5x + 6 = 0).\nimport sympy as sp x = sp.symbols(“x”) solution = sp.solve(x**2 - 5*x + 6, x) solution"
+    "text": "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.\n— Antoine de Saint-Exupéry\n\nThe problem is to design a ruler of \\(n\\) units using the fewest possible graduations, such that all possible integer lengths appear on the ruler. This puzzle was published by Mickaël Launay (Launay 2025)."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to Math Problems",
+    "objectID": "problems/regle_saint_exuperienne.html#problem-description",
+    "href": "problems/regle_saint_exuperienne.html#problem-description",
+    "title": "The Saint-Exupéry ruler",
     "section": "",
-    "text": "Welcome to Math Problems\nThis site contains math problems with solutions powered by Quarto + Python."
+    "text": "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.\n— Antoine de Saint-Exupéry\n\nThe problem is to design a ruler of \\(n\\) units using the fewest possible graduations, such that all possible integer lengths appear on the ruler. This puzzle was published by Mickaël Launay (Launay 2025)."
+  },
+  {
+    "objectID": "problems/regle_saint_exuperienne.html#mip-model",
+    "href": "problems/regle_saint_exuperienne.html#mip-model",
+    "title": "The Saint-Exupéry ruler",
+    "section": "MIP model",
+    "text": "MIP model\n\nParameters\n\n\\(N = \\{0,1,\\dots,n\\}\\): set of units of the ruler\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_i \\in \\{0,1\\}\\): takes value \\(1\\) if and only if there is a mark on unit \\(i\\in N\\)\n\\(\\textcolor{blue}{y}_{i,j} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if there are marks on units \\(i\\in N\\) and \\(j\\in N\\), \\(i&lt; j\\)\n\n\n\nObjective function\nThe problem is to minimize the number of marks:\n\\[\n\\min \\sum_{i \\in N} \\textcolor{blue}{x}_i\n\\]\nsubject to:\n\n\nConstraints\n\nAll possible integer lengths must appear somehow on the ruler:\n\n\\[\n\\sum_{i&lt;j, \\;j-i=k} \\textcolor{blue}{y}_{i,j} \\ge 1 \\quad \\forall k \\in N, k&gt;0 \\tag{1}\n\\]\n\nVariables \\(\\textcolor{blue}{x}_i\\) and \\(\\textcolor{blue}{y}_{i,j}\\) must be consistent:\n\n\\[\\begin{align}\n\\textcolor{blue}{y}_{i,j} &\\le \\textcolor{blue}{x}_i &\\forall i&lt;j \\tag{2}\\\\\n\\textcolor{blue}{y}_{i,j} &\\le \\textcolor{blue}{x}_j &\\forall i&lt;j  \\tag{3}\\\\\n\\textcolor{blue}{x}_i+\\textcolor{blue}{x}_j &\\le 1+\\textcolor{blue}{y}_{i,j}\n&\\forall i&lt;j \\tag{4} \\\\\n\\end{align}\\]\nConstraints \\((2)\\) and \\((3)\\) enforce \\(\\textcolor{blue}{y}_{i,j}=1\\implies \\textcolor{blue}{x}_i=1\\) and \\(\\textcolor{blue}{x}_j=1\\), constraints \\((4)\\) enforce the reciprocal relationship."
+  },
+  {
+    "objectID": "problems/regle_saint_exuperienne.html#solution",
+    "href": "problems/regle_saint_exuperienne.html#solution",
+    "title": "The Saint-Exupéry ruler",
+    "section": "Solution",
+    "text": "Solution\nSolving this problem with \\(n=20\\) takes less than a second with CBC and yields:\n\n\n\nmark\n----\n0\n1\n4\n6\n11\n18\n19\n20\n\n\nSource: mark\nSo the 20 unit ruler can be designed with \\(8\\) marks. We can check that all integer lengths do appear on the ruler (some lengths appear multiple times):\n\n\n\nlength -&gt; endpoints\n-------------------\n1 -&gt; 1 0\n1 -&gt; 19 18\n1 -&gt; 20 19\n2 -&gt; 6 4\n2 -&gt; 20 18\n3 -&gt; 4 1\n4 -&gt; 4 0\n5 -&gt; 6 1\n5 -&gt; 11 6\n6 -&gt; 6 0\n7 -&gt; 11 4\n7 -&gt; 18 11\n8 -&gt; 19 11\n9 -&gt; 20 11\n10 -&gt; 11 1\n11 -&gt; 11 0\n12 -&gt; 18 6\n13 -&gt; 19 6\n14 -&gt; 18 4\n14 -&gt; 20 6\n15 -&gt; 19 4\n16 -&gt; 20 4\n17 -&gt; 18 1\n18 -&gt; 18 0\n18 -&gt; 19 1\n19 -&gt; 19 0\n19 -&gt; 20 1\n20 -&gt; 20 0"
   },
   {
     "objectID": "problems/index.html",
     "href": "problems/index.html",
     "title": "Problems",
     "section": "",
-    "text": "Quadratic equations\n\n\n\n\n\nShortest paths\nDynamic programming"
+    "text": "The Saint-Exupéry ruler"
   },
   {
     "objectID": "problems/index.html#browse-by-topic",
     "href": "problems/index.html#browse-by-topic",
     "title": "Problems",
     "section": "",
-    "text": "Quadratic equations\n\n\n\n\n\nShortest paths\nDynamic programming"
+    "text": "The Saint-Exupéry ruler"
   },
   {
-    "objectID": "problems/index.html#all-problems",
-    "href": "problems/index.html#all-problems",
-    "title": "Problems",
-    "section": "All problems",
-    "text": "All problems\n\nQuadratic equations\nDifficulty: Easy\nTags: algebra, equations"
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "1 Welcome to OR Resources",
+    "section": "",
+    "text": "1 Welcome to OR Resources\nThis site offers a collection of problems solved using mathematical optimization techniques.\nMost problems originate from OR Stack Exchange and the math puzzles published by Le Monde."
+  },
+  {
+    "objectID": "problems/notebooks/saint_exupery_ruler.html",
+    "href": "problems/notebooks/saint_exupery_ruler.html",
+    "title": "OR Resources",
+    "section": "",
+    "text": "import pulp\n\n\nruler = [i for i in range(21)]\n\n\n# create problem\nprob = pulp.LpProblem(\"ruler\", pulp.LpMinimize)\n\n# x[i]=1 &lt;=&gt; mark on unit i\nx = pulp.LpVariable.dicts(\"x\",ruler,cat=pulp.LpBinary)\n# y[i][j]=1 &lt;=&gt; mark on units i and j\ny = pulp.LpVariable.dicts(\"y\",(ruler,ruler),cat=pulp.LpBinary)\n\n# minimize number of marks\nprob+= pulp.lpSum(x)\n\nfor i in ruler:\n    for j in ruler:\n        if j&gt;i:\n            prob+= y[i][j]&lt;= x[i]\n            prob+= y[i][j]&lt;= x[j]\n            prob+= x[i]+x[j] &lt;= y[i][j]+1\n\nfor k in ruler:\n    if k&gt;0:\n        prob+= pulp.lpSum(y[i][j] for i in ruler for j in ruler if j&gt;i if j-i==k)&gt;=1, \"length_%s\"%k\n\n# match initial conditions\nprob+= x[1]==1\nprob+= x[4]==1\nprob+= x[6]==1\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"mark\")\nprint(\"----\")\nfor i in ruler:\n    if pulp.value(x[i])&gt;0.9:\n        print(i)\n\nmark\n----\n0\n1\n4\n6\n11\n18\n19\n20\n\n\n\nprint(\"length -&gt; endpoints\")\nprint(\"-------------------\")\nfor k in ruler:\n    if k&gt;0:\n        for i in ruler:\n            for j in ruler:\n                if j&gt;i and j-i==k:\n                    if pulp.value(y[i][j])&gt;0.9:\n                        print(k,\"-&gt;\",j,i)\n\nlength -&gt; endpoints\n-------------------\n1 -&gt; 1 0\n1 -&gt; 19 18\n1 -&gt; 20 19\n2 -&gt; 6 4\n2 -&gt; 20 18\n3 -&gt; 4 1\n4 -&gt; 4 0\n5 -&gt; 6 1\n5 -&gt; 11 6\n6 -&gt; 6 0\n7 -&gt; 11 4\n7 -&gt; 18 11\n8 -&gt; 19 11\n9 -&gt; 20 11\n10 -&gt; 11 1\n11 -&gt; 11 0\n12 -&gt; 18 6\n13 -&gt; 19 6\n14 -&gt; 18 4\n14 -&gt; 20 6\n15 -&gt; 19 4\n16 -&gt; 20 4\n17 -&gt; 18 1\n18 -&gt; 18 0\n18 -&gt; 19 1\n19 -&gt; 19 0\n19 -&gt; 20 1\n20 -&gt; 20 0"
   }
 ]

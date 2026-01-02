@@ -1,3 +1,6 @@
-# Welcome to Math Problems
+# Welcome to OR Resources
 
-This site contains math problems with solutions powered by Quarto + Python.
+This site offers a collection of problems solved using mathematical optimization techniques.
+
+Most problems originate from [OR Stack Exchange](https://or.stackexchange.com/) 
+and the math puzzles published by [Le Monde](https://www.lemonde.fr/les-enigmes-maths-du-monde/).
