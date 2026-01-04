@@ -80,7 +80,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-categories','listing-source',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-categories','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
       searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
     };
@@ -130,6 +130,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -168,17 +169,8 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#browse-by-topic" id="toc-browse-by-topic" class="nav-link active" data-scroll-target="#browse-by-topic">Browse by topic</a>
-  <ul class="collapse">
-  <li><a href="#puzzles" id="toc-puzzles" class="nav-link" data-scroll-target="#puzzles">Puzzles</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -202,63 +194,84 @@ window.Quarto = {
 </header>
 
 
-<section id="browse-by-topic" class="level2">
-<h2 class="anchored" data-anchor-id="browse-by-topic">Browse by topic</h2>
-<section id="puzzles" class="level3">
-<h3 class="anchored" data-anchor-id="puzzles">Puzzles</h3>
-<ul>
-<li><a href="../problems/regle_saint_exuperienne.html">The Saint-Exupéry ruler</a></li>
-</ul>
 
 
 
-</section>
-</section>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
 <div class="listing-actions-group">
     <div class="input-group input-group-sm quarto-listing-filter">
       <span class="input-group-text"><i class="bi bi-search"></i></span>
       <input type="text" class="search form-control" placeholder="Filter">
     </div>
 </div>
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Y29tYmluYXRvcmlhbC1vcHRpbWl6YXRpb24lMkNpbnRlZ2VyLXByb2dyYW1taW5n" data-listing-file-modified-sort="1767377773326" data-listing-reading-time-sort="2" data-listing-word-count-sort="233">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../problems/regle_saint_exuperienne.html" class="no-external">The Saint-Exupéry ruler</a>
-</h3>
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="cHV6emxlJTJDZ3JpZCUyQ21vZGVsaW5n" data-listing-file-modified-sort="1767536784862" data-listing-reading-time-sort="2" data-listing-word-count-sort="321">
+<a href="../problems/numberlink.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="../problems/images/numberlink.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Numberlink
+</h5>
 <div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('Y29tYmluYXRvcmlhbC1vcHRpbWl6YXRpb24='); return false;">combinatorial-optimization</div>
+<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
 
-<div class="listing-category" onclick="window.quartoListingCategory('aW50ZWdlci1wcm9ncmFtbWluZw=='); return false;">integer-programming</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZA=='); return false;">grid</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
 
 </div>
 </div>
-<div class="metadata">
-<a href="../problems/regle_saint_exuperienne.html" class="no-external">
-<div class="metadata-value listing-source">
-LeMonde
+</div></a>
 </div>
-</a>
+<div class="g-col-1" data-index="1" data-categories="cHV6emxlJTJDbW9kZWxpbmc=" data-listing-file-modified-sort="1767560869546" data-listing-reading-time-sort="2" data-listing-word-count-sort="345">
+<a href="../problems/postman.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="../problems/images/postman.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Postman
+</h5>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
+
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1767377595461">
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../problems/notebooks/saint_exupery_ruler.html" class="no-external"></a>
-</h3>
+</div></a>
 </div>
-<div class="metadata">
-<a href="../problems/notebooks/saint_exupery_ruler.html" class="no-external">
-</a>
+<div class="g-col-1" data-index="2" data-categories="cHV6emxlJTJDbW9kZWxpbmc=" data-listing-file-modified-sort="1767469900824" data-listing-reading-time-sort="2" data-listing-word-count-sort="291">
+<a href="../problems/saint_exupery_ruler.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="../problems/images/st_ex_ruler_6.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+The Saint-Exupéry ruler
+</h5>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
+
 </div>
+</div>
+</div></a>
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div></main> <!-- /main -->
-<script src="https://giscus.app/client.js" data-repo="romain-montagne/or-resources" data-repo-id="R_kgDOQyHv8A" data-category="General" data-category-id="DIC_kwDOQyHv8M4C0fuo" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="fr" crossorigin="anonymous" async="">
+<script src="https://giscus.app/client.js" data-repo="romain-montagne/or-resources" data-repo-id="R_kgDOQyHv8A" data-category="General" data-category-id="DIC_kwDOQyHv8M4C0fuo" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" async="">
 
 </script>
 <script id="quarto-html-after-body" type="application/javascript">

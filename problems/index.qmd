@@ -1,12 +1,9 @@
 ---
 title: "Problems"
 listing:
-  contents: .
-  fields: [title, categories, source]
+  contents: "*.qmd"
+  fields: [title, categories, image]
   filter-ui: true
+  type: grid
+  grid-columns: 3
 ---
-
-## Browse by topic
-
-### Puzzles
-- [The Saint-Exupéry ruler](regle_saint_exuperienne.qmd)

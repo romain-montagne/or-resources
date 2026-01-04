@@ -1,0 +1,7 @@
+figure figcaption {
+  text-align: center;
+}
+.embed-scale-50 {
+  max-width: 50%;
+  margin: auto;
+}

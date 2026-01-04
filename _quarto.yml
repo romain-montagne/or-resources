@@ -17,10 +17,9 @@ format:
     theme: flatly
     toc: true
     include-after-body: giscus.html
-    number-sections: true
-    number-depth: 1
     html-math-method: mathjax
     number-math: true
+    css: styles.css
 
 execute:
   freeze: auto

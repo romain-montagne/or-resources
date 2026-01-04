@@ -1,0 +1,112 @@
+---
+title: Postman
+categories: [puzzle,modeling]
+tags: [combinatorial-optimization,integer-programming]
+bibliography: references.bib
+image: images/postman.png
+#source: 
+#  - Les énigmes maths du Monde
+#  - Yet Another Math Programming Consultant 
+---
+
+## Problem description
+
+This puzzle was published by Mickaël Launay [@lemonde2025facteurmod].
+A postman delivers mail to a set of houses numbered from $1$ to $n$, arranged in a circle, 
+following these rules:
+
+- The delivery always begins at house $1$
+- After serving house $k$, the postman moves forward $k$ positions around the circle to reach the next house 
+- The delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.
+
+
+For example if $n=6$, the postman starts at house $1$, 
+then moves $1$ position to reach house $2$, then $2$ positions to reach house $4$, 
+then $4$ positions to reach house $8 \equiv 2 \pmod{6}$.
+Since house $2$ was already served, the process stops: 
+
+![](images/postman6.png){width=30% fig-align="center"}
+
+The problem is to relabel the houses such that all houses are served.
+
+## MIP model
+
+#### Parameters
+
+- $N=\{1,\dots,n\}$: set of houses
+
+#### Variables
+
+- $\textcolor{blue}{x}_{i,j} \in \{0,1\}$: takes value $1$ if and only if houses $i$ and $j$ are
+served consecutively, $i\neq j$
+- $\textcolor{blue}{r}_{i} \in N$: rank of house $i\in N$ in the delivery order
+- $\textcolor{blue}{\ell}_{i} \in N$: label of house $i\in N$
+
+#### Objective function
+
+As this is a feasibility problem, any dummy objective function is suitable:
+
+$$
+\min 0
+$$
+
+subject to:
+
+#### Constraints
+
+- All houses must be served:
+
+\begin{align}
+\sum_{j \in N, j\neq i} \textcolor{blue}{x}_{i,j}&=1 \quad \forall i \in N \\
+\sum_{j \in N , j\neq i} \textcolor{blue}{x}_{j,i}&=1 \quad \forall i \in N 
+\end{align}
+
+- No subtours:
+
+\begin{align}
+\textcolor{blue}{r}_{j} &\ge \textcolor{blue}{r}_{i}+1-n(1-\textcolor{blue}{x}_{i,j})\quad \forall i\neq j, j>1 \\
+\end{align}
+
+The above (MTZ) constraints enforce $\textcolor{blue}{x}_{i,j}=1 \implies \textcolor{blue}{r}_{j}=\textcolor{blue}{r}_{i}+1$.
+
+- All houses must be relabeled:
+
+$$
+\sum_{k \in N} \textcolor{blue}{y}_{i,k}=1 \quad \forall i \in N 
+$$
+
+- A label can only be used once:
+
+$$
+\sum_{i \in N} \textcolor{blue}{y}_{i,k}=1 \quad \forall k \in N 
+$$
+
+- Labels and successors must be consistent: 
+
+\begin{align}
+\textcolor{blue}{x}_{i,j} &\le \textcolor{blue}{y}_{i,j-i} &\forall i<j, \; j>1 \\
+\textcolor{blue}{x}_{i,j} &\le \textcolor{blue}{y}_{i,j-i+n} &\forall i>j, \; j>1
+\end{align}
+
+The above constaints enforce $\textcolor{blue}{x}_{i,j}=1 \implies \textcolor{blue}{y}_{i,j-i\pmod{n}}$.
+
+- House $1$ is first (rank and label):
+
+\begin{align}
+\textcolor{blue}{r}_{1} &= 1 \\
+\textcolor{blue}{y}_{1,1} &=1
+\end{align}
+
+## Solution
+
+Solving this problem with $n=6$ takes less than $1$ second with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
+
+![](images/postman6_sol.png){width=60% fig-align="center"}
+
+Solving this problem with $n=12$ takes less than $3$ seconds with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
+
+
+{{< embed notebooks/postman.ipynb#49f48424-8d83-475f-a08d-a77f7ca8d16d >}}
+

@@ -1,0 +1,96 @@
+---
+title: Numberlink
+categories: [puzzle,grid,modeling]
+tags: [combinatorial-optimization,integer-programming]
+bibliography: references.bib
+image: images/numberlink.png
+#source: 
+#  - Les énigmes maths du Monde
+#  - Yet Another Math Programming Consultant 
+---
+
+## Problem description
+
+This puzzle was published by Mickaël Launay [@lemonde2024trois], but it is actually a well
+known problem called a [Numberlink](https://en.wikipedia.org/wiki/Numberlink) puzzle.
+We need to connect endpoints by paths over a board with cells such that:
+
+- Each cell is part of a path
+- Paths do not cross
+
+The initial grid is illustrated below (the endpoints have different symbols but the same color):
+
+![Illustration from [@lemonde2024trois]](images/numberlink.png){width=30% fig-align="center"}
+
+We will represent this data as the following 2d grid graph:
+
+<div class="embed-scale-50">
+{{< embed notebooks/numberlink.ipynb#785df5d0-66c1-46f4-8676-1c29d23f1f33 >}}
+</div>
+
+## MIP model
+
+Erwin Kalvelagen posted a great article [@numberlink2017] on this topic. I will use one of the
+models described in the post to solve the problem.
+
+#### Parameters
+
+- $K$: set of values in the cells
+- $C$: set of cells
+- $F \subset C$: set of free cells
+- $E_k \subset C$: set of endpoint cells with value $k$
+- $N(p)$: set of adjacent (up, down, left, right) cells of cell $p \in C$
+
+#### Variables
+
+- $\textcolor{blue}{x}_{p,k} \in \{0,1\}$: takes value $1$ if and only if value $k\in K$ is assigned to cell $p\in C$
+
+#### Objective function
+
+As this is a feasibility problem, any dummy objective function is suitable:
+
+$$
+\min 0
+$$
+
+subject to:
+
+#### Constraints
+
+- All free cells must be assigned exactly one value:
+
+$$
+\sum_{k \in K} \textcolor{blue}{x}_{p,k}=1 \quad \forall p \in F
+$$
+
+- All endpoints must be assigned their given value:
+
+$$
+\textcolor{blue}{x}_{p,k}=1 \quad \forall p \in E_k, \; \forall k \in K
+$$
+
+- If cell $p$ is not an endpoint and takes value $k$, then two of its neighbors must also take value $k$: 
+
+$$
+-L_p(1-\textcolor{blue}{x}_{p,k})+2 \le
+\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} 
+\le 2 +U_p(1-\textcolor{blue}{x}_{p,k}) \quad \forall p \in F 
+$$
+
+Since a cell has at most $4$ neighbors, $U_p$ is bounded by $2$. $L_p$ can be set to $2$ for every cell.
+
+
+- If cell $p$ is an endpoint with value $k$, then one of its neighbors must take value $k$:
+
+$$
+\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} = 1 \quad \forall p \in E_k, \; \forall k \in K 
+$$
+
+## Solution
+
+Solving this problem takes less than a second with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
+
+<div class="embed-scale-50">
+{{< embed notebooks/numberlink.ipynb#26c45c07 >}}
+</div>
