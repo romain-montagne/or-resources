@@ -1,6 +1,6 @@
 ---
 title: Postman
-categories: [puzzle,modeling]
+categories: [puzzle,modeling,routing]
 tags: [combinatorial-optimization,integer-programming]
 bibliography: references.bib
 image: images/postman.png
@@ -15,9 +15,9 @@ This puzzle was published by Mickaël Launay [@lemonde2025facteurmod].
 A postman delivers mail to a set of houses numbered from $1$ to $n$, arranged in a circle, 
 following these rules:
 
-- The delivery always begins at house $1$
-- After serving house $k$, the postman moves forward $k$ positions around the circle to reach the next house 
-- The delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.
+- the delivery always begins at house $1$;
+- after serving house $k$, the postman moves forward $k$ positions around the circle to reach the next house;
+- the delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.
 
 
 For example if $n=6$, the postman starts at house $1$, 
@@ -84,11 +84,11 @@ $$
 - Labels and successors must be consistent: 
 
 \begin{align}
-\textcolor{blue}{x}_{i,j} &\le \textcolor{blue}{y}_{i,j-i} &\forall i<j, \; j>1 \\
-\textcolor{blue}{x}_{i,j} &\le \textcolor{blue}{y}_{i,j-i+n} &\forall i>j, \; j>1
+\textcolor{blue}{x}_{i,j} &= \textcolor{blue}{y}_{i,j-i} &\forall i<j, \; j>1 \\
+\textcolor{blue}{x}_{i,j} &= \textcolor{blue}{y}_{i,j-i+n} &\forall i>j, \; j>1
 \end{align}
 
-The above constaints enforce $\textcolor{blue}{x}_{i,j}=1 \implies \textcolor{blue}{y}_{i,j-i\pmod{n}}$.
+The above constaints enforce $\textcolor{blue}{x}_{i,j}=1 \Leftrightarrow \textcolor{blue}{y}_{i,j-i\pmod{n}}=1$.
 
 - House $1$ is first (rank and label):
 
@@ -99,12 +99,12 @@ The above constaints enforce $\textcolor{blue}{x}_{i,j}=1 \implies \textcolor{bl
 
 ## Solution
 
-Solving this problem with $n=6$ takes less than $1$ second with the default solver
+Solving this problem with $n=6$ takes less than a second with the default solver
 in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
 ![](images/postman6_sol.png){width=60% fig-align="center"}
 
-Solving this problem with $n=12$ takes less than $3$ seconds with the default solver
+Solving this problem with $n=12$ takes less than a second with the default solver
 in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
 

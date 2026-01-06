@@ -32,14 +32,14 @@
     "href": "problems/numberlink.html",
     "title": "Numberlink",
     "section": "",
-    "text": "This puzzle was published by Mickaël Launay (Launay 2024), but it is actually a well known problem called a Numberlink puzzle. We need to connect endpoints by paths over a board with cells such that:\n\nEach cell is part of a path\nPaths do not cross\n\nThe initial grid is illustrated below (the endpoints have different symbols but the same color):\n\n\n\nIllustration from (Launay 2024)\n\n\nWe will represent this data as the following 2d grid graph:\n\n\n\n\n\n\n\n\n\n\n\nSource: numberlink.ipynb"
+    "text": "This puzzle was published by Mickaël Launay (Launay 2024), but it is actually a well known problem called a Numberlink puzzle. We need to connect endpoints by paths over a board with cells such that:\n\neach cell is part of a path;\npaths do not cross.\n\nThe initial grid is illustrated below (the endpoints have different symbols but the same color):\n\n\n\nIllustration from (Launay 2024)\n\n\nWe will represent this data as the following 2d grid graph:\n\n\n\n\n\n\n\n\n\n\n\nSource: numberlink.ipynb"
   },
   {
     "objectID": "problems/numberlink.html#problem-description",
     "href": "problems/numberlink.html#problem-description",
     "title": "Numberlink",
     "section": "",
-    "text": "This puzzle was published by Mickaël Launay (Launay 2024), but it is actually a well known problem called a Numberlink puzzle. We need to connect endpoints by paths over a board with cells such that:\n\nEach cell is part of a path\nPaths do not cross\n\nThe initial grid is illustrated below (the endpoints have different symbols but the same color):\n\n\n\nIllustration from (Launay 2024)\n\n\nWe will represent this data as the following 2d grid graph:\n\n\n\n\n\n\n\n\n\n\n\nSource: numberlink.ipynb"
+    "text": "This puzzle was published by Mickaël Launay (Launay 2024), but it is actually a well known problem called a Numberlink puzzle. We need to connect endpoints by paths over a board with cells such that:\n\neach cell is part of a path;\npaths do not cross.\n\nThe initial grid is illustrated below (the endpoints have different symbols but the same color):\n\n\n\nIllustration from (Launay 2024)\n\n\nWe will represent this data as the following 2d grid graph:\n\n\n\n\n\n\n\n\n\n\n\nSource: numberlink.ipynb"
   },
   {
     "objectID": "problems/numberlink.html#mip-model",
@@ -63,11 +63,39 @@
     "text": "import pulp\nimport networkx as nx\nimport math\n\n\nn=12\nG = nx.complete_graph(n)\n\nmapping = {i: i + 1 for i in G.nodes()}\nG = nx.relabel_nodes(G, mapping)\n\nG = G.to_directed()\n\npos = {}\nfor i, node in enumerate(sorted(G.nodes())):\n    theta = math.pi/2 - (2*math.pi*i/n)  \n    pos[node] = (math.cos(theta), math.sin(theta))\nnx.draw(G, pos, with_labels=True, node_size=600)\n\n\n\n\n\n\n\n\n\nlabels = [l for l in range(1,n+1)]\n\n\nprob = pulp.LpProblem(\"postman\",pulp.LpMinimize)\n\n# variables\nx = pulp.LpVariable.dicts(\"x\",G.edges(),cat=pulp.LpBinary)\nr = pulp.LpVariable.dicts(\"r\",G.nodes(),lowBound=1,upBound=n,cat=pulp.LpInteger)\nl = pulp.LpVariable.dicts(\"l\",G.nodes(),lowBound=1,upBound=n,cat=pulp.LpInteger)\ny = pulp.LpVariable.dicts(\"y\",(G.nodes(),labels),cat=pulp.LpBinary)\n\n# dummy objective function\nprob += pulp.lpSum((pos[u][1]-pos[v][1])**2*x[(u,v)] for (u,v) in G.edges())\n\n# inflow and outflow through each node\nfor v in G.nodes():\n    prob += pulp.lpSum(x[(u,v)] for u in G.nodes() if u!=v) == 1\n    prob += pulp.lpSum(x[(v,u)] for u in G.nodes() if u!=v) == 1\n    \n# MTZ\nfor j in G.nodes():\n    if j&gt;1:\n        for i in G.nodes():\n            if i!=j:\n                prob += r[j] &gt;= r[i]+1-n*(1-x[(i,j)])\n\n# labeling\nfor i in G.nodes():\n    for j in G.nodes():\n        if j&gt;1:\n            if i&lt;j:\n                prob += x[(i,j)] &lt;= y[i][j-i]\n            if i&gt;j:\n                prob += x[(i,j)] &lt;= y[i][j-i+n]\n\n    prob += pulp.lpSum(y[i][k] for k in labels) == 1\n    prob += pulp.lpSum(k*y[i][k] for k in labels) == l[i]\n                      \nfor k in labels:\n    prob += pulp.lpSum(y[i][k] for i in G.nodes()) == 1\n\n# first node\nprob += r[1]==1\nprob += l[1]==1\n\n\nprob.solve()\n\n1\n\n\n\nrank_dict = dict(zip([i for i in r],[pulp.value(r[i])for i in r]))\nfor i in sorted(rank_dict, key=lambda k: rank_dict[k]):\n    print(\"rank\",int(pulp.value(r[i])),\"node\",i,\"label\",int(pulp.value(l[i])))\n\nrank 1 node 1 label 1\nrank 2 node 2 label 10\nrank 3 node 12 label 3\nrank 4 node 3 label 8\nrank 5 node 11 label 5\nrank 6 node 4 label 6\nrank 7 node 10 label 7\nrank 8 node 5 label 4\nrank 9 node 9 label 9\nrank 10 node 6 label 2\nrank 11 node 8 label 11\nrank 12 node 7 label 12\n\n\n\nremove = []\nfor (u,v) in G.edges():\n    if pulp.value(x[(u,v)])&lt;0.1:\n        remove.append((u,v))\n    elif v==1:\n        remove.append((u,v))\nG.remove_edges_from(remove)\n\nnx.draw(G, pos, with_labels=True, node_size=600)\noffset = 0.15  \npos_value = {v: (x, y + offset) for v, (x, y) in pos.items()}\nval_labels = {v: f\"{int(pulp.value(l[v]))}\" for v in G.nodes()}             \nnx.draw_networkx_labels(G, pos_value, labels=val_labels, font_size=10, font_color=\"#333\")"
   },
   {
-    "objectID": "problems/index.html",
-    "href": "problems/index.html",
-    "title": "Problems",
+    "objectID": "problems/notebooks/code.html",
+    "href": "problems/notebooks/code.html",
+    "title": "OR Resources",
     "section": "",
-    "text": "Numberlink\n\n\n\npuzzle\n\ngrid\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\n\n\nPostman\n\n\n\npuzzle\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Saint-Exupéry ruler\n\n\n\npuzzle\n\nmodeling\n\n\n\n\n\n\nNo matching items"
+    "text": "import pulp\n\n\ndigits = [d for d in range(10)]\nvalues = [k for k in range(10)]\nsummands = [1,2]\n\n\n# create problem\nprob = pulp.LpProblem(\"lines\", pulp.LpMaximize)\n\n# summand 1\nm = pulp.LpVariable(\"m\",cat=pulp.LpInteger)\n# summand 2\nn = pulp.LpVariable(\"n\",cat=pulp.LpInteger)\n# x[i][j][k]=1 &lt;=&gt; digit i=k for summand j\nx = pulp.LpVariable.dicts(\"x\",(digits,summands,values),cat=pulp.LpBinary)\n# z[i]=1 &lt;=&gt; digit i=0 for m and n\nz = pulp.LpVariable.dicts(\"z\",digits,cat=pulp.LpBinary)\n\n# objective\nprob+= m+n\n\n# m and n in base 10\nprob+= m == pulp.lpSum(k*x[i][1][k]*10**i for i in digits for k in values)\nprob+= n == pulp.lpSum(k*x[i][2][k]*10**i for i in digits for k in values)\n\n# one value per digit\nfor j in summands:\n    for i in digits:\n        prob+= pulp.lpSum(x[i][j][k] for k in values) == 1\n\n# all non 0 digits are distinct\nfor k in values:\n    if k&gt;0:\n        prob+= pulp.lpSum(x[i][j][k] for i in digits for j in summands) &lt;= 1\n\n# digitwise sum must produce carry\nfor i in digits:\n    if i==0:\n        prob+= pulp.lpSum(k*x[i][j][k] for j in summands for k in values) &gt;= 10\n    else:\n        prob+= pulp.lpSum(k*x[i][j][k] for j in summands for k in values) &gt;= 9*(1-z[i])\n\n# z[i] = 1 =&gt; digit i=0\nfor i in digits:\n    for j in summands:\n        prob+= z[i] &lt;= x[i][j][0]\n\n# if there is a double 0, the digits on the left are also 0\nfor i in digits:\n    if i&lt;max(digits):\n        prob+= z[i] &lt;= z[i+1]\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"m + n = \",int(pulp.value(m)),\"+\",int(pulp.value(n)),\"=\",int(pulp.value(prob.objective)))\n\nm + n =  9348 + 7652 = 17000"
+  },
+  {
+    "objectID": "problems/code.html",
+    "href": "problems/code.html",
+    "title": "Code",
+    "section": "",
+    "text": "This puzzle, published by Mickaël Launay (Launay 2025), is a secret code puzzle.\nThe code is obtained by adding two positive integers, with the following two conditions:\n\nall digits occurring in the two addends are distinct;\nwhen the addition is performed column by column, every column produces a carry.\n\nThe secret code is the largest possible sum that can be obtained from an addition satisfying both of these conditions."
+  },
+  {
+    "objectID": "problems/code.html#problem-description",
+    "href": "problems/code.html#problem-description",
+    "title": "Code",
+    "section": "",
+    "text": "This puzzle, published by Mickaël Launay (Launay 2025), is a secret code puzzle.\nThe code is obtained by adding two positive integers, with the following two conditions:\n\nall digits occurring in the two addends are distinct;\nwhen the addition is performed column by column, every column produces a carry.\n\nThe secret code is the largest possible sum that can be obtained from an addition satisfying both of these conditions."
+  },
+  {
+    "objectID": "problems/code.html#mip-model",
+    "href": "problems/code.html#mip-model",
+    "title": "Code",
+    "section": "MIP model",
+    "text": "MIP model\nIn this model, no logical reasoning is derived from the conditions, except for the fact that there are at most \\(10\\) digits.\n\nParameters\n\n\\(I=\\{0,\\dots,9\\}\\): set of digits (the first digit, \\(0\\), is at the far right)\n\\(J=\\{1,2\\}\\): set of summands\n\\(K=\\{0,1,\\dots,9\\}\\): set of possible values for a given digit\n\n\n\nVariables\n\n\\(\\textcolor{blue}{m} \\in \\mathbb{N}\\): first summand\n\\(\\textcolor{blue}{n} \\in \\mathbb{N}\\): second summand\n\\(\\textcolor{blue}{x}_{i,j,k} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if digit \\(i\\in I\\) of summand \\(j\\in J\\) has value \\(k \\in K\\)\n\\(\\textcolor{blue}{y}_{i} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if both digits \\(i \\in I\\) are zero for \\(m\\) and \\(n\\)\n\n\n\nObjective function\nThe secret code is the largest sum satisfying the given conditions:\n\\[\n\\max \\; \\textcolor{blue}{m}+\\textcolor{blue}{n}\n\\]\nsubject to:\n\n\nConstraints\n\nSummands \\(m\\) and \\(n\\) are defined in base \\(10\\):\n\n\\[\\begin{align}\n\\textcolor{blue}{m} &= \\sum_{i \\in I}\\sum_{k\\in K} k\\;10^i\\;\\textcolor{blue}{x}_{i,1,k} \\\\\n\\textcolor{blue}{n} &= \\sum_{i \\in I}\\sum_{k\\in K} k\\;10^i\\;\\textcolor{blue}{x}_{i,2,k} \\\\\n\\end{align}\\]\n\nEach digit must have exactly one value:\n\n\\[\n\\sum_{k \\in K} \\textcolor{blue}{x}_{i,j,k}=1 \\quad \\forall i \\in I,\\; \\forall j\\in J \\\\\n\\]\n\nAll digits are distinct:\n\n\\[\n\\sum_{i\\in I} \\sum_{j\\in J} \\textcolor{blue}{x}_{i,j,k} \\le 1 \\quad \\forall k\\in K \\\\\n\\]\n\nAll columnwise sums must produce a carry, except for columns of zeros:\n\n\\[\\begin{align}\n\\sum_{j \\in J} \\sum_{k\\in K} k\\; \\textcolor{blue}{x}_{1,j,k} &\\ge 10 \\\\\n\\sum_{j \\in J} \\sum_{k\\in K} k\\;\\textcolor{blue}{x}_{i,j,k} &\\ge 9(1-\\textcolor{blue}{y}_i) \\quad \\forall i \\in I,\\; i&gt;1 \\\\\n\\end{align}\\]\n\nActivated \\(\\textcolor{blue}{y}_i\\) implies a column of zeros:\n\n\\[\n\\textcolor{blue}{y}_i \\le \\textcolor{blue}{x}_{i,j,0}\\quad \\forall i\\in I, \\forall j \\in J\n\\]\n\nA column of zeros cannot be “in between” non zero columns:\n\n\\[\n\\textcolor{blue}{y}_i \\le \\textcolor{blue}{y}_{i+1}\\quad \\forall i \\in I,\\; i&lt;9\n\\]"
+  },
+  {
+    "objectID": "problems/code.html#solution",
+    "href": "problems/code.html#solution",
+    "title": "Code",
+    "section": "Solution",
+    "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\nm + n =  9348 + 7652 = 17000\n\n\nSource: code.ipynb\nWith a bit of reasoning, one can determine that the number of digits must be \\(4\\). In this case, the variables \\(\\textcolor{blue}{y}_i\\)​ can be omitted, along with the last two sets of constraints."
   },
   {
     "objectID": "index.html",
@@ -75,6 +103,13 @@
     "title": "Welcome to OR Resources",
     "section": "",
     "text": "Welcome to OR Resources\nThis site offers a collection of problems solved using mathematical optimization techniques.\nMost problems originate from OR Stack Exchange and the math puzzles published by Le Monde."
+  },
+  {
+    "objectID": "problems/index.html",
+    "href": "problems/index.html",
+    "title": "Problems",
+    "section": "",
+    "text": "Code\n\n\n\npuzzle\n\nmodeling\n\nsecret-code\n\n\n\n\n\n\n\n\n\n\n\n\n\nNumberlink\n\n\n\npuzzle\n\nmodeling\n\ngrid\n\n\n\n\n\n\n\n\n\n\n\n\n\nPostman\n\n\n\npuzzle\n\nmodeling\n\nrouting\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Saint-Exupéry ruler\n\n\n\npuzzle\n\nmodeling\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "problems/notebooks/numberlink.html",
@@ -95,27 +130,27 @@
     "href": "problems/postman.html",
     "title": "Postman",
     "section": "",
-    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nThe delivery always begins at house \\(1\\)\nAfter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house\nThe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
+    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nthe delivery always begins at house \\(1\\);\nafter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house;\nthe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
   },
   {
     "objectID": "problems/postman.html#problem-description",
     "href": "problems/postman.html#problem-description",
     "title": "Postman",
     "section": "",
-    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nThe delivery always begins at house \\(1\\)\nAfter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house\nThe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
+    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nthe delivery always begins at house \\(1\\);\nafter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house;\nthe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
   },
   {
     "objectID": "problems/postman.html#mip-model",
     "href": "problems/postman.html#mip-model",
     "title": "Postman",
     "section": "MIP model",
-    "text": "MIP model\n\nParameters\n\n\\(N=\\{1,\\dots,n\\}\\): set of houses\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i,j} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if houses \\(i\\) and \\(j\\) are served consecutively, \\(i\\neq j\\)\n\\(\\textcolor{blue}{r}_{i} \\in N\\): rank of house \\(i\\in N\\) in the delivery order\n\\(\\textcolor{blue}{\\ell}_{i} \\in N\\): label of house \\(i\\in N\\)\n\n\n\nObjective function\nAs this is a feasibility problem, any dummy objective function is suitable:\n\\[\n\\min 0\n\\]\nsubject to:\n\n\nConstraints\n\nAll houses must be served:\n\n\\[\\begin{align}\n\\sum_{j \\in N, j\\neq i} \\textcolor{blue}{x}_{i,j}&=1 \\quad \\forall i \\in N \\\\\n\\sum_{j \\in N , j\\neq i} \\textcolor{blue}{x}_{j,i}&=1 \\quad \\forall i \\in N\n\\end{align}\\]\n\nNo subtours:\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{j} &\\ge \\textcolor{blue}{r}_{i}+1-n(1-\\textcolor{blue}{x}_{i,j})\\quad \\forall i\\neq j, j&gt;1 \\\\\n\\end{align}\\]\nThe above (MTZ) constraints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\implies \\textcolor{blue}{r}_{j}=\\textcolor{blue}{r}_{i}+1\\).\n\nAll houses must be relabeled:\n\n\\[\n\\sum_{k \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall i \\in N\n\\]\n\nA label can only be used once:\n\n\\[\n\\sum_{i \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall k \\in N\n\\]\n\nLabels and successors must be consistent:\n\n\\[\\begin{align}\n\\textcolor{blue}{x}_{i,j} &\\le \\textcolor{blue}{y}_{i,j-i} &\\forall i&lt;j, \\; j&gt;1 \\\\\n\\textcolor{blue}{x}_{i,j} &\\le \\textcolor{blue}{y}_{i,j-i+n} &\\forall i&gt;j, \\; j&gt;1\n\\end{align}\\]\nThe above constaints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\implies \\textcolor{blue}{y}_{i,j-i\\pmod{n}}\\).\n\nHouse \\(1\\) is first (rank and label):\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{1} &= 1 \\\\\n\\textcolor{blue}{y}_{1,1} &=1\n\\end{align}\\]"
+    "text": "MIP model\n\nParameters\n\n\\(N=\\{1,\\dots,n\\}\\): set of houses\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i,j} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if houses \\(i\\) and \\(j\\) are served consecutively, \\(i\\neq j\\)\n\\(\\textcolor{blue}{r}_{i} \\in N\\): rank of house \\(i\\in N\\) in the delivery order\n\\(\\textcolor{blue}{\\ell}_{i} \\in N\\): label of house \\(i\\in N\\)\n\n\n\nObjective function\nAs this is a feasibility problem, any dummy objective function is suitable:\n\\[\n\\min 0\n\\]\nsubject to:\n\n\nConstraints\n\nAll houses must be served:\n\n\\[\\begin{align}\n\\sum_{j \\in N, j\\neq i} \\textcolor{blue}{x}_{i,j}&=1 \\quad \\forall i \\in N \\\\\n\\sum_{j \\in N , j\\neq i} \\textcolor{blue}{x}_{j,i}&=1 \\quad \\forall i \\in N\n\\end{align}\\]\n\nNo subtours:\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{j} &\\ge \\textcolor{blue}{r}_{i}+1-n(1-\\textcolor{blue}{x}_{i,j})\\quad \\forall i\\neq j, j&gt;1 \\\\\n\\end{align}\\]\nThe above (MTZ) constraints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\implies \\textcolor{blue}{r}_{j}=\\textcolor{blue}{r}_{i}+1\\).\n\nAll houses must be relabeled:\n\n\\[\n\\sum_{k \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall i \\in N\n\\]\n\nA label can only be used once:\n\n\\[\n\\sum_{i \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall k \\in N\n\\]\n\nLabels and successors must be consistent:\n\n\\[\\begin{align}\n\\textcolor{blue}{x}_{i,j} &= \\textcolor{blue}{y}_{i,j-i} &\\forall i&lt;j, \\; j&gt;1 \\\\\n\\textcolor{blue}{x}_{i,j} &= \\textcolor{blue}{y}_{i,j-i+n} &\\forall i&gt;j, \\; j&gt;1\n\\end{align}\\]\nThe above constaints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\Leftrightarrow \\textcolor{blue}{y}_{i,j-i\\pmod{n}}=1\\).\n\nHouse \\(1\\) is first (rank and label):\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{1} &= 1 \\\\\n\\textcolor{blue}{y}_{1,1} &=1\n\\end{align}\\]"
   },
   {
     "objectID": "problems/postman.html#solution",
     "href": "problems/postman.html#solution",
     "title": "Postman",
     "section": "Solution",
-    "text": "Solution\nSolving this problem with \\(n=6\\) takes less than \\(1\\) second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\nSolving this problem with \\(n=12\\) takes less than \\(3\\) seconds with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\n\n\n\n\n\nSource: postman.ipynb"
+    "text": "Solution\nSolving this problem with \\(n=6\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\nSolving this problem with \\(n=12\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\n\n\n\n\n\nSource: postman.ipynb"
   }
 ]

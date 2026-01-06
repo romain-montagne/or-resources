@@ -2,6 +2,7 @@
   {
     "listing": "/problems/index.html",
     "items": [
+      "/problems/code.html",
       "/problems/numberlink.html",
       "/problems/postman.html",
       "/problems/saint_exupery_ruler.html"

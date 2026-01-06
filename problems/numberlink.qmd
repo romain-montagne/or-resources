@@ -1,6 +1,6 @@
 ---
 title: Numberlink
-categories: [puzzle,grid,modeling]
+categories: [puzzle,modeling,grid]
 tags: [combinatorial-optimization,integer-programming]
 bibliography: references.bib
 image: images/numberlink.png
@@ -15,8 +15,8 @@ This puzzle was published by Mickaël Launay [@lemonde2024trois], but it is actu
 known problem called a [Numberlink](https://en.wikipedia.org/wiki/Numberlink) puzzle.
 We need to connect endpoints by paths over a board with cells such that:
 
-- Each cell is part of a path
-- Paths do not cross
+- each cell is part of a path;
+- paths do not cross.
 
 The initial grid is illustrated below (the endpoints have different symbols but the same color):
 

@@ -178,6 +178,7 @@ window.Quarto = {
   <div class="quarto-categories">
     <div class="quarto-category">puzzle</div>
     <div class="quarto-category">modeling</div>
+    <div class="quarto-category">routing</div>
   </div>
   </div>
 
@@ -199,9 +200,9 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
 <p>This puzzle was published by Mickaël Launay <span class="citation" data-cites="lemonde2025facteurmod">(<a href="#ref-lemonde2025facteurmod" role="doc-biblioref">Launay 2025</a>)</span>. A postman delivers mail to a set of houses numbered from <span class="math inline">\(1\)</span> to <span class="math inline">\(n\)</span>, arranged in a circle, following these rules:</p>
 <ul>
-<li>The delivery always begins at house <span class="math inline">\(1\)</span></li>
-<li>After serving house <span class="math inline">\(k\)</span>, the postman moves forward <span class="math inline">\(k\)</span> positions around the circle to reach the next house</li>
-<li>The delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.</li>
+<li>the delivery always begins at house <span class="math inline">\(1\)</span>;</li>
+<li>after serving house <span class="math inline">\(k\)</span>, the postman moves forward <span class="math inline">\(k\)</span> positions around the circle to reach the next house;</li>
+<li>the delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.</li>
 </ul>
 <p>For example if <span class="math inline">\(n=6\)</span>, the postman starts at house <span class="math inline">\(1\)</span>, then moves <span class="math inline">\(1\)</span> position to reach house <span class="math inline">\(2\)</span>, then <span class="math inline">\(2\)</span> positions to reach house <span class="math inline">\(4\)</span>, then <span class="math inline">\(4\)</span> positions to reach house <span class="math inline">\(8 \equiv 2 \pmod{6}\)</span>. Since house <span class="math inline">\(2\)</span> was already served, the process stops:</p>
 <div class="quarto-figure quarto-figure-center">
@@ -267,10 +268,10 @@ window.Quarto = {
 <li>Labels and successors must be consistent:</li>
 </ul>
 <p><span class="math display">\[\begin{align}
-\textcolor{blue}{x}_{i,j} &amp;\le \textcolor{blue}{y}_{i,j-i} &amp;\forall i&lt;j, \; j&gt;1 \\
-\textcolor{blue}{x}_{i,j} &amp;\le \textcolor{blue}{y}_{i,j-i+n} &amp;\forall i&gt;j, \; j&gt;1
+\textcolor{blue}{x}_{i,j} &amp;= \textcolor{blue}{y}_{i,j-i} &amp;\forall i&lt;j, \; j&gt;1 \\
+\textcolor{blue}{x}_{i,j} &amp;= \textcolor{blue}{y}_{i,j-i+n} &amp;\forall i&gt;j, \; j&gt;1
 \end{align}\]</span></p>
-<p>The above constaints enforce <span class="math inline">\(\textcolor{blue}{x}_{i,j}=1 \implies \textcolor{blue}{y}_{i,j-i\pmod{n}}\)</span>.</p>
+<p>The above constaints enforce <span class="math inline">\(\textcolor{blue}{x}_{i,j}=1 \Leftrightarrow \textcolor{blue}{y}_{i,j-i\pmod{n}}=1\)</span>.</p>
 <ul>
 <li>House <span class="math inline">\(1\)</span> is first (rank and label):</li>
 </ul>
@@ -282,13 +283,13 @@ window.Quarto = {
 </section>
 <section id="solution" class="level2">
 <h2 class="anchored" data-anchor-id="solution">Solution</h2>
-<p>Solving this problem with <span class="math inline">\(n=6\)</span> takes less than <span class="math inline">\(1\)</span> second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
+<p>Solving this problem with <span class="math inline">\(n=6\)</span> takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/postman6_sol.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
 </figure>
 </div>
-<p>Solving this problem with <span class="math inline">\(n=12\)</span> takes less than <span class="math inline">\(3\)</span> seconds with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
+<p>Solving this problem with <span class="math inline">\(n=12\)</span> takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
 <div class="quarto-embed-nb-cell">
 <div id="49f48424-8d83-475f-a08d-a77f7ca8d16d" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
