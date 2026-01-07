@@ -1,9 +1,9 @@
 ---
-title: Code
+title: Secret Code
 categories: [puzzle,modeling, secret-code]
 tags: [combinatorial-optimization,integer-programming,combinatorics,number-theory]
 bibliography: references.bib
-image: images/code.png
+image: images/gemini/secret_code.png
 #source: 
 #  - Les énigmes maths du Monde
 #  - Yet Another Math Programming Consultant 

@@ -3,7 +3,7 @@ title: Postman
 categories: [puzzle,modeling,routing]
 tags: [combinatorial-optimization,integer-programming]
 bibliography: references.bib
-image: images/postman.png
+image: images/gemini/six_houses.png
 #source: 
 #  - Les énigmes maths du Monde
 #  - Yet Another Math Programming Consultant 

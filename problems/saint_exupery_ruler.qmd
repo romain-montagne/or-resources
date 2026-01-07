@@ -4,7 +4,7 @@ categories: [puzzle,modeling]
 tags: [combinatorial-optimization,integer-programming]
 bibliography: references.bib
 source: Les énigmes maths du Monde
-image: images/st_ex_ruler_6.png
+image: images/gemini/ruler.png
 ---
 
 ## Problem description
@@ -17,7 +17,7 @@ that all possible integer lengths appear on the ruler.
 This puzzle was published by Mickaël Launay [@lemonde2025saintExupery]. An example 
 with $n=6$ is displayed in the Figure below:
 
-![](images/st_ex_ruler_6.png){width=60% fig-align="center"}
+![Illustration from [@lemonde2025saintExupery]](images/st_ex_ruler_6.png){width=60% fig-align="center"}
 
 Length $1$ can be measured with marks $0$ and $1$, length $2$ with marks $4$ and $6$, 
 length $3$ with marks $1$ and $4$, length $4$ with marks $0$ and $4$, length $5$ with 

@@ -3,7 +3,7 @@ title: Numberlink
 categories: [puzzle,modeling,grid]
 tags: [combinatorial-optimization,integer-programming]
 bibliography: references.bib
-image: images/numberlink.png
+image: images/gemini/numberlink.png
 #source: 
 #  - Les énigmes maths du Monde
 #  - Yet Another Math Programming Consultant 
@@ -22,7 +22,7 @@ The initial grid is illustrated below (the endpoints have different symbols but 
 
 ![Illustration from [@lemonde2024trois]](images/numberlink.png){width=30% fig-align="center"}
 
-We will represent this data as the following 2d grid graph:
+We will represent this data as the following 2d grid graph (where a cell is a node):
 
 <div class="embed-scale-50">
 {{< embed notebooks/numberlink.ipynb#785df5d0-66c1-46f4-8676-1c29d23f1f33 >}}
