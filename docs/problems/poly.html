@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Polyomino – OR Resources</title>
+<title>Pentominoes – OR Resources</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,18 +167,19 @@ window.Quarto = {
   <li><a href="#mip-model" id="toc-mip-model" class="nav-link" data-scroll-target="#mip-model">MIP model</a></li>
   <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   </ul>
-<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\code-preview.html"><i class="bi bi-journal-code"></i>code.ipynb</a></li></ul></div></nav>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\pentominos-preview.html"><i class="bi bi-journal-code"></i>pentominos.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Polyomino</h1>
+<h1 class="title">Pentominoes</h1>
   <div class="quarto-categories">
     <div class="quarto-category">puzzle</div>
     <div class="quarto-category">modeling</div>
-    <div class="quarto-category">polyominos</div>
+    <div class="quarto-category">grid</div>
+    <div class="quarto-category">tilings</div>
   </div>
   </div>
 
@@ -198,89 +199,76 @@ window.Quarto = {
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
-<p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2025polychoco">(<a href="#ref-lemonde2025polychoco" role="doc-biblioref">Launay 2025</a>)</span>.</p>
+<p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2025polychoco">(<a href="#ref-lemonde2025polychoco" role="doc-biblioref">Launay 2025</a>)</span>, boils down to finding a tiling of a <span class="math inline">\(5\times 10\)</span> grid using different <a href="https://en.wikipedia.org/wiki/Pentomino">pentominoes</a>.</p>
+<p>We will represent the grid as 2d grid graph (where a cell is a node):</p>
+<div class="embed-scale-50">
+<div class="quarto-embed-nb-cell">
+<div id="e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4" class="cell" data-execution_count="154">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="poly_files/figure-html/notebooks-pentominos-cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\pentominos-preview.html#e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4">Source: pentominos.ipynb</a></div>
+</div>
+<p>The candidate pentominoes are the <span class="math inline">\(8\)</span> Y pentominoes:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/y_pentominoes.svg" class="img-fluid figure-img" style="width:60.0%"></p>
+<figcaption>Illustration from <a href="https://en.wikipedia.org/wiki/Pentomino">wikipedia</a></figcaption>
+</figure>
+</div>
 </section>
 <section id="mip-model" class="level2">
 <h2 class="anchored" data-anchor-id="mip-model">MIP model</h2>
-<p>In this model, no logical reasoning is derived from the conditions, except for the fact that there are at most <span class="math inline">\(10\)</span> digits.</p>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <ul>
-<li><span class="math inline">\(I=\{0,\dots,9\}\)</span>: set of digits (the first digit, <span class="math inline">\(0\)</span>, is at the far right)</li>
-<li><span class="math inline">\(J=\{1,2\}\)</span>: set of summands</li>
-<li><span class="math inline">\(K=\{0,1,\dots,9\}\)</span>: set of possible values for a given digit</li>
+<li><span class="math inline">\(C\)</span>: set of cells of the grid</li>
+<li><span class="math inline">\(P\)</span>: set of candidate pentominoes. A pentomino <span class="math inline">\(p\)</span> is defined as a subgraph of the grid; therefore it is defined not only by its shape, but also by the set of nodes it covers.</li>
 </ul>
 </section>
 <section id="variables" class="level4">
 <h4 class="anchored" data-anchor-id="variables">Variables</h4>
 <ul>
-<li><span class="math inline">\(\textcolor{blue}{m} \in \mathbb{N}\)</span>: first summand</li>
-<li><span class="math inline">\(\textcolor{blue}{n} \in \mathbb{N}\)</span>: second summand</li>
-<li><span class="math inline">\(\textcolor{blue}{x}_{i,j,k} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if digit <span class="math inline">\(i\in I\)</span> of summand <span class="math inline">\(j\in J\)</span> has value <span class="math inline">\(k \in K\)</span></li>
-<li><span class="math inline">\(\textcolor{blue}{y}_{i} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if both digits <span class="math inline">\(i \in I\)</span> are zero for <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{x}_{i} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if pentomino <span class="math inline">\(p\in P\)</span> is used</li>
 </ul>
 </section>
 <section id="objective-function" class="level4">
 <h4 class="anchored" data-anchor-id="objective-function">Objective function</h4>
-<p>The secret code is the largest sum satisfying the given conditions:</p>
+<p>As this is a feasibility problem, any dummy objective function is suitable:</p>
 <p><span class="math display">\[
-\max \; \textcolor{blue}{m}+\textcolor{blue}{n}
+\min 0
 \]</span></p>
 <p>subject to:</p>
 </section>
 <section id="constraints" class="level4">
 <h4 class="anchored" data-anchor-id="constraints">Constraints</h4>
 <ul>
-<li>Summands <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> are defined in base <span class="math inline">\(10\)</span>:</li>
+<li>Each cell (node) of the grid (graph) must be covered exactly once, by one of the candidate pentaminos:</li>
 </ul>
 <p><span class="math display">\[\begin{align}
-\textcolor{blue}{m} &amp;= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,1,k} \\
-\textcolor{blue}{n} &amp;= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,2,k} \\
+\sum_{p \in P|c \in p}\textcolor{blue}{x}_{p}=1 \quad \forall c \in C \\
 \end{align}\]</span></p>
-<ul>
-<li>Each digit must have exactly one value:</li>
-</ul>
-<p><span class="math display">\[
-\sum_{k \in K} \textcolor{blue}{x}_{i,j,k}=1 \quad \forall i \in I,\; \forall j\in J \\
-\]</span></p>
-<ul>
-<li>All digits are distinct:</li>
-</ul>
-<p><span class="math display">\[
-\sum_{i\in I} \sum_{j\in J} \textcolor{blue}{x}_{i,j,k} \le 1 \quad \forall k\in K \\
-\]</span></p>
-<ul>
-<li>All columnwise sums must produce a carry, except for columns of zeros:</li>
-</ul>
-<p><span class="math display">\[\begin{align}
-\sum_{j \in J} \sum_{k\in K} k\; \textcolor{blue}{x}_{1,j,k} &amp;\ge 10 \\
-\sum_{j \in J} \sum_{k\in K} k\;\textcolor{blue}{x}_{i,j,k} &amp;\ge 9(1-\textcolor{blue}{y}_i) \quad \forall i \in I,\; i&gt;1 \\
-\end{align}\]</span></p>
-<ul>
-<li>Activated <span class="math inline">\(\textcolor{blue}{y}_i\)</span> implies a column of zeros:</li>
-</ul>
-<p><span class="math display">\[
-\textcolor{blue}{y}_i \le \textcolor{blue}{x}_{i,j,0}\quad \forall i\in I, \forall j \in J
-\]</span></p>
-<ul>
-<li>A column of zeros cannot be “in between” non zero columns:</li>
-</ul>
-<p><span class="math display">\[
-\textcolor{blue}{y}_i \le \textcolor{blue}{y}_{i+1}\quad \forall i \in I,\; i&lt;9
-\]</span></p>
 </section>
 </section>
 <section id="solution" class="level2">
 <h2 class="anchored" data-anchor-id="solution">Solution</h2>
 <p>Solving this problem takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
 <div class="quarto-embed-nb-cell">
-<div id="21448e6b-c3ee-413f-a3dc-af6982e945a3" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-stdout">
-<pre><code>m + n =  9348 + 7652 = 17000</code></pre>
+<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="184">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="poly_files/figure-html/notebooks-pentominos-cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<a class="quarto-notebook-link" id="nblink-1" href="notebooks\code-preview.html#21448e6b-c3ee-413f-a3dc-af6982e945a3">Source: code.ipynb</a></div>
-<p>With a bit of reasoning, one can determine that the number of digits must be <span class="math inline">\(4\)</span>. In this case, the variables <span class="math inline">\(\textcolor{blue}{y}_i\)</span>​ can be omitted, along with the last two sets of constraints.</p>
+</div>
+</div>
 
 
 

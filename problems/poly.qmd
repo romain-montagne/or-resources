@@ -1,6 +1,6 @@
 ---
-title: Polyomino
-categories: [puzzle,modeling, polyominos]
+title: Pentominoes
+categories: [puzzle,modeling,grid,tilings]
 tags: [combinatorial-optimization,integer-programming]
 bibliography: references.bib
 image: images/gemini/polyominos.png
@@ -11,84 +11,55 @@ image: images/gemini/polyominos.png
 
 ## Problem description
 
-This puzzle, published by Mickaël Launay [@lemonde2025polychoco].
+This puzzle, published by Mickaël Launay [@lemonde2025polychoco], boils down to finding a tiling of a $5\times 10$
+grid using different [pentominoes](https://en.wikipedia.org/wiki/Pentomino).
+
+We will represent the grid as 2d grid graph (where a cell is a node):
+
+<div class="embed-scale-50">
+{{< embed notebooks/pentominos.ipynb#e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4 >}}
+</div>
+
+The candidate pentominoes are the $8$ Y pentominoes:
+
+![Illustration from [wikipedia](https://en.wikipedia.org/wiki/Pentomino)](images/y_pentominoes.svg){width=60% fig-align="center"}
 
 
 ## MIP model
 
-In this model, no logical reasoning is derived from the conditions, except for the
-fact that there are at most $10$ digits.
 
 #### Parameters
 
-- $I=\{0,\dots,9\}$: set of digits (the first digit, $0$, is at the far right)
-- $J=\{1,2\}$: set of summands
-- $K=\{0,1,\dots,9\}$: set of possible values for a given digit
+- $C$: set of cells of the grid
+- $P$: set of candidate pentominoes. A pentomino $p$ is defined as a subgraph of the grid; 
+therefore it is defined not only by its shape, but also by the set of nodes it covers. 
 
 #### Variables
 
-- $\textcolor{blue}{m} \in \mathbb{N}$: first summand
-- $\textcolor{blue}{n} \in \mathbb{N}$: second summand
-- $\textcolor{blue}{x}_{i,j,k} \in \{0,1\}$: takes value $1$ if and only if digit $i\in I$ of summand $j\in J$ has value $k \in K$
-- $\textcolor{blue}{y}_{i} \in \{0,1\}$: takes value $1$ if and only if both digits $i \in I$ are zero for $m$ and $n$
+- $\textcolor{blue}{x}_{i} \in \{0,1\}$: takes value $1$ if and only if pentomino $p\in P$ is used
 
 #### Objective function
 
-The secret code is the largest sum satisfying the given conditions:
+As this is a feasibility problem, any dummy objective function is suitable:
 
 $$
-\max \; \textcolor{blue}{m}+\textcolor{blue}{n}
+\min 0
 $$
 
 subject to:
 
 #### Constraints
 
-- Summands $m$ and $n$ are defined in base $10$:
+- Each cell (node) of the grid (graph) must be covered exactly once, by one of the candidate pentaminos:
 
 \begin{align}
-\textcolor{blue}{m} &= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,1,k} \\
-\textcolor{blue}{n} &= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,2,k} \\
+\sum_{p \in P|c \in p}\textcolor{blue}{x}_{p}=1 \quad \forall c \in C \\
 \end{align}
 
-- Each digit must have exactly one value:
-
-$$
-\sum_{k \in K} \textcolor{blue}{x}_{i,j,k}=1 \quad \forall i \in I,\; \forall j\in J \\
-$$
-
-- All digits are distinct:
-
-$$
-\sum_{i\in I} \sum_{j\in J} \textcolor{blue}{x}_{i,j,k} \le 1 \quad \forall k\in K \\
-$$
-
-- All columnwise sums must produce a carry, except for columns of zeros:
-
-\begin{align}
-\sum_{j \in J} \sum_{k\in K} k\; \textcolor{blue}{x}_{1,j,k} &\ge 10 \\
-\sum_{j \in J} \sum_{k\in K} k\;\textcolor{blue}{x}_{i,j,k} &\ge 9(1-\textcolor{blue}{y}_i) \quad \forall i \in I,\; i>1 \\
-\end{align}
-
-- Activated $\textcolor{blue}{y}_i$ implies a column of zeros:
-
-$$
-\textcolor{blue}{y}_i \le \textcolor{blue}{x}_{i,j,0}\quad \forall i\in I, \forall j \in J
-$$
-
-- A column of zeros cannot be "in between" non zero columns:
-
-$$
-\textcolor{blue}{y}_i \le \textcolor{blue}{y}_{i+1}\quad \forall i \in I,\; i<9
-$$
 
 ## Solution
 
 Solving this problem takes less than a second with the default solver
 in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
-{{< embed notebooks/code.ipynb#21448e6b-c3ee-413f-a3dc-af6982e945a3 >}}
-
-With a bit of reasoning, one can determine that the number of digits must be $4$. 
-In this case, the variables $\textcolor{blue}{y}_i$​ can be omitted, 
-along with the last two sets of constraints.
+{{< embed notebooks/pentominos.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}

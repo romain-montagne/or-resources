@@ -1,5 +1,5 @@
 ---
-title: The Saint-Exupéry ruler
+title: The Saint-Exupéry Ruler
 categories: [puzzle,modeling]
 tags: [combinatorial-optimization,integer-programming]
 bibliography: references.bib

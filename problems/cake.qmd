@@ -1,5 +1,5 @@
 ---
-title: Cake
+title: Tiered Cake
 categories: [puzzle,modeling]
 tags: [combinatorial-optimization,integer-programming,combinatorics]
 bibliography: references.bib
@@ -10,84 +10,82 @@ image: images/gemini/cake.png
 
 ## Problem description
 
-This puzzle was published by Mickaël Launay and Dominique Souder [@souder2002_52semaines].
+This puzzle, published by Mickaël Launay and Dominique Souder [@souder2002_52semaines], reads as follows.
 
+A tiered cake has a total of $2004$ candles. 
+The top tier contains some number of candles, and each tier below it has $k$ more candles than the tier directly above. 
+If the cake is built to have the maximum possible number of tiers, how many candles are on the top tier?
 
 ## MIP model
 
-In this model, no logical reasoning is derived from the conditions, except for the
-fact that there are at most $10$ digits.
+In this model, no logical reasoning is derived from the problem statement, except for the fact that there cannot be more than
+$63$ layers, because $1+2+\dots+63=2016>2004$. Otherwise, an obvious upper bound is $2004$.
 
 #### Parameters
 
-- $I=\{0,\dots,9\}$: set of digits (the first digit, $0$, is at the far right)
-- $J=\{1,2\}$: set of summands
-- $K=\{0,1,\dots,9\}$: set of possible values for a given digit
+- $L=\{1,\dots,63\}$: set of potential layers (the top layer is layer $1$)
 
 #### Variables
 
-- $\textcolor{blue}{m} \in \mathbb{N}$: first summand
-- $\textcolor{blue}{n} \in \mathbb{N}$: second summand
-- $\textcolor{blue}{x}_{i,j,k} \in \{0,1\}$: takes value $1$ if and only if digit $i\in I$ of summand $j\in J$ has value $k \in K$
-- $\textcolor{blue}{y}_{i} \in \{0,1\}$: takes value $1$ if and only if both digits $i \in I$ are zero for $m$ and $n$
+- $\textcolor{blue}{x}_{i} \in \mathbb{N}$: number of candles on layer $i\in L$
+- $\textcolor{blue}{y}_{i} \in \{0,1\}$: takes value $1$ if and only if layer $i \in L$ exists
+- $\textcolor{blue}{k} \in \mathbb{N}$: difference of candles between two consecutive layers
 
 #### Objective function
 
-The secret code is the largest sum satisfying the given conditions:
+The cake has a maximum number of layers:
 
 $$
-\max \; \textcolor{blue}{m}+\textcolor{blue}{n}
+\max \sum_{i \in L} \textcolor{blue}{y}_{i}
 $$
 
 subject to:
 
 #### Constraints
 
-- Summands $m$ and $n$ are defined in base $10$:
+- The total number of candles is $2004$:
+
+$$
+\sum_{i \in L} \textcolor{blue}{x}_{i}= 2004 \\
+$$
+
+- Between two layers, the difference is $\textcolor{blue}{k}$:
 
 \begin{align}
-\textcolor{blue}{m} &= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,1,k} \\
-\textcolor{blue}{n} &= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,2,k} \\
+- M(1-\textcolor{blue}{y}_{i})+\textcolor{blue}{k}  \le  \textcolor{blue}{x}_{i}-\textcolor{blue}{x}_{i-1} \le \textcolor{blue}{k} + M(1-\textcolor{blue}{y}_{i}) \quad \forall i\in L,\; i>1
 \end{align}
 
-- Each digit must have exactly one value:
+- The difference is at least equal to $1$
 
 $$
-\sum_{k \in K} \textcolor{blue}{x}_{i,j,k}=1 \quad \forall i \in I,\; \forall j\in J \\
+\textcolor{blue}{k} \ge 1:
 $$
 
-- All digits are distinct:
+- A layer that does not exist cannot have any candles:
 
 $$
-\sum_{i\in I} \sum_{j\in J} \textcolor{blue}{x}_{i,j,k} \le 1 \quad \forall k\in K \\
+\textcolor{blue}{x}_{i} \le M \;\textcolor{blue}{y}_{i}
 $$
 
-- All columnwise sums must produce a carry, except for columns of zeros:
+$M$ can be set to $2004$.
 
-\begin{align}
-\sum_{j \in J} \sum_{k\in K} k\; \textcolor{blue}{x}_{1,j,k} &\ge 10 \\
-\sum_{j \in J} \sum_{k\in K} k\;\textcolor{blue}{x}_{i,j,k} &\ge 9(1-\textcolor{blue}{y}_i) \quad \forall i \in I,\; i>1 \\
-\end{align}
 
-- Activated $\textcolor{blue}{y}_i$ implies a column of zeros:
+- If a layer does not exist, then layers beneath do not exist either:
 
 $$
-\textcolor{blue}{y}_i \le \textcolor{blue}{x}_{i,j,0}\quad \forall i\in I, \forall j \in J
+\textcolor{blue}{y}_{i} \le \textcolor{blue}{y}_{i-1} \quad \forall i \in L, \; i>1
 $$
 
-- A column of zeros cannot be "in between" non zero columns:
-
-$$
-\textcolor{blue}{y}_i \le \textcolor{blue}{y}_{i+1}\quad \forall i \in I,\; i<9
-$$
 
 ## Solution
 
-Solving this problem takes less than a second with the default solver
+Solving this problem takes less than $4$ seconds with the default solver
 in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
-{{< embed notebooks/code.ipynb#21448e6b-c3ee-413f-a3dc-af6982e945a3 >}}
+{{< embed notebooks/tiered_cake.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}
 
-With a bit of reasoning, one can determine that the number of digits must be $4$. 
+Note that the solution is not unique, the set of optimal solutions is $(k,n)\in\{(1,72),(3,49),(5,26),(7,3)\}$.
+
+With a bit of reasoning, one can determine that the number of layers is necessarily $24$. 
 In this case, the variables $\textcolor{blue}{y}_i$​ can be omitted, 
 along with the last two sets of constraints.

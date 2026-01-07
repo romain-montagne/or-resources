@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Cake – OR Resources</title>
+<title>Tiered Cake – OR Resources</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,14 +167,14 @@ window.Quarto = {
   <li><a href="#mip-model" id="toc-mip-model" class="nav-link" data-scroll-target="#mip-model">MIP model</a></li>
   <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   </ul>
-<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\code-preview.html"><i class="bi bi-journal-code"></i>code.ipynb</a></li></ul></div></nav>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\tiered_cake-preview.html"><i class="bi bi-journal-code"></i>tiered_cake.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Cake</h1>
+<h1 class="title">Tiered Cake</h1>
   <div class="quarto-categories">
     <div class="quarto-category">puzzle</div>
     <div class="quarto-category">modeling</div>
@@ -197,89 +197,83 @@ window.Quarto = {
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
-<p>This puzzle was published by Mickaël Launay and Dominique Souder <span class="citation" data-cites="souder2002_52semaines">(<a href="#ref-souder2002_52semaines" role="doc-biblioref">Souder and Launay 2002</a>)</span>.</p>
+<p>This puzzle, published by Mickaël Launay and Dominique Souder <span class="citation" data-cites="souder2002_52semaines">(<a href="#ref-souder2002_52semaines" role="doc-biblioref">Souder and Launay 2002</a>)</span>, reads as follows.</p>
+<p>A tiered cake has a total of <span class="math inline">\(2004\)</span> candles. The top tier contains some number of candles, and each tier below it has <span class="math inline">\(k\)</span> more candles than the tier directly above. If the cake is built to have the maximum possible number of tiers, how many candles are on the top tier?</p>
 </section>
 <section id="mip-model" class="level2">
 <h2 class="anchored" data-anchor-id="mip-model">MIP model</h2>
-<p>In this model, no logical reasoning is derived from the conditions, except for the fact that there are at most <span class="math inline">\(10\)</span> digits.</p>
+<p>In this model, no logical reasoning is derived from the problem statement, except for the fact that there cannot be more than <span class="math inline">\(63\)</span> layers, because <span class="math inline">\(1+2+\dots+63=2016&gt;2004\)</span>. Otherwise, an obvious upper bound is <span class="math inline">\(2004\)</span>.</p>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <ul>
-<li><span class="math inline">\(I=\{0,\dots,9\}\)</span>: set of digits (the first digit, <span class="math inline">\(0\)</span>, is at the far right)</li>
-<li><span class="math inline">\(J=\{1,2\}\)</span>: set of summands</li>
-<li><span class="math inline">\(K=\{0,1,\dots,9\}\)</span>: set of possible values for a given digit</li>
+<li><span class="math inline">\(L=\{1,\dots,63\}\)</span>: set of potential layers (the top layer is layer <span class="math inline">\(1\)</span>)</li>
 </ul>
 </section>
 <section id="variables" class="level4">
 <h4 class="anchored" data-anchor-id="variables">Variables</h4>
 <ul>
-<li><span class="math inline">\(\textcolor{blue}{m} \in \mathbb{N}\)</span>: first summand</li>
-<li><span class="math inline">\(\textcolor{blue}{n} \in \mathbb{N}\)</span>: second summand</li>
-<li><span class="math inline">\(\textcolor{blue}{x}_{i,j,k} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if digit <span class="math inline">\(i\in I\)</span> of summand <span class="math inline">\(j\in J\)</span> has value <span class="math inline">\(k \in K\)</span></li>
-<li><span class="math inline">\(\textcolor{blue}{y}_{i} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if both digits <span class="math inline">\(i \in I\)</span> are zero for <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{x}_{i} \in \mathbb{N}\)</span>: number of candles on layer <span class="math inline">\(i\in L\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{y}_{i} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if layer <span class="math inline">\(i \in L\)</span> exists</li>
+<li><span class="math inline">\(\textcolor{blue}{k} \in \mathbb{N}\)</span>: difference of candles between two consecutive layers</li>
 </ul>
 </section>
 <section id="objective-function" class="level4">
 <h4 class="anchored" data-anchor-id="objective-function">Objective function</h4>
-<p>The secret code is the largest sum satisfying the given conditions:</p>
+<p>The cake has a maximum number of layers:</p>
 <p><span class="math display">\[
-\max \; \textcolor{blue}{m}+\textcolor{blue}{n}
+\max \sum_{i \in L} \textcolor{blue}{y}_{i}
 \]</span></p>
 <p>subject to:</p>
 </section>
 <section id="constraints" class="level4">
 <h4 class="anchored" data-anchor-id="constraints">Constraints</h4>
 <ul>
-<li>Summands <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> are defined in base <span class="math inline">\(10\)</span>:</li>
+<li>The total number of candles is <span class="math inline">\(2004\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\sum_{i \in L} \textcolor{blue}{x}_{i}= 2004 \\
+\]</span></p>
+<ul>
+<li>Between two layers, the difference is <span class="math inline">\(\textcolor{blue}{k}\)</span>:</li>
 </ul>
 <p><span class="math display">\[\begin{align}
-\textcolor{blue}{m} &amp;= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,1,k} \\
-\textcolor{blue}{n} &amp;= \sum_{i \in I}\sum_{k\in K} k\;10^i\;\textcolor{blue}{x}_{i,2,k} \\
+- M(1-\textcolor{blue}{y}_{i})+\textcolor{blue}{k}  \le  \textcolor{blue}{x}_{i}-\textcolor{blue}{x}_{i-1} \le \textcolor{blue}{k} + M(1-\textcolor{blue}{y}_{i}) \quad \forall i\in L,\; i&gt;1
 \end{align}\]</span></p>
 <ul>
-<li>Each digit must have exactly one value:</li>
+<li>The difference is at least equal to <span class="math inline">\(1\)</span></li>
 </ul>
 <p><span class="math display">\[
-\sum_{k \in K} \textcolor{blue}{x}_{i,j,k}=1 \quad \forall i \in I,\; \forall j\in J \\
+\textcolor{blue}{k} \ge 1:
 \]</span></p>
 <ul>
-<li>All digits are distinct:</li>
+<li>A layer that does not exist cannot have any candles:</li>
 </ul>
 <p><span class="math display">\[
-\sum_{i\in I} \sum_{j\in J} \textcolor{blue}{x}_{i,j,k} \le 1 \quad \forall k\in K \\
+\textcolor{blue}{x}_{i} \le M \;\textcolor{blue}{y}_{i}
 \]</span></p>
+<p><span class="math inline">\(M\)</span> can be set to <span class="math inline">\(2004\)</span>.</p>
 <ul>
-<li>All columnwise sums must produce a carry, except for columns of zeros:</li>
-</ul>
-<p><span class="math display">\[\begin{align}
-\sum_{j \in J} \sum_{k\in K} k\; \textcolor{blue}{x}_{1,j,k} &amp;\ge 10 \\
-\sum_{j \in J} \sum_{k\in K} k\;\textcolor{blue}{x}_{i,j,k} &amp;\ge 9(1-\textcolor{blue}{y}_i) \quad \forall i \in I,\; i&gt;1 \\
-\end{align}\]</span></p>
-<ul>
-<li>Activated <span class="math inline">\(\textcolor{blue}{y}_i\)</span> implies a column of zeros:</li>
+<li>If a layer does not exist, then layers beneath do not exist either:</li>
 </ul>
 <p><span class="math display">\[
-\textcolor{blue}{y}_i \le \textcolor{blue}{x}_{i,j,0}\quad \forall i\in I, \forall j \in J
-\]</span></p>
-<ul>
-<li>A column of zeros cannot be “in between” non zero columns:</li>
-</ul>
-<p><span class="math display">\[
-\textcolor{blue}{y}_i \le \textcolor{blue}{y}_{i+1}\quad \forall i \in I,\; i&lt;9
+\textcolor{blue}{y}_{i} \le \textcolor{blue}{y}_{i-1} \quad \forall i \in L, \; i&gt;1
 \]</span></p>
 </section>
 </section>
 <section id="solution" class="level2">
 <h2 class="anchored" data-anchor-id="solution">Solution</h2>
-<p>Solving this problem takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
+<p>Solving this problem takes less than <span class="math inline">\(4\)</span> seconds with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
 <div class="quarto-embed-nb-cell">
-<div id="21448e6b-c3ee-413f-a3dc-af6982e945a3" class="cell" data-execution_count="5">
+<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
-<pre><code>m + n =  9348 + 7652 = 17000</code></pre>
+<pre><code>number of layers =  24.0
+number of candles on first layer =  72.0
+k =  1.0</code></pre>
 </div>
 </div>
-<a class="quarto-notebook-link" id="nblink-1" href="notebooks\code-preview.html#21448e6b-c3ee-413f-a3dc-af6982e945a3">Source: code.ipynb</a></div>
-<p>With a bit of reasoning, one can determine that the number of digits must be <span class="math inline">\(4\)</span>. In this case, the variables <span class="math inline">\(\textcolor{blue}{y}_i\)</span>​ can be omitted, along with the last two sets of constraints.</p>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\tiered_cake-preview.html#75251953-f8df-4818-bdbd-9c2e93b00a20">Source: tiered_cake.ipynb</a></div>
+<p>Note that the solution is not unique, the set of optimal solutions is <span class="math inline">\((k,n)\in\{(1,72),(3,49),(5,26),(7,3)\}\)</span>.</p>
+<p>With a bit of reasoning, one can determine that the number of layers is necessarily <span class="math inline">\(24\)</span>. In this case, the variables <span class="math inline">\(\textcolor{blue}{y}_i\)</span>​ can be omitted, along with the last two sets of constraints.</p>
 
 
 

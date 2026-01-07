@@ -2,12 +2,12 @@
   {
     "listing": "/problems/index.html",
     "items": [
-      "/problems/cake.html",
       "/problems/numberlink.html",
       "/problems/poly.html",
       "/problems/postman.html",
       "/problems/code.html",
-      "/problems/saint_exupery_ruler.html"
+      "/problems/saint_exupery_ruler.html",
+      "/problems/cake.html"
     ]
   }
 ]
