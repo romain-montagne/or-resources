@@ -17,7 +17,7 @@ grid using different [pentominoes](https://en.wikipedia.org/wiki/Pentomino).
 We will represent the grid as 2d grid graph (where a cell is a node):
 
 <div class="embed-scale-50">
-{{< embed notebooks/pentominos.ipynb#e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4 >}}
+{{< embed notebooks/pentominoes.ipynb#e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4 >}}
 </div>
 
 The candidate pentominoes are the $8$ Y pentominoes:
@@ -50,7 +50,8 @@ subject to:
 
 #### Constraints
 
-- Each cell (node) of the grid (graph) must be covered exactly once, by one of the candidate pentaminos:
+- Each cell (node) of the grid (graph) must be covered exactly once, 
+by one of the candidate pentaminoes:
 
 \begin{align}
 \sum_{p \in P|c \in p}\textcolor{blue}{x}_{p}=1 \quad \forall c \in C \\
@@ -62,4 +63,4 @@ subject to:
 Solving this problem takes less than a second with the default solver
 in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
-{{< embed notebooks/pentominos.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}
+{{< embed notebooks/pentominoes.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}

@@ -55,6 +55,8 @@ $$
 - M(1-\textcolor{blue}{y}_{i})+\textcolor{blue}{k}  \le  \textcolor{blue}{x}_{i}-\textcolor{blue}{x}_{i-1} \le \textcolor{blue}{k} + M(1-\textcolor{blue}{y}_{i}) \quad \forall i\in L,\; i>1
 \end{align}
 
+$M$ can be set to $2004$.
+
 - The difference is at least equal to $1$
 
 $$
