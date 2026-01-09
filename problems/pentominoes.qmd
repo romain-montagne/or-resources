@@ -64,3 +64,4 @@ Solving this problem takes less than a second with the default solver
 in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
 {{< embed notebooks/pentominoes.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}
+

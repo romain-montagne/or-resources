@@ -1,0 +1,99 @@
+---
+title: Touching Polyominoes
+categories: [puzzle,modeling,grid,tilings]
+tags: [combinatorial-optimization,integer-programming]
+bibliography: references.bib
+image: images/gemini/touching_octominoes.png
+#source: 
+#  - Les énigmes maths du Monde
+#  - Yet Another Math Programming Consultant 
+---
+
+## Problem description
+
+This puzzle, published by Mickaël Launay [@lemonde2024quatre], reads as follows:
+
+Using the four polyominoes shown in the illustration below, arrange them so that:
+
+- each shape touches all three of the others along at least one edge
+(corner-to-corner contact does not count);
+- no cell is covered by more than one polyomino
+(the shapes may not overlap).
+
+![Illustration from [@lemonde2024quatre]](images/4touching_polyominoes.png){width=30% fig-align="center"}
+
+Then, arrange the L $6 \times 3$ octominoes (see illustration below) under the same conditions.
+
+![Illustration from [@lemonde2024quatre]](images/Loctominoes.png){width=30% fig-align="center"}
+
+
+## MIP model
+
+#### Parameters
+
+- $C$: set of cells of the grid
+- $K=\{1,2,3,4\}$: set of polyomino types
+- $P_k$: set of candidate polyominoes of type $k\in K$. A polyomino $p\in P_k$ is defined as a "subgrid" of the grid; 
+therefore it is defined not only by its shape, but also by the set of cells it covers. 
+- $P=\bigcup_{k\in K} P_k$: set of all candidate polyominoes
+- $N(p)$: set of cells adjacent to $p\in P$ in the grid
+
+#### Variables
+
+- $\textcolor{blue}{x}_{i} \in \{0,1\}$: takes value $1$ if and only if polyomino $p\in P$ is used
+
+#### Objective function
+
+As this is a feasibility problem, any dummy objective function is suitable:
+
+$$
+\min 0
+$$
+
+subject to:
+
+#### Constraints
+
+- Each polyomino type should appear exactly once: 
+
+$$
+\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 1 \quad \forall k \in K \tag{1}
+$$
+
+
+- A cell of the grid can be covered at most once, 
+by one of the candidate polyominoes:
+
+\begin{align}
+\sum_{k \in K}\sum_{p \in P_k|c \in p}\textcolor{blue}{x}_{p}\le 1 \quad \forall c \in C \\
+\end{align}
+
+- All four polyominoes must be in contact, 
+so every pair of non touching polyominoes cannot be selected simultaneously:
+
+$$
+x_p+x_q \le 1 \quad \forall (p,q) \in P \times P, \; N(p)\cap q = \emptyset
+$$
+
+
+## Solution
+
+The background grid is represented as 2d grid graph (where a cell is a node).
+
+Solving this problem takes less than $10$ seconds with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
+
+{{< embed notebooks/touching_polyominoes.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}
+
+Note that the computation time increases with the size of the 2d grid.
+
+If the set of polyominoes are the L $6\times 3$ octominoes, $|K|=1$, and constraints $(1)$ 
+are adjusted as follows to enforce $4$ polynominoes:
+
+$$
+\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 4
+$$
+
+A solution is to arrange the octominoes as follows:
+
+![4 touching L $6\times 3$ octominoes](images/Loctominoes_touching.png){width=70% fig-align="center"}

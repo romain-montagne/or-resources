@@ -1,171 +1,87 @@
 [
   {
-    "objectID": "problems/saint_exupery_ruler.html",
-    "href": "problems/saint_exupery_ruler.html",
-    "title": "The Saint-Exupéry Ruler",
+    "objectID": "problems/touching_polyominoes.html",
+    "href": "problems/touching_polyominoes.html",
+    "title": "Touching Polyominoes",
     "section": "",
-    "text": "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.\n— Antoine de Saint-Exupéry\n\nThe problem is to design a ruler of \\(n\\) units using the fewest possible graduations, such that all possible integer lengths appear on the ruler. This puzzle was published by Mickaël Launay (Launay 2025). An example with \\(n=6\\) is displayed in the Figure below:\n\n\n\nIllustration from (Launay 2025)\n\n\nLength \\(1\\) can be measured with marks \\(0\\) and \\(1\\), length \\(2\\) with marks \\(4\\) and \\(6\\), length \\(3\\) with marks \\(1\\) and \\(4\\), length \\(4\\) with marks \\(0\\) and \\(4\\), length \\(5\\) with marks \\(6\\) and \\(1\\), and length \\(6\\) with marks \\(0\\) and \\(6\\)."
+    "text": "This puzzle, published by Mickaël Launay (Launay 2024), reads as follows:\nUsing the four polyominoes shown in the illustration below, arrange them so that:\n\neach shape touches all three of the others along at least one edge (corner-to-corner contact does not count);\nno cell is covered by more than one polyomino (the shapes may not overlap).\n\n\n\n\nIllustration from (Launay 2024)\n\n\nThen, arrange the L \\(6 \\times 3\\) octominoes (see illustration below) under the same conditions.\n\n\n\nIllustration from (Launay 2024)"
   },
   {
-    "objectID": "problems/saint_exupery_ruler.html#problem-description",
-    "href": "problems/saint_exupery_ruler.html#problem-description",
-    "title": "The Saint-Exupéry Ruler",
+    "objectID": "problems/touching_polyominoes.html#problem-description",
+    "href": "problems/touching_polyominoes.html#problem-description",
+    "title": "Touching Polyominoes",
     "section": "",
-    "text": "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.\n— Antoine de Saint-Exupéry\n\nThe problem is to design a ruler of \\(n\\) units using the fewest possible graduations, such that all possible integer lengths appear on the ruler. This puzzle was published by Mickaël Launay (Launay 2025). An example with \\(n=6\\) is displayed in the Figure below:\n\n\n\nIllustration from (Launay 2025)\n\n\nLength \\(1\\) can be measured with marks \\(0\\) and \\(1\\), length \\(2\\) with marks \\(4\\) and \\(6\\), length \\(3\\) with marks \\(1\\) and \\(4\\), length \\(4\\) with marks \\(0\\) and \\(4\\), length \\(5\\) with marks \\(6\\) and \\(1\\), and length \\(6\\) with marks \\(0\\) and \\(6\\)."
+    "text": "This puzzle, published by Mickaël Launay (Launay 2024), reads as follows:\nUsing the four polyominoes shown in the illustration below, arrange them so that:\n\neach shape touches all three of the others along at least one edge (corner-to-corner contact does not count);\nno cell is covered by more than one polyomino (the shapes may not overlap).\n\n\n\n\nIllustration from (Launay 2024)\n\n\nThen, arrange the L \\(6 \\times 3\\) octominoes (see illustration below) under the same conditions.\n\n\n\nIllustration from (Launay 2024)"
   },
   {
-    "objectID": "problems/saint_exupery_ruler.html#mip-model",
-    "href": "problems/saint_exupery_ruler.html#mip-model",
-    "title": "The Saint-Exupéry Ruler",
+    "objectID": "problems/touching_polyominoes.html#mip-model",
+    "href": "problems/touching_polyominoes.html#mip-model",
+    "title": "Touching Polyominoes",
     "section": "MIP model",
-    "text": "MIP model\n\nParameters\n\n\\(N = \\{0,1,\\dots,n\\}\\): set of units of the ruler\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_i \\in \\{0,1\\}\\): takes value \\(1\\) if and only if there is a mark on unit \\(i\\in N\\)\n\\(\\textcolor{blue}{y}_{i,j} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if there are marks on units \\(i\\in N\\) and \\(j\\in N\\), \\(i&lt; j\\)\n\n\n\nObjective function\nThe problem is to minimize the number of marks:\n\\[\n\\min \\sum_{i \\in N} \\textcolor{blue}{x}_i\n\\]\nsubject to:\n\n\nConstraints\n\nAll possible integer lengths must appear somehow on the ruler:\n\n\\[\n\\sum_{i&lt;j, \\;j-i=k} \\textcolor{blue}{y}_{i,j} \\ge 1 \\quad \\forall k \\in N, k&gt;0 \\tag{1}\n\\]\n\nVariables \\(\\textcolor{blue}{x}_i\\) and \\(\\textcolor{blue}{y}_{i,j}\\) must be consistent:\n\n\\[\\begin{align}\n\\textcolor{blue}{y}_{i,j} &\\le \\textcolor{blue}{x}_i &\\forall i&lt;j \\tag{2}\\\\\n\\textcolor{blue}{y}_{i,j} &\\le \\textcolor{blue}{x}_j &\\forall i&lt;j  \\tag{3}\\\\\n\\textcolor{blue}{x}_i+\\textcolor{blue}{x}_j &\\le \\textcolor{blue}{y}_{i,j}+1\n&\\forall i&lt;j \\tag{4} \\\\\n\\end{align}\\]\nConstraints \\((2)\\) and \\((3)\\) enforce \\(\\textcolor{blue}{y}_{i,j}=1\\implies \\textcolor{blue}{x}_i=1\\) and \\(\\textcolor{blue}{x}_j=1\\), constraints \\((4)\\) enforce the reciprocal relationship."
+    "text": "MIP model\n\nParameters\n\n\\(C\\): set of cells of the grid\n\\(K=\\{1,2,3,4\\}\\): set of polyomino types\n\\(P_k\\): set of candidate polyominoes of type \\(k\\in K\\). A polyomino \\(p\\in P_k\\) is defined as a “subgrid” of the grid; therefore it is defined not only by its shape, but also by the set of cells it covers.\n\\(P=\\bigcup_{k\\in K} P_k\\): set of all candidate polyominoes\n\\(N(p)\\): set of cells adjacent to \\(p\\in P\\) in the grid\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if polyomino \\(p\\in P\\) is used\n\n\n\nObjective function\nAs this is a feasibility problem, any dummy objective function is suitable:\n\\[\n\\min 0\n\\]\nsubject to:\n\n\nConstraints\n\nEach polyomino type should appear exactly once:\n\n\\[\n\\sum_{p \\in P_k}\\textcolor{blue}{x}_{p} = 1 \\quad \\forall k \\in K \\tag{1}\n\\]\n\nA cell of the grid can be covered at most once, by one of the candidate polyominoes:\n\n\\[\\begin{align}\n\\sum_{k \\in K}\\sum_{p \\in P_k|c \\in p}\\textcolor{blue}{x}_{p}\\le 1 \\quad \\forall c \\in C \\\\\n\\end{align}\\]\n\nAll four polyominoes must be in contact, so every pair of non touching polyominoes cannot be selected simultaneously:\n\n\\[\nx_p+x_q \\le 1 \\quad \\forall (p,q) \\in P \\times P, \\; N(p)\\cap q = \\emptyset\n\\]"
   },
   {
-    "objectID": "problems/saint_exupery_ruler.html#solution",
-    "href": "problems/saint_exupery_ruler.html#solution",
-    "title": "The Saint-Exupéry Ruler",
+    "objectID": "problems/touching_polyominoes.html#solution",
+    "href": "problems/touching_polyominoes.html#solution",
+    "title": "Touching Polyominoes",
     "section": "Solution",
-    "text": "Solution\nSolving this problem with \\(n=20\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\nSo the 20 unit ruler can be designed with \\(8\\) marks. We can check that all integer lengths do appear on the ruler (some lengths appear multiple times):\n\n\n\nlength -&gt; endpoints\n-------------------\n1 -&gt; 1 0\n1 -&gt; 19 18\n1 -&gt; 20 19\n2 -&gt; 6 4\n2 -&gt; 20 18\n3 -&gt; 4 1\n4 -&gt; 4 0\n5 -&gt; 6 1\n5 -&gt; 11 6\n6 -&gt; 6 0\n7 -&gt; 11 4\n7 -&gt; 18 11\n8 -&gt; 19 11\n9 -&gt; 20 11\n10 -&gt; 11 1\n11 -&gt; 11 0\n12 -&gt; 18 6\n13 -&gt; 19 6\n14 -&gt; 18 4\n14 -&gt; 20 6\n15 -&gt; 19 4\n16 -&gt; 20 4\n17 -&gt; 18 1\n18 -&gt; 18 0\n18 -&gt; 19 1\n19 -&gt; 19 0\n19 -&gt; 20 1\n20 -&gt; 20 0\n\n\nSource: Saint‑Exupéry ruler"
+    "text": "Solution\nThe background grid is represented as 2d grid graph (where a cell is a node).\nSolving this problem takes less than \\(10\\) seconds with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\n\n\n\n\n\nSource: touching_polyominoes.ipynb\nNote that the computation time increases with the size of the 2d grid.\nIf the set of polyominoes are the L \\(6\\times 3\\) octominoes, \\(|K|=1\\), and constraints \\((1)\\) are adjusted as follows to enforce \\(4\\) polynominoes:\n\\[\n\\sum_{p \\in P_k}\\textcolor{blue}{x}_{p} = 4\n\\]\nA solution is to arrange the octominoes as follows:\n\n\n\n4 touching L \\(6\\times 3\\) octominoes"
   },
   {
-    "objectID": "problems/poly.html",
-    "href": "problems/poly.html",
-    "title": "Pentominoes",
-    "section": "",
-    "text": "This puzzle, published by Mickaël Launay (Launay 2025), boils down to finding a tiling of a \\(5\\times 10\\) grid using different pentominoes.\nWe will represent the grid as 2d grid graph (where a cell is a node):\n\n\n\n\n\n\n\n\n\n\n\nSource: pentominos.ipynb\n\nThe candidate pentominoes are the \\(8\\) Y pentominoes:\n\n\n\nIllustration from wikipedia"
-  },
-  {
-    "objectID": "problems/poly.html#problem-description",
-    "href": "problems/poly.html#problem-description",
-    "title": "Pentominoes",
-    "section": "",
-    "text": "This puzzle, published by Mickaël Launay (Launay 2025), boils down to finding a tiling of a \\(5\\times 10\\) grid using different pentominoes.\nWe will represent the grid as 2d grid graph (where a cell is a node):\n\n\n\n\n\n\n\n\n\n\n\nSource: pentominos.ipynb\n\nThe candidate pentominoes are the \\(8\\) Y pentominoes:\n\n\n\nIllustration from wikipedia"
-  },
-  {
-    "objectID": "problems/poly.html#mip-model",
-    "href": "problems/poly.html#mip-model",
-    "title": "Pentominoes",
-    "section": "MIP model",
-    "text": "MIP model\n\nParameters\n\n\\(C\\): set of cells of the grid\n\\(P\\): set of candidate pentominoes. A pentomino \\(p\\) is defined as a subgraph of the grid; therefore it is defined not only by its shape, but also by the set of nodes it covers.\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if pentomino \\(p\\in P\\) is used\n\n\n\nObjective function\nAs this is a feasibility problem, any dummy objective function is suitable:\n\\[\n\\min 0\n\\]\nsubject to:\n\n\nConstraints\n\nEach cell (node) of the grid (graph) must be covered exactly once, by one of the candidate pentaminos:\n\n\\[\\begin{align}\n\\sum_{p \\in P|c \\in p}\\textcolor{blue}{x}_{p}=1 \\quad \\forall c \\in C \\\\\n\\end{align}\\]"
-  },
-  {
-    "objectID": "problems/poly.html#solution",
-    "href": "problems/poly.html#solution",
-    "title": "Pentominoes",
-    "section": "Solution",
-    "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields:"
-  },
-  {
-    "objectID": "problems/notebooks/tiered_cake.html",
-    "href": "problems/notebooks/tiered_cake.html",
-    "title": "OR Resources",
-    "section": "",
-    "text": "import pulp\n\n\nlayers = [i for i in range(1,64)]\n\n\n# create problem\nprob = pulp.LpProblem(\"cake\", pulp.LpMaximize)\n\n# x[i] = number of candles on layer i\nx = pulp.LpVariable.dicts(\"x\",layers,lowBound=0,cat=pulp.LpInteger)\n# y[i]=1 &lt;=&gt; layer i is used\ny = pulp.LpVariable.dicts(\"y\",layers,cat=pulp.LpBinary)\n# difference of candles between two layers\nk = pulp.LpVariable(\"k\",lowBound=1,cat=pulp.LpInteger)\n\n# objective: maximize number of layers\nprob+= pulp.lpSum(y)\n\n# between two layers, the difference is k\nfor i in layers:\n    if i&gt;1:\n        prob+= x[i] &lt;= x[i-1]+k+2004*(1-y[i])\n        prob+= x[i] &gt;= x[i-1]+k-2004*(1-y[i])\n\n# total number of candles is 2004\nprob+= pulp.lpSum(x) == 2004\n\n# link x and y\nfor i in layers:\n    prob+= x[i] &lt;=2004*y[i]\n\n# consistency between layers\nfor i in layers:\n    if i&gt;1:\n        prob+= y[i]&lt;=y[i-1]\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"number of layers = \",pulp.value(prob.objective))\nprint(\"number of candles on first layer = \",pulp.value(x[1]))\nprint(\"k = \",pulp.value(k))\n\nnumber of layers =  24.0\nnumber of candles on first layer =  72.0\nk =  1.0"
-  },
-  {
-    "objectID": "problems/notebooks/postman.html",
-    "href": "problems/notebooks/postman.html",
-    "title": "OR Resources",
-    "section": "",
-    "text": "import pulp\nimport networkx as nx\nimport math\n\n\nn=12\nG = nx.complete_graph(n)\n\nmapping = {i: i + 1 for i in G.nodes()}\nG = nx.relabel_nodes(G, mapping)\n\nG = G.to_directed()\n\npos = {}\nfor i, node in enumerate(sorted(G.nodes())):\n    theta = math.pi/2 - (2*math.pi*i/n)  \n    pos[node] = (math.cos(theta), math.sin(theta))\nnx.draw(G, pos, with_labels=True, node_size=600)\n\n\n\n\n\n\n\n\n\nlabels = [l for l in range(1,n+1)]\n\n\nprob = pulp.LpProblem(\"postman\",pulp.LpMinimize)\n\n# variables\nx = pulp.LpVariable.dicts(\"x\",G.edges(),cat=pulp.LpBinary)\nr = pulp.LpVariable.dicts(\"r\",G.nodes(),lowBound=1,upBound=n,cat=pulp.LpInteger)\nl = pulp.LpVariable.dicts(\"l\",G.nodes(),lowBound=1,upBound=n,cat=pulp.LpInteger)\ny = pulp.LpVariable.dicts(\"y\",(G.nodes(),labels),cat=pulp.LpBinary)\n\n# dummy objective function\nprob += pulp.lpSum((pos[u][1]-pos[v][1])**2*x[(u,v)] for (u,v) in G.edges())\n\n# inflow and outflow through each node\nfor v in G.nodes():\n    prob += pulp.lpSum(x[(u,v)] for u in G.nodes() if u!=v) == 1\n    prob += pulp.lpSum(x[(v,u)] for u in G.nodes() if u!=v) == 1\n    \n# MTZ\nfor j in G.nodes():\n    if j&gt;1:\n        for i in G.nodes():\n            if i!=j:\n                prob += r[j] &gt;= r[i]+1-n*(1-x[(i,j)])\n\n# labeling\nfor i in G.nodes():\n    for j in G.nodes():\n        if j&gt;1:\n            if i&lt;j:\n                prob += x[(i,j)] &lt;= y[i][j-i]\n            if i&gt;j:\n                prob += x[(i,j)] &lt;= y[i][j-i+n]\n\n    prob += pulp.lpSum(y[i][k] for k in labels) == 1\n    prob += pulp.lpSum(k*y[i][k] for k in labels) == l[i]\n                      \nfor k in labels:\n    prob += pulp.lpSum(y[i][k] for i in G.nodes()) == 1\n\n# first node\nprob += r[1]==1\nprob += l[1]==1\n\n\nprob.solve()\n\n1\n\n\n\nrank_dict = dict(zip([i for i in r],[pulp.value(r[i])for i in r]))\nfor i in sorted(rank_dict, key=lambda k: rank_dict[k]):\n    print(\"rank\",int(pulp.value(r[i])),\"node\",i,\"label\",int(pulp.value(l[i])))\n\nrank 1 node 1 label 1\nrank 2 node 2 label 10\nrank 3 node 12 label 3\nrank 4 node 3 label 8\nrank 5 node 11 label 5\nrank 6 node 4 label 6\nrank 7 node 10 label 7\nrank 8 node 5 label 4\nrank 9 node 9 label 9\nrank 10 node 6 label 2\nrank 11 node 8 label 11\nrank 12 node 7 label 12\n\n\n\nremove = []\nfor (u,v) in G.edges():\n    if pulp.value(x[(u,v)])&lt;0.1:\n        remove.append((u,v))\n    elif v==1:\n        remove.append((u,v))\nG.remove_edges_from(remove)\n\nnx.draw(G, pos, with_labels=True, node_size=600)\noffset = 0.15  \npos_value = {v: (x, y + offset) for v, (x, y) in pos.items()}\nval_labels = {v: f\"{int(pulp.value(l[v]))}\" for v in G.nodes()}             \nnx.draw_networkx_labels(G, pos_value, labels=val_labels, font_size=10, font_color=\"#333\")"
-  },
-  {
-    "objectID": "problems/notebooks/numberlink.html",
-    "href": "problems/notebooks/numberlink.html",
-    "title": "OR Resources",
-    "section": "",
-    "text": "import pulp\nimport networkx as nx\n\n\nT = [\n    ['','','','',1],\n    [2,3,'','',2],\n    ['','','','',''],\n    ['','','','',''],\n    ['','',1,'',''],\n    ['','','','',''],\n    ['','','','',3],\n]\n\nrows = len(T)\ncols = len(T[0])\n\nG = nx.grid_2d_graph(rows, cols) \nfor r in range(rows):\n    for c in range(cols):\n        G.nodes[(r, c)][\"value\"] = T[r][c]\n        G.nodes[(r, c)][\"layer\"] = c\n\nnx.draw(G,pos=nx.multipartite_layout(G,subset_key=\"layer\",align=\"vertical\"),\n          labels = nx.get_node_attributes(G,\"value\"),\n          node_color=\"white\",\n          edgecolors=\"black\",\n          node_size=650)\n\n\n\n\n\n\n\n\n\n# create problem\nprob = pulp.LpProblem(\"numberlink\", pulp.LpMaximize)\n\n# define variables\nx = pulp.LpVariable.dicts(\"x\",(G.nodes(),[1,2,3]),cat=pulp.LpBinary)\n\n# objective function\nprob += 0\n\n# each cell has a unique number\nfor (i,j) in G.nodes():\n    prob += pulp.lpSum(x[(i,j)][k] for k in [1,2,3]) == 1\n    \n# enforce endpoints\nfor (i,j) in G.nodes():\n    val = G.nodes[(i,j)][\"value\"]\n    if val:\n        prob += x[(i,j)][val] == 1\n        \n# if cell is an endpoint, then one neighbor must have same value\nfor (i,j) in G.nodes():\n    val = G.nodes[(i,j)][\"value\"]\n    if val:\n        prob += pulp.lpSum(x[(u,v)][val] for (u,v) in G.neighbors((i,j))) == 1\n        \n# if cell is not an end point, then 2 neighbours must have same value\nfor (i,j) in G.nodes():\n    val = G.nodes[(i,j)][\"value\"]\n    if not val:\n        for k in [1,2,3]:\n            prob += pulp.lpSum(x[(u,v)][k] for (u,v) in G.neighbors((i,j))) &gt;= 2-2*(1-x[(i,j)][k])\n            prob += pulp.lpSum(x[(u,v)][k] for (u,v) in G.neighbors((i,j))) &lt;= 2+2*(1-x[(i,j)][k])\n\n\nprob.solve()\n\n1\n\n\n\nfor (i,j) in G.nodes():\n    for k in [1,2,3]:\n        val = pulp.value(x[(i,j)][k])\n        if val &gt;0.9:\n            G.nodes[(i,j)][\"value\"]=k\n\n\nnx.draw(G,pos=nx.multipartite_layout(G,subset_key=\"layer\"),\n          labels = nx.get_node_attributes(G, 'value'),\n          node_color=[G.nodes[(i,j)][\"value\"] for (i,j) in G.nodes()],\n          node_size=650,\n          alpha=0.9\n       )"
-  },
-  {
-    "objectID": "problems/index.html",
-    "href": "problems/index.html",
-    "title": "Problems",
-    "section": "",
-    "text": "Numberlink\n\n\n\npuzzle\n\nmodeling\n\ngrid\n\n\n\n\n\n\n\n\n\n\n\n\n\nPentominoes\n\n\n\npuzzle\n\nmodeling\n\ngrid\n\ntilings\n\n\n\n\n\n\n\n\n\n\n\n\n\nPostman\n\n\n\npuzzle\n\nmodeling\n\nrouting\n\n\n\n\n\n\n\n\n\n\n\n\n\nSecret Code\n\n\n\npuzzle\n\nmodeling\n\nsecret-code\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Saint-Exupéry Ruler\n\n\n\npuzzle\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\n\n\nTiered Cake\n\n\n\npuzzle\n\nmodeling\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "problems/cake.html",
-    "href": "problems/cake.html",
-    "title": "Tiered Cake",
-    "section": "",
-    "text": "This puzzle, published by Mickaël Launay and Dominique Souder (Souder and Launay 2002), reads as follows.\nA tiered cake has a total of \\(2004\\) candles. The top tier contains some number of candles, and each tier below it has \\(k\\) more candles than the tier directly above. If the cake is built to have the maximum possible number of tiers, how many candles are on the top tier?"
-  },
-  {
-    "objectID": "problems/cake.html#problem-description",
-    "href": "problems/cake.html#problem-description",
-    "title": "Tiered Cake",
-    "section": "",
-    "text": "This puzzle, published by Mickaël Launay and Dominique Souder (Souder and Launay 2002), reads as follows.\nA tiered cake has a total of \\(2004\\) candles. The top tier contains some number of candles, and each tier below it has \\(k\\) more candles than the tier directly above. If the cake is built to have the maximum possible number of tiers, how many candles are on the top tier?"
-  },
-  {
-    "objectID": "problems/cake.html#mip-model",
-    "href": "problems/cake.html#mip-model",
-    "title": "Tiered Cake",
-    "section": "MIP model",
-    "text": "MIP model\nIn this model, no logical reasoning is derived from the problem statement, except for the fact that there cannot be more than \\(63\\) layers, because \\(1+2+\\dots+63=2016&gt;2004\\). Otherwise, an obvious upper bound is \\(2004\\).\n\nParameters\n\n\\(L=\\{1,\\dots,63\\}\\): set of potential layers (the top layer is layer \\(1\\))\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i} \\in \\mathbb{N}\\): number of candles on layer \\(i\\in L\\)\n\\(\\textcolor{blue}{y}_{i} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if layer \\(i \\in L\\) exists\n\\(\\textcolor{blue}{k} \\in \\mathbb{N}\\): difference of candles between two consecutive layers\n\n\n\nObjective function\nThe cake has a maximum number of layers:\n\\[\n\\max \\sum_{i \\in L} \\textcolor{blue}{y}_{i}\n\\]\nsubject to:\n\n\nConstraints\n\nThe total number of candles is \\(2004\\):\n\n\\[\n\\sum_{i \\in L} \\textcolor{blue}{x}_{i}= 2004 \\\\\n\\]\n\nBetween two layers, the difference is \\(\\textcolor{blue}{k}\\):\n\n\\[\\begin{align}\n- M(1-\\textcolor{blue}{y}_{i})+\\textcolor{blue}{k}  \\le  \\textcolor{blue}{x}_{i}-\\textcolor{blue}{x}_{i-1} \\le \\textcolor{blue}{k} + M(1-\\textcolor{blue}{y}_{i}) \\quad \\forall i\\in L,\\; i&gt;1\n\\end{align}\\]\n\nThe difference is at least equal to \\(1\\)\n\n\\[\n\\textcolor{blue}{k} \\ge 1:\n\\]\n\nA layer that does not exist cannot have any candles:\n\n\\[\n\\textcolor{blue}{x}_{i} \\le M \\;\\textcolor{blue}{y}_{i}\n\\]\n\\(M\\) can be set to \\(2004\\).\n\nIf a layer does not exist, then layers beneath do not exist either:\n\n\\[\n\\textcolor{blue}{y}_{i} \\le \\textcolor{blue}{y}_{i-1} \\quad \\forall i \\in L, \\; i&gt;1\n\\]"
-  },
-  {
-    "objectID": "problems/cake.html#solution",
-    "href": "problems/cake.html#solution",
-    "title": "Tiered Cake",
-    "section": "Solution",
-    "text": "Solution\nSolving this problem takes less than \\(4\\) seconds with the default solver in PuLP (CBC) and yields:\n\n\n\nnumber of layers =  24.0\nnumber of candles on first layer =  72.0\nk =  1.0\n\n\nSource: tiered_cake.ipynb\nNote that the solution is not unique, the set of optimal solutions is \\((k,n)\\in\\{(1,72),(3,49),(5,26),(7,3)\\}\\).\nWith a bit of reasoning, one can determine that the number of layers is necessarily \\(24\\). In this case, the variables \\(\\textcolor{blue}{y}_i\\)​ can be omitted, along with the last two sets of constraints."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Welcome to OR Resources",
-    "section": "",
-    "text": "Welcome to OR Resources\nThis site offers a collection of problems solved using mathematical optimization techniques.\nMost problems originate from OR Stack Exchange and the math puzzles published by Le Monde."
-  },
-  {
-    "objectID": "problems/code.html",
-    "href": "problems/code.html",
+    "objectID": "problems/secret_code.html",
+    "href": "problems/secret_code.html",
     "title": "Secret Code",
     "section": "",
     "text": "This puzzle, published by Mickaël Launay (Launay 2025), is a secret code puzzle.\nThe code is obtained by adding two positive integers, with the following two conditions:\n\nall digits occurring in the two addends are distinct;\nwhen the addition is performed column by column, every column produces a carry.\n\nThe secret code is the largest possible sum that can be obtained from an addition satisfying both of these conditions."
   },
   {
-    "objectID": "problems/code.html#problem-description",
-    "href": "problems/code.html#problem-description",
+    "objectID": "problems/secret_code.html#problem-description",
+    "href": "problems/secret_code.html#problem-description",
     "title": "Secret Code",
     "section": "",
     "text": "This puzzle, published by Mickaël Launay (Launay 2025), is a secret code puzzle.\nThe code is obtained by adding two positive integers, with the following two conditions:\n\nall digits occurring in the two addends are distinct;\nwhen the addition is performed column by column, every column produces a carry.\n\nThe secret code is the largest possible sum that can be obtained from an addition satisfying both of these conditions."
   },
   {
-    "objectID": "problems/code.html#mip-model",
-    "href": "problems/code.html#mip-model",
+    "objectID": "problems/secret_code.html#mip-model",
+    "href": "problems/secret_code.html#mip-model",
     "title": "Secret Code",
     "section": "MIP model",
     "text": "MIP model\nIn this model, no logical reasoning is derived from the conditions, except for the fact that there are at most \\(10\\) digits.\n\nParameters\n\n\\(I=\\{0,\\dots,9\\}\\): set of digits (the first digit, \\(0\\), is at the far right)\n\\(J=\\{1,2\\}\\): set of summands\n\\(K=\\{0,1,\\dots,9\\}\\): set of possible values for a given digit\n\n\n\nVariables\n\n\\(\\textcolor{blue}{m} \\in \\mathbb{N}\\): first summand\n\\(\\textcolor{blue}{n} \\in \\mathbb{N}\\): second summand\n\\(\\textcolor{blue}{x}_{i,j,k} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if digit \\(i\\in I\\) of summand \\(j\\in J\\) has value \\(k \\in K\\)\n\\(\\textcolor{blue}{y}_{i} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if both digits \\(i \\in I\\) are zero for \\(m\\) and \\(n\\)\n\n\n\nObjective function\nThe secret code is the largest sum satisfying the given conditions:\n\\[\n\\max \\; \\textcolor{blue}{m}+\\textcolor{blue}{n}\n\\]\nsubject to:\n\n\nConstraints\n\nSummands \\(m\\) and \\(n\\) are defined in base \\(10\\):\n\n\\[\\begin{align}\n\\textcolor{blue}{m} &= \\sum_{i \\in I}\\sum_{k\\in K} k\\;10^i\\;\\textcolor{blue}{x}_{i,1,k} \\\\\n\\textcolor{blue}{n} &= \\sum_{i \\in I}\\sum_{k\\in K} k\\;10^i\\;\\textcolor{blue}{x}_{i,2,k} \\\\\n\\end{align}\\]\n\nEach digit must have exactly one value:\n\n\\[\n\\sum_{k \\in K} \\textcolor{blue}{x}_{i,j,k}=1 \\quad \\forall i \\in I,\\; \\forall j\\in J \\\\\n\\]\n\nAll digits are distinct:\n\n\\[\n\\sum_{i\\in I} \\sum_{j\\in J} \\textcolor{blue}{x}_{i,j,k} \\le 1 \\quad \\forall k\\in K \\\\\n\\]\n\nAll columnwise sums must produce a carry, except for columns of zeros:\n\n\\[\\begin{align}\n\\sum_{j \\in J} \\sum_{k\\in K} k\\; \\textcolor{blue}{x}_{1,j,k} &\\ge 10 \\\\\n\\sum_{j \\in J} \\sum_{k\\in K} k\\;\\textcolor{blue}{x}_{i,j,k} &\\ge 9(1-\\textcolor{blue}{y}_i) \\quad \\forall i \\in I,\\; i&gt;1 \\\\\n\\end{align}\\]\n\nActivated \\(\\textcolor{blue}{y}_i\\) implies a column of zeros:\n\n\\[\n\\textcolor{blue}{y}_i \\le \\textcolor{blue}{x}_{i,j,0}\\quad \\forall i\\in I, \\forall j \\in J\n\\]\n\nA column of zeros cannot be “in between” non zero columns:\n\n\\[\n\\textcolor{blue}{y}_i \\le \\textcolor{blue}{y}_{i+1}\\quad \\forall i \\in I,\\; i&lt;9\n\\]"
   },
   {
-    "objectID": "problems/code.html#solution",
-    "href": "problems/code.html#solution",
+    "objectID": "problems/secret_code.html#solution",
+    "href": "problems/secret_code.html#solution",
     "title": "Secret Code",
     "section": "Solution",
-    "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\nm + n =  9348 + 7652 = 17000\n\n\nSource: code.ipynb\nWith a bit of reasoning, one can determine that the number of digits must be \\(4\\). In this case, the variables \\(\\textcolor{blue}{y}_i\\)​ can be omitted, along with the last two sets of constraints."
+    "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\nm + n =  9348 + 7652 = 17000\n\n\nSource: secret_code.ipynb\nWith a bit of reasoning, one can determine that the number of digits must be \\(4\\). In this case, the variables \\(\\textcolor{blue}{y}_i\\)​ can be omitted, along with the last two sets of constraints."
   },
   {
-    "objectID": "problems/notebooks/code.html",
-    "href": "problems/notebooks/code.html",
-    "title": "OR Resources",
+    "objectID": "problems/postman.html",
+    "href": "problems/postman.html",
+    "title": "Postman",
     "section": "",
-    "text": "import pulp\n\n\ndigits = [d for d in range(10)]\nvalues = [k for k in range(10)]\nsummands = [1,2]\n\n\n# create problem\nprob = pulp.LpProblem(\"lines\", pulp.LpMaximize)\n\n# summand 1\nm = pulp.LpVariable(\"m\",cat=pulp.LpInteger)\n# summand 2\nn = pulp.LpVariable(\"n\",cat=pulp.LpInteger)\n# x[i][j][k]=1 &lt;=&gt; digit i=k for summand j\nx = pulp.LpVariable.dicts(\"x\",(digits,summands,values),cat=pulp.LpBinary)\n# z[i]=1 &lt;=&gt; digit i=0 for m and n\nz = pulp.LpVariable.dicts(\"z\",digits,cat=pulp.LpBinary)\n\n# objective\nprob+= m+n\n\n# m and n in base 10\nprob+= m == pulp.lpSum(k*x[i][1][k]*10**i for i in digits for k in values)\nprob+= n == pulp.lpSum(k*x[i][2][k]*10**i for i in digits for k in values)\n\n# one value per digit\nfor j in summands:\n    for i in digits:\n        prob+= pulp.lpSum(x[i][j][k] for k in values) == 1\n\n# all non 0 digits are distinct\nfor k in values:\n    if k&gt;0:\n        prob+= pulp.lpSum(x[i][j][k] for i in digits for j in summands) &lt;= 1\n\n# digitwise sum must produce carry\nfor i in digits:\n    if i==0:\n        prob+= pulp.lpSum(k*x[i][j][k] for j in summands for k in values) &gt;= 10\n    else:\n        prob+= pulp.lpSum(k*x[i][j][k] for j in summands for k in values) &gt;= 9*(1-z[i])\n\n# z[i] = 1 =&gt; digit i=0\nfor i in digits:\n    for j in summands:\n        prob+= z[i] &lt;= x[i][j][0]\n\n# if there is a double 0, the digits on the left are also 0\nfor i in digits:\n    if i&lt;max(digits):\n        prob+= z[i] &lt;= z[i+1]\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"m + n = \",int(pulp.value(m)),\"+\",int(pulp.value(n)),\"=\",int(pulp.value(prob.objective)))\n\nm + n =  9348 + 7652 = 17000"
+    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nthe delivery always begins at house \\(1\\);\nafter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house;\nthe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
   },
   {
-    "objectID": "problems/notebooks/pentominos.html",
-    "href": "problems/notebooks/pentominos.html",
-    "title": "OR Resources",
+    "objectID": "problems/postman.html#problem-description",
+    "href": "problems/postman.html#problem-description",
+    "title": "Postman",
     "section": "",
-    "text": "import pulp\nimport networkx as nx\n\n\nrows = 5\ncols = 10\nG = nx.grid_2d_graph(rows, cols)\nfor r in range(rows):\n    for c in range(cols):\n        G.nodes[(r, c)][\"layer\"] = c\nnx.draw(G,pos=nx.multipartite_layout(G,subset_key=\"layer\",align=\"vertical\"),\n        node_color=\"white\",\n        edgecolors=\"black\",\n        #with_labels=True,\n        node_size=250)\n\n\n\n\n\n\n\n\n\npentominos = []\nIp,Lp,Pp,Yp = False,False,False,True\nfor node in G.nodes():\n    if Ip:\n        # I pentominos\n        I = [(node[0]+i, node[1]) for i in range(5)]\n        if all(n in G for n in I):\n            P=G.subgraph(I)\n            pentominos.append(P)\n    if Lp:\n        # L pentominos 1\n        L1 = [(node[0]+i, node[1]) for i in range(4)]+[(node[0],node[1]+1)]\n        if all(n in G for n in L1):\n            P=G.subgraph(L1)\n            pentominos.append(P)\n        # L pentominos 2\n        L2 = [(node[0]+i, node[1]) for i in range(4)]+[(node[0]+3,node[1]-1)]\n        if all(n in G for n in L2):\n            P=G.subgraph(L2)\n            pentominos.append(P)\n    if Pp:\n        # P pentominos 1\n        P1 = [(node[0]+i, node[1]) for i in range(3)]+[(node[0]+i,node[1]+1) for i in range(2)]\n        if all(n in G for n in P1):\n            P=G.subgraph(P1)\n            pentominos.append(P)\n        # P pentominos 2\n        P2 = [(node[0]+i, node[1]) for i in range(1,3)]+[(node[0]+i,node[1]+1) for i in range(3)]\n        if all(n in G for n in P2):\n            P=G.subgraph(P2)\n            pentominos.append(P)\n    if Yp:\n        # Y pentominos 1\n        Y1 = [(node[0]+i, node[1]) for i in range(4)]+[(node[0]+i,node[1]+1) for i in range(2,3)]\n        if all(n in G for n in Y1):\n            P=G.subgraph(Y1)\n            pentominos.append(P)\n        # Y pentominos 2\n        Y2 = [(node[0]+i, node[1]) for i in range(4)]+[(node[0]+i,node[1]-1) for i in range(1,2)]\n        if all(n in G for n in Y2):\n            P=G.subgraph(Y2)\n            pentominos.append(P)\n        # Y pentominos 3\n        Y3 = [(node[0], node[1]+i) for i in range(4)]+[(node[0]-1,node[1]+i) for i in range(2,3)]\n        if all(n in G for n in Y3):\n            P=G.subgraph(Y3)\n            pentominos.append(P)\n        # Y pentominos 4\n        Y4 = [(node[0], node[1]+i) for i in range(4)]+[(node[0]+1,node[1]+i) for i in range(1,2)]\n        if all(n in G for n in Y4):\n            P=G.subgraph(Y4)\n            pentominos.append(P)\n    \npentominos_dict = dict(zip([i for i in range(len(pentominos))],pentominos))\n\n\n# create problem\nprob = pulp.LpProblem(\"pentomino\", pulp.LpMinimize)\n\n# x[p] = 1 pentamino p is used\nx = pulp.LpVariable.dicts(\"x\",pentominos_dict,cat=pulp.LpBinary)\n\n# dummy objective\nprob+= 0\n\n# each node shold be covered exactly once\nfor (r,c) in G.nodes():\n    prob+= pulp.lpSum(x[p] for p in pentominos_dict if (r,c) in pentominos_dict[p].nodes()) == 1\n\n\nprob.solve()\n\n1\n\n\n\npos = {(x, y): (y, -x) for x, y in G.nodes()} \nnx.draw(G, pos, node_size=10, edge_color='grey')\nfor p in x:\n    if pulp.value(x[p])&gt;0.9:\n        P = pentominos_dict[p]\n        nx.draw(P, pos, \n                node_color=\"white\",\n                edgecolors=\"black\", \n                width=15)"
+    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nthe delivery always begins at house \\(1\\);\nafter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house;\nthe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
   },
   {
-    "objectID": "problems/notebooks/saint_exupery_ruler.html",
-    "href": "problems/notebooks/saint_exupery_ruler.html",
-    "title": "Saint‑Exupéry ruler",
-    "section": "",
-    "text": "import pulp \n\n\nruler = [i for i in range(21)]\n\n\n# create problem\nprob = pulp.LpProblem(\"ruler\", pulp.LpMinimize)\n\n# x[i]=1 &lt;=&gt; mark on unit i\nx = pulp.LpVariable.dicts(\"x\",ruler,cat=pulp.LpBinary)\n# y[i][j]=1 &lt;=&gt; mark on units i and j\ny = pulp.LpVariable.dicts(\"y\",(ruler,ruler),cat=pulp.LpBinary)\n\n# minimize number of marks\nprob+= pulp.lpSum(x)\n\nfor i in ruler:\n    for j in ruler:\n        if j&gt;i:\n            prob+= y[i][j]&lt;= x[i]\n            prob+= y[i][j]&lt;= x[j]\n            prob+= x[i]+x[j] &lt;= y[i][j]+1\n\nfor k in ruler:\n    if k&gt;0:\n        prob+= pulp.lpSum(y[i][j] for i in ruler for j in ruler if j&gt;i if j-i==k)&gt;=1, \"length_%s\"%k\n\n# match initial conditions\nprob+= x[1]==1\nprob+= x[4]==1\nprob+= x[6]==1\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"mark\")\nprint(\"----\")\nfor i in ruler:\n    if pulp.value(x[i])&gt;0.9:\n        print(i)\n\nmark\n----\n0\n1\n4\n6\n11\n18\n19\n20\n\n\n\nprint(\"length -&gt; endpoints\")\nprint(\"-------------------\")\nfor k in ruler:\n    if k&gt;0:\n        for i in ruler:\n            for j in ruler:\n                if j&gt;i and j-i==k:\n                    if pulp.value(y[i][j])&gt;0.9:\n                        print(k,\"-&gt;\",j,i)\n\nlength -&gt; endpoints\n-------------------\n1 -&gt; 1 0\n1 -&gt; 19 18\n1 -&gt; 20 19\n2 -&gt; 6 4\n2 -&gt; 20 18\n3 -&gt; 4 1\n4 -&gt; 4 0\n5 -&gt; 6 1\n5 -&gt; 11 6\n6 -&gt; 6 0\n7 -&gt; 11 4\n7 -&gt; 18 11\n8 -&gt; 19 11\n9 -&gt; 20 11\n10 -&gt; 11 1\n11 -&gt; 11 0\n12 -&gt; 18 6\n13 -&gt; 19 6\n14 -&gt; 18 4\n14 -&gt; 20 6\n15 -&gt; 19 4\n16 -&gt; 20 4\n17 -&gt; 18 1\n18 -&gt; 18 0\n18 -&gt; 19 1\n19 -&gt; 19 0\n19 -&gt; 20 1\n20 -&gt; 20 0\n\n\n\nimport plotly.express as px\nimport pandas as pd\n\ndef make_ruler(\n    start=0, end=10, ticks=None,\n    ruler_height=1.0, tick_height=0.7,\n    label_offset=-0.15, label_size=36,\n    bg_color=\"#e6e6e6\", border_color=\"black\",\n    border_thickness=6, tick_width=6,\n    width_px=1000, height_px=220\n):\n    if ticks is None:\n        ticks = list(range(int(start), int(end)+1))\n\n    base = pd.DataFrame({\"x\": [], \"y\": []})\n    fig = px.scatter(base, x=\"x\", y=\"y\")\n\n    # Body\n    fig.add_shape(\n        type=\"rect\",\n        x0=start, x1=end,\n        y0=0, y1=ruler_height,\n        fillcolor=bg_color,\n        line=dict(color=border_color, width=border_thickness),\n        layer=\"below\"\n    )\n\n    # Ticks + labels\n    for x in ticks:\n        fig.add_shape(\n            type=\"line\",\n            x0=x, x1=x,\n            y0=ruler_height, y1=ruler_height - tick_height,\n            line=dict(color=border_color, width=tick_width)\n        )\n        fig.add_annotation(\n            x=x, y=label_offset,\n            text=str(x),\n            showarrow=False,\n            font=dict(size=label_size, color=border_color),\n            align=\"center\",\n            yanchor=\"top\"\n        )\n\n    pad = max((end - start) * 0.02, 0.2)\n    fig.update_layout(\n        width=width_px, height=height_px,\n        margin=dict(l=20, r=20, t=10, b=10),\n        plot_bgcolor=\"white\",\n    )\n    fig.update_xaxes(range=[start - pad, end + pad],\n                     showgrid=False, showticklabels=False,\n                     visible=False, fixedrange=True)\n    fig.update_yaxes(range=[label_offset - 0.8, ruler_height + 0.3],\n                     showgrid=False, showticklabels=False,\n                     visible=False, fixedrange=True)\n    return fig\n\n# Example\nfig = make_ruler(start=0, end=ruler[-1], ticks=[i for i in ruler if pulp.value(x[i])&gt;0.9])\nfig.show()"
+    "objectID": "problems/postman.html#mip-model",
+    "href": "problems/postman.html#mip-model",
+    "title": "Postman",
+    "section": "MIP model",
+    "text": "MIP model\n\nParameters\n\n\\(N=\\{1,\\dots,n\\}\\): set of houses\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i,j} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if houses \\(i\\) and \\(j\\) are served consecutively, \\(i\\neq j\\)\n\\(\\textcolor{blue}{r}_{i} \\in N\\): rank of house \\(i\\in N\\) in the delivery order\n\\(\\textcolor{blue}{\\ell}_{i} \\in N\\): label of house \\(i\\in N\\)\n\n\n\nObjective function\nAs this is a feasibility problem, any dummy objective function is suitable:\n\\[\n\\min 0\n\\]\nsubject to:\n\n\nConstraints\n\nAll houses must be served:\n\n\\[\\begin{align}\n\\sum_{j \\in N, j\\neq i} \\textcolor{blue}{x}_{i,j}&=1 \\quad \\forall i \\in N \\\\\n\\sum_{j \\in N , j\\neq i} \\textcolor{blue}{x}_{j,i}&=1 \\quad \\forall i \\in N\n\\end{align}\\]\n\nNo subtours:\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{j} &\\ge \\textcolor{blue}{r}_{i}+1-n(1-\\textcolor{blue}{x}_{i,j})\\quad \\forall i\\neq j, j&gt;1 \\\\\n\\end{align}\\]\nThe above (MTZ) constraints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\implies \\textcolor{blue}{r}_{j}=\\textcolor{blue}{r}_{i}+1\\).\n\nAll houses must be relabeled:\n\n\\[\n\\sum_{k \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall i \\in N\n\\]\n\nA label can only be used once:\n\n\\[\n\\sum_{i \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall k \\in N\n\\]\n\nLabels and successors must be consistent:\n\n\\[\\begin{align}\n\\textcolor{blue}{x}_{i,j} &= \\textcolor{blue}{y}_{i,j-i} &\\forall i&lt;j, \\; j&gt;1 \\\\\n\\textcolor{blue}{x}_{i,j} &= \\textcolor{blue}{y}_{i,j-i+n} &\\forall i&gt;j, \\; j&gt;1\n\\end{align}\\]\nThe above constaints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\Leftrightarrow \\textcolor{blue}{y}_{i,j-i\\pmod{n}}=1\\).\n\nHouse \\(1\\) is first (rank and label):\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{1} &= 1 \\\\\n\\textcolor{blue}{y}_{1,1} &=1\n\\end{align}\\]"
+  },
+  {
+    "objectID": "problems/postman.html#solution",
+    "href": "problems/postman.html#solution",
+    "title": "Postman",
+    "section": "Solution",
+    "text": "Solution\nSolving this problem with \\(n=6\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\nSolving this problem with \\(n=12\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\n\n\n\n\n\nSource: postman.ipynb"
   },
   {
     "objectID": "problems/numberlink.html",
@@ -196,31 +112,150 @@
     "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields:"
   },
   {
-    "objectID": "problems/postman.html",
-    "href": "problems/postman.html",
-    "title": "Postman",
+    "objectID": "problems/notebooks/tiered_cake.html",
+    "href": "problems/notebooks/tiered_cake.html",
+    "title": "OR Resources",
     "section": "",
-    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nthe delivery always begins at house \\(1\\);\nafter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house;\nthe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
+    "text": "import pulp\n\n\nlayers = [i for i in range(1,64)]\n\n\n# create problem\nprob = pulp.LpProblem(\"cake\", pulp.LpMaximize)\n\n# x[i] = number of candles on layer i\nx = pulp.LpVariable.dicts(\"x\",layers,lowBound=0,cat=pulp.LpInteger)\n# y[i]=1 &lt;=&gt; layer i is used\ny = pulp.LpVariable.dicts(\"y\",layers,cat=pulp.LpBinary)\n# difference of candles between two layers\nk = pulp.LpVariable(\"k\",lowBound=1,cat=pulp.LpInteger)\n\n# objective: maximize number of layers\nprob+= pulp.lpSum(y)\n\n# between two layers, the difference is k\nfor i in layers:\n    if i&gt;1:\n        prob+= x[i] &lt;= x[i-1]+k+2004*(1-y[i])\n        prob+= x[i] &gt;= x[i-1]+k-2004*(1-y[i])\n\n# total number of candles is 2004\nprob+= pulp.lpSum(x) == 2004\n\n# link x and y\nfor i in layers:\n    prob+= x[i] &lt;=2004*y[i]\n\n# consistency between layers\nfor i in layers:\n    if i&gt;1:\n        prob+= y[i]&lt;=y[i-1]\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"number of layers = \",pulp.value(prob.objective))\nprint(\"number of candles on first layer = \",pulp.value(x[1]))\nprint(\"k = \",pulp.value(k))\n\nnumber of layers =  24.0\nnumber of candles on first layer =  72.0\nk =  1.0"
   },
   {
-    "objectID": "problems/postman.html#problem-description",
-    "href": "problems/postman.html#problem-description",
-    "title": "Postman",
+    "objectID": "problems/notebooks/saint_exupery_ruler.html",
+    "href": "problems/notebooks/saint_exupery_ruler.html",
+    "title": "Saint‑Exupéry ruler",
     "section": "",
-    "text": "This puzzle was published by Mickaël Launay (Launay 2025). A postman delivers mail to a set of houses numbered from \\(1\\) to \\(n\\), arranged in a circle, following these rules:\n\nthe delivery always begins at house \\(1\\);\nafter serving house \\(k\\), the postman moves forward \\(k\\) positions around the circle to reach the next house;\nthe delivery process stops as soon as the postman reaches a house that has already been served, even if some houses remain unvisited.\n\nFor example if \\(n=6\\), the postman starts at house \\(1\\), then moves \\(1\\) position to reach house \\(2\\), then \\(2\\) positions to reach house \\(4\\), then \\(4\\) positions to reach house \\(8 \\equiv 2 \\pmod{6}\\). Since house \\(2\\) was already served, the process stops:\n\n\n\n\n\nThe problem is to relabel the houses such that all houses are served."
+    "text": "import pulp \n\n\nruler = [i for i in range(21)]\n\n\n# create problem\nprob = pulp.LpProblem(\"ruler\", pulp.LpMinimize)\n\n# x[i]=1 &lt;=&gt; mark on unit i\nx = pulp.LpVariable.dicts(\"x\",ruler,cat=pulp.LpBinary)\n# y[i][j]=1 &lt;=&gt; mark on units i and j\ny = pulp.LpVariable.dicts(\"y\",(ruler,ruler),cat=pulp.LpBinary)\n\n# minimize number of marks\nprob+= pulp.lpSum(x)\n\nfor i in ruler:\n    for j in ruler:\n        if j&gt;i:\n            prob+= y[i][j]&lt;= x[i]\n            prob+= y[i][j]&lt;= x[j]\n            prob+= x[i]+x[j] &lt;= y[i][j]+1\n\nfor k in ruler:\n    if k&gt;0:\n        prob+= pulp.lpSum(y[i][j] for i in ruler for j in ruler if j&gt;i if j-i==k)&gt;=1, \"length_%s\"%k\n\n# match initial conditions\nprob+= x[1]==1\nprob+= x[4]==1\nprob+= x[6]==1\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"mark\")\nprint(\"----\")\nfor i in ruler:\n    if pulp.value(x[i])&gt;0.9:\n        print(i)\n\nmark\n----\n0\n1\n4\n6\n11\n18\n19\n20\n\n\n\nprint(\"length -&gt; endpoints\")\nprint(\"-------------------\")\nfor k in ruler:\n    if k&gt;0:\n        for i in ruler:\n            for j in ruler:\n                if j&gt;i and j-i==k:\n                    if pulp.value(y[i][j])&gt;0.9:\n                        print(k,\"-&gt;\",j,i)\n\nlength -&gt; endpoints\n-------------------\n1 -&gt; 1 0\n1 -&gt; 19 18\n1 -&gt; 20 19\n2 -&gt; 6 4\n2 -&gt; 20 18\n3 -&gt; 4 1\n4 -&gt; 4 0\n5 -&gt; 6 1\n5 -&gt; 11 6\n6 -&gt; 6 0\n7 -&gt; 11 4\n7 -&gt; 18 11\n8 -&gt; 19 11\n9 -&gt; 20 11\n10 -&gt; 11 1\n11 -&gt; 11 0\n12 -&gt; 18 6\n13 -&gt; 19 6\n14 -&gt; 18 4\n14 -&gt; 20 6\n15 -&gt; 19 4\n16 -&gt; 20 4\n17 -&gt; 18 1\n18 -&gt; 18 0\n18 -&gt; 19 1\n19 -&gt; 19 0\n19 -&gt; 20 1\n20 -&gt; 20 0\n\n\n\nimport plotly.express as px\nimport pandas as pd\n\ndef make_ruler(\n    start=0, end=10, ticks=None,\n    ruler_height=1.0, tick_height=0.7,\n    label_offset=-0.15, label_size=36,\n    bg_color=\"#e6e6e6\", border_color=\"black\",\n    border_thickness=6, tick_width=6,\n    width_px=1000, height_px=220\n):\n    if ticks is None:\n        ticks = list(range(int(start), int(end)+1))\n\n    base = pd.DataFrame({\"x\": [], \"y\": []})\n    fig = px.scatter(base, x=\"x\", y=\"y\")\n\n    # Body\n    fig.add_shape(\n        type=\"rect\",\n        x0=start, x1=end,\n        y0=0, y1=ruler_height,\n        fillcolor=bg_color,\n        line=dict(color=border_color, width=border_thickness),\n        layer=\"below\"\n    )\n\n    # Ticks + labels\n    for x in ticks:\n        fig.add_shape(\n            type=\"line\",\n            x0=x, x1=x,\n            y0=ruler_height, y1=ruler_height - tick_height,\n            line=dict(color=border_color, width=tick_width)\n        )\n        fig.add_annotation(\n            x=x, y=label_offset,\n            text=str(x),\n            showarrow=False,\n            font=dict(size=label_size, color=border_color),\n            align=\"center\",\n            yanchor=\"top\"\n        )\n\n    pad = max((end - start) * 0.02, 0.2)\n    fig.update_layout(\n        width=width_px, height=height_px,\n        margin=dict(l=20, r=20, t=10, b=10),\n        plot_bgcolor=\"white\",\n    )\n    fig.update_xaxes(range=[start - pad, end + pad],\n                     showgrid=False, showticklabels=False,\n                     visible=False, fixedrange=True)\n    fig.update_yaxes(range=[label_offset - 0.8, ruler_height + 0.3],\n                     showgrid=False, showticklabels=False,\n                     visible=False, fixedrange=True)\n    return fig\n\n# Example\nfig = make_ruler(start=0, end=ruler[-1], ticks=[i for i in ruler if pulp.value(x[i])&gt;0.9])\nfig.show()"
   },
   {
-    "objectID": "problems/postman.html#mip-model",
-    "href": "problems/postman.html#mip-model",
-    "title": "Postman",
+    "objectID": "problems/notebooks/pentominoes.html",
+    "href": "problems/notebooks/pentominoes.html",
+    "title": "OR Resources",
+    "section": "",
+    "text": "import pulp\nimport networkx as nx\n\n\nrows = 5\ncols = 10\nG = nx.grid_2d_graph(rows, cols)\nfor r in range(rows):\n    for c in range(cols):\n        G.nodes[(r, c)][\"layer\"] = c\nnx.draw(G,pos=nx.multipartite_layout(G,subset_key=\"layer\",align=\"vertical\"),\n        node_color=\"white\",\n        edgecolors=\"black\",\n        node_size=250)\n\n\n\n\n\n\n\n\n\nORIENTATION_NAMES = [\n    \"id\", \"rot90\", \"rot180\", \"rot270\",\n    \"mirror\", \"mirror_rot90\", \"mirror_rot180\", \"mirror_rot270\"\n]\nORIENTATION_COLORS = {\n    \"id\":           \"#1f77b4\",\n    \"rot90\":        \"#ff7f0e\",\n    \"rot180\":       \"#2ca02c\",\n    \"rot270\":       \"#d62728\",\n    \"mirror\":       \"#9467bd\",\n    \"mirror_rot90\": \"#8c564b\",\n    \"mirror_rot180\":\"#e377c2\",\n    \"mirror_rot270\":\"#7f7f7f\",\n}\nY_OFFSETS = [\n    # identity\n    [(0,0),(1,0),(2,0),(3,0),(2,1)],\n    # rot 90\n    [(0,0),(0,1),(0,2),(0,3),(1,2)],\n    # rot 180\n    [(0,0),(-1,0),(-2,0),(-3,0),(-2,-1)],\n    # rot 270\n    [(0,0),(0,-1),(0,-2),(0,-3),(-1,-2)],\n    # mirror y-axis\n    [(0,0),(-1,0),(-2,0),(-3,0),(-2,1)],\n    # mirror + rot 90\n    [(0,0),(0,-1),(0,-2),(0,-3),(1,-2)],\n    # mirror + rot 180\n    [(0,0),(1,0),(2,0),(3,0),(2,-1)],\n    # mirror + rot 270\n    [(0,0),(0,1),(0,2),(0,3),(-1,2)],\n]\n\npentominoes = []\nfor node in G.nodes():\n    x0, y0 = node\n    #for ori in Y_OFFSETS:\n    for ori_offsets, ori_name in zip(Y_OFFSETS, ORIENTATION_NAMES):\n        Y = [(x0 + dx, y0 + dy) for (dx, dy) in ori_offsets]\n        if all(G.has_node(v) for v in Y): \n            P=G.subgraph(Y).copy()\n            P.graph[\"orientation\"] = ori_name       \n            P.graph[\"color\"] = ORIENTATION_COLORS[ori_name]  \n            pentominoes.append(P)\npentominoes_dict = dict(zip([i for i in range(len(pentominoes))],pentominoes))\n\n\n# create problem\nprob = pulp.LpProblem(\"pentomino\", pulp.LpMinimize)\n\n# x[p] = 1 pentamino p is used\nx = pulp.LpVariable.dicts(\"x\",pentominoes_dict,cat=pulp.LpBinary)\n\n# dummy objective\nprob+= 0\n\n# each node shold be covered exactly once\nfor (r,c) in G.nodes():\n    prob+= pulp.lpSum(x[p] for p in pentominoes_dict if (r,c) in pentominoes_dict[p].nodes()) == 1\n\n\nprob.solve()\n\n1\n\n\n\npos = {(x, y): (y, -x) for x, y in G.nodes()} \nnx.draw(G, pos, node_size=10, edge_color='grey')\nfor p in x:\n    if pulp.value(x[p])&gt;0.9:\n        P = pentominoes_dict[p]\n        nx.draw(P, pos, \n                node_color=\"white\",\n                edgecolors=\"black\",\n                edge_color=P.graph[\"color\"],\n                width=15)"
+  },
+  {
+    "objectID": "problems/index.html",
+    "href": "problems/index.html",
+    "title": "Problems",
+    "section": "",
+    "text": "Numberlink\n\n\n\npuzzle\n\nmodeling\n\ngrid\n\n\n\n\n\n\n\n\n\n\n\n\n\nPentominoes\n\n\n\npuzzle\n\nmodeling\n\ngrid\n\ntilings\n\n\n\n\n\n\n\n\n\n\n\n\n\nPostman\n\n\n\npuzzle\n\nmodeling\n\nrouting\n\n\n\n\n\n\n\n\n\n\n\n\n\nSecret Code\n\n\n\npuzzle\n\nmodeling\n\nsecret-code\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe Saint-Exupéry Ruler\n\n\n\npuzzle\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\n\n\nTiered Cake\n\n\n\npuzzle\n\nmodeling\n\n\n\n\n\n\n\n\n\n\n\n\n\nTouching Polyominoes\n\n\n\npuzzle\n\nmodeling\n\ngrid\n\ntilings\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to OR Resources",
+    "section": "",
+    "text": "Welcome to OR Resources\nThis site offers a collection of problems solved using mathematical optimization techniques.\nMost problems originate from OR Stack Exchange and the math puzzles published by Le Monde."
+  },
+  {
+    "objectID": "problems/notebooks/numberlink.html",
+    "href": "problems/notebooks/numberlink.html",
+    "title": "OR Resources",
+    "section": "",
+    "text": "import pulp\nimport networkx as nx\n\n\nT = [\n    ['','','','',1],\n    [2,3,'','',2],\n    ['','','','',''],\n    ['','','','',''],\n    ['','',1,'',''],\n    ['','','','',''],\n    ['','','','',3],\n]\n\nrows = len(T)\ncols = len(T[0])\n\nG = nx.grid_2d_graph(rows, cols) \nfor r in range(rows):\n    for c in range(cols):\n        G.nodes[(r, c)][\"value\"] = T[r][c]\n        G.nodes[(r, c)][\"layer\"] = c\n\nnx.draw(G,pos=nx.multipartite_layout(G,subset_key=\"layer\",align=\"vertical\"),\n          labels = nx.get_node_attributes(G,\"value\"),\n          node_color=\"white\",\n          edgecolors=\"black\",\n          node_size=650)\n\n\n\n\n\n\n\n\n\n# create problem\nprob = pulp.LpProblem(\"numberlink\", pulp.LpMaximize)\n\n# define variables\nx = pulp.LpVariable.dicts(\"x\",(G.nodes(),[1,2,3]),cat=pulp.LpBinary)\n\n# objective function\nprob += 0\n\n# each cell has a unique number\nfor (i,j) in G.nodes():\n    prob += pulp.lpSum(x[(i,j)][k] for k in [1,2,3]) == 1\n    \n# enforce endpoints\nfor (i,j) in G.nodes():\n    val = G.nodes[(i,j)][\"value\"]\n    if val:\n        prob += x[(i,j)][val] == 1\n        \n# if cell is an endpoint, then one neighbor must have same value\nfor (i,j) in G.nodes():\n    val = G.nodes[(i,j)][\"value\"]\n    if val:\n        prob += pulp.lpSum(x[(u,v)][val] for (u,v) in G.neighbors((i,j))) == 1\n        \n# if cell is not an end point, then 2 neighbours must have same value\nfor (i,j) in G.nodes():\n    val = G.nodes[(i,j)][\"value\"]\n    if not val:\n        for k in [1,2,3]:\n            prob += pulp.lpSum(x[(u,v)][k] for (u,v) in G.neighbors((i,j))) &gt;= 2-2*(1-x[(i,j)][k])\n            prob += pulp.lpSum(x[(u,v)][k] for (u,v) in G.neighbors((i,j))) &lt;= 2+2*(1-x[(i,j)][k])\n\n\nprob.solve()\n\n1\n\n\n\nfor (i,j) in G.nodes():\n    for k in [1,2,3]:\n        val = pulp.value(x[(i,j)][k])\n        if val &gt;0.9:\n            G.nodes[(i,j)][\"value\"]=k\n\n\nnx.draw(G,pos=nx.multipartite_layout(G,subset_key=\"layer\"),\n          labels = nx.get_node_attributes(G, 'value'),\n          node_color=[G.nodes[(i,j)][\"value\"] for (i,j) in G.nodes()],\n          node_size=650,\n          alpha=0.9\n       )"
+  },
+  {
+    "objectID": "problems/notebooks/postman.html",
+    "href": "problems/notebooks/postman.html",
+    "title": "OR Resources",
+    "section": "",
+    "text": "import pulp\nimport networkx as nx\nimport math\n\n\nn=12\nG = nx.complete_graph(n)\n\nmapping = {i: i + 1 for i in G.nodes()}\nG = nx.relabel_nodes(G, mapping)\n\nG = G.to_directed()\n\npos = {}\nfor i, node in enumerate(sorted(G.nodes())):\n    theta = math.pi/2 - (2*math.pi*i/n)  \n    pos[node] = (math.cos(theta), math.sin(theta))\nnx.draw(G, pos, with_labels=True, node_size=600)\n\n\n\n\n\n\n\n\n\nlabels = [l for l in range(1,n+1)]\n\n\nprob = pulp.LpProblem(\"postman\",pulp.LpMinimize)\n\n# variables\nx = pulp.LpVariable.dicts(\"x\",G.edges(),cat=pulp.LpBinary)\nr = pulp.LpVariable.dicts(\"r\",G.nodes(),lowBound=1,upBound=n,cat=pulp.LpInteger)\nl = pulp.LpVariable.dicts(\"l\",G.nodes(),lowBound=1,upBound=n,cat=pulp.LpInteger)\ny = pulp.LpVariable.dicts(\"y\",(G.nodes(),labels),cat=pulp.LpBinary)\n\n# dummy objective function\nprob += pulp.lpSum((pos[u][1]-pos[v][1])**2*x[(u,v)] for (u,v) in G.edges())\n\n# inflow and outflow through each node\nfor v in G.nodes():\n    prob += pulp.lpSum(x[(u,v)] for u in G.nodes() if u!=v) == 1\n    prob += pulp.lpSum(x[(v,u)] for u in G.nodes() if u!=v) == 1\n    \n# MTZ\nfor j in G.nodes():\n    if j&gt;1:\n        for i in G.nodes():\n            if i!=j:\n                prob += r[j] &gt;= r[i]+1-n*(1-x[(i,j)])\n\n# labeling\nfor i in G.nodes():\n    for j in G.nodes():\n        if j&gt;1:\n            if i&lt;j:\n                prob += x[(i,j)] &lt;= y[i][j-i]\n            if i&gt;j:\n                prob += x[(i,j)] &lt;= y[i][j-i+n]\n\n    prob += pulp.lpSum(y[i][k] for k in labels) == 1\n    prob += pulp.lpSum(k*y[i][k] for k in labels) == l[i]\n                      \nfor k in labels:\n    prob += pulp.lpSum(y[i][k] for i in G.nodes()) == 1\n\n# first node\nprob += r[1]==1\nprob += l[1]==1\n\n\nprob.solve()\n\n1\n\n\n\nrank_dict = dict(zip([i for i in r],[pulp.value(r[i])for i in r]))\nfor i in sorted(rank_dict, key=lambda k: rank_dict[k]):\n    print(\"rank\",int(pulp.value(r[i])),\"node\",i,\"label\",int(pulp.value(l[i])))\n\nrank 1 node 1 label 1\nrank 2 node 2 label 10\nrank 3 node 12 label 3\nrank 4 node 3 label 8\nrank 5 node 11 label 5\nrank 6 node 4 label 6\nrank 7 node 10 label 7\nrank 8 node 5 label 4\nrank 9 node 9 label 9\nrank 10 node 6 label 2\nrank 11 node 8 label 11\nrank 12 node 7 label 12\n\n\n\nremove = []\nfor (u,v) in G.edges():\n    if pulp.value(x[(u,v)])&lt;0.1:\n        remove.append((u,v))\n    elif v==1:\n        remove.append((u,v))\nG.remove_edges_from(remove)\n\nnx.draw(G, pos, with_labels=True, node_size=600)\noffset = 0.15  \npos_value = {v: (x, y + offset) for v, (x, y) in pos.items()}\nval_labels = {v: f\"{int(pulp.value(l[v]))}\" for v in G.nodes()}             \nnx.draw_networkx_labels(G, pos_value, labels=val_labels, font_size=10, font_color=\"#333\")"
+  },
+  {
+    "objectID": "problems/notebooks/secret_code.html",
+    "href": "problems/notebooks/secret_code.html",
+    "title": "OR Resources",
+    "section": "",
+    "text": "import pulp\n\n\ndigits = [d for d in range(10)]\nvalues = [k for k in range(10)]\nsummands = [1,2]\n\n\n# create problem\nprob = pulp.LpProblem(\"lines\", pulp.LpMaximize)\n\n# summand 1\nm = pulp.LpVariable(\"m\",cat=pulp.LpInteger)\n# summand 2\nn = pulp.LpVariable(\"n\",cat=pulp.LpInteger)\n# x[i][j][k]=1 &lt;=&gt; digit i=k for summand j\nx = pulp.LpVariable.dicts(\"x\",(digits,summands,values),cat=pulp.LpBinary)\n# z[i]=1 &lt;=&gt; digit i=0 for m and n\nz = pulp.LpVariable.dicts(\"z\",digits,cat=pulp.LpBinary)\n\n# objective\nprob+= m+n\n\n# m and n in base 10\nprob+= m == pulp.lpSum(k*x[i][1][k]*10**i for i in digits for k in values)\nprob+= n == pulp.lpSum(k*x[i][2][k]*10**i for i in digits for k in values)\n\n# one value per digit\nfor j in summands:\n    for i in digits:\n        prob+= pulp.lpSum(x[i][j][k] for k in values) == 1\n\n# all non 0 digits are distinct\nfor k in values:\n    if k&gt;0:\n        prob+= pulp.lpSum(x[i][j][k] for i in digits for j in summands) &lt;= 1\n\n# digitwise sum must produce carry\nfor i in digits:\n    if i==0:\n        prob+= pulp.lpSum(k*x[i][j][k] for j in summands for k in values) &gt;= 10\n    else:\n        prob+= pulp.lpSum(k*x[i][j][k] for j in summands for k in values) &gt;= 9*(1-z[i])\n\n# z[i] = 1 =&gt; digit i=0\nfor i in digits:\n    for j in summands:\n        prob+= z[i] &lt;= x[i][j][0]\n\n# if there is a double 0, the digits on the left are also 0\nfor i in digits:\n    if i&lt;max(digits):\n        prob+= z[i] &lt;= z[i+1]\n\n\nprob.solve()\n\n1\n\n\n\nprint(\"m + n = \",int(pulp.value(m)),\"+\",int(pulp.value(n)),\"=\",int(pulp.value(prob.objective)))\n\nm + n =  9348 + 7652 = 17000"
+  },
+  {
+    "objectID": "problems/notebooks/touching_polyominoes.html",
+    "href": "problems/notebooks/touching_polyominoes.html",
+    "title": "OR Resources",
+    "section": "",
+    "text": "import pulp\nimport networkx as nx\n\n\nrows = 5\ncols = 5\nG = nx.grid_2d_graph(rows, cols)\nfor r in range(rows):\n    for c in range(cols):\n        G.nodes[(r, c)][\"layer\"] = c\nnx.draw(G,pos=nx.multipartite_layout(G,subset_key=\"layer\",align=\"vertical\"),\n        node_color=\"white\",\n        edgecolors=\"black\",\n        node_size=250)\n\n\n\n\n\n\n\n\n\nP_TYPES = [\n           \"monomino\",\n           \"domino\",\n           \"I triomino\",\n           \"L triomino\",\n           #\"L3x6 octomino\"\n          ]\nOFFSETS = [\n([(0,0)],\"monomino\",1), # monomino\n([(0,0),(0,1)],\"domino\",2), # vertical domino\n([(0,0),(1,0)],\"domino\",3), # horizontal domino\n([(0, 0),(0, 1),(0, 2)],\"I triomino\",4), # vertical triomino\n([(0, 0),(1, 0),(2, 0)],\"I triomino\",5), # horizontal triomino\n([(0, 0),(0, 1),(1, 1)],\"L triomino\",6), # L triomino id\n([(0, 0), (1, 0), (0, 1)],\"L triomino\",7), # L triomino 90°\n([(0, 0), (1, 0), (1, -1)],\"L triomino\",8), # L triomino 180°\n([(0, 0), (0, -1), (-1, -1)],\"L triomino\",9), # L triomino 270°\n#([(0, 0), (1, 0), (2, 0),(0, 1), (0, 2), (0, 3), (0, 4), (0, 5)],\"L3x6 octomino\",10), # L octomino 1\n#([(0, 0), (0, 1), (0, 2),(-1, 0), (-2, 0), (-3, 0), (-4, 0), (-5, 0)],\"L3x6 octomino\",11), # L octomino 2 ...\n#([(0, 0), (-1, 0), (-2, 0),(0, -1), (0, -2), (0, -3), (0, -4), (0, -5)],\"L3x6 octomino\",12),\n#([(0, 0), (0, -1), (0, -2),(1, 0), (2, 0), (3, 0), (4, 0), (5, 0)],\"L3x6 octomino\",13),\n#([(0, 0), (-1, 0), (-2, 0),(0, 1), (0, 2), (0, 3), (0, 4), (0, 5)],\"L3x6 octomino\",14),\n#([(0, 0), (0, -1), (0, -2),(-1, 0), (-2, 0), (-3, 0), (-4, 0), (-5, 0)],\"L3x6 octomino\",15),\n#([(0, 0), (1, 0), (2, 0),(0, -1), (0, -2), (0, -3), (0, -4), (0, -5)],\"L3x6 octomino\",16),\n#([(0, 0), (0, 1), (0, 2),(1, 0), (2, 0), (3, 0), (4, 0), (5, 0)],\"L3x6 octomino\",17),\n]\nCOLORS = dict(zip([i for i in range(1,18)],[\n    \"#1f77b4\",  # blue\n    \"#ff7f0e\",  # orange\n    \"#d62728\",  # red\n    \"#9467bd\",  # purple\n    \"#8c564b\",  # brown\n    \"#e377c2\",  # pink\n    \"#7f7f7f\",  # gray\n    \"#2ca02c\",  # green\n    \"#bcbd22\",  # yellow-green\n    \"#17becf\",  # cyan\n    \"#393b79\",  # dark blue\n    \"#637939\",  # olive\n    \"#8c6d31\",  # ochre\n    \"#843c39\",  # dark red\n    \"#7b4173\",  # violet\n    \"#3182bd\",  # bright blue\n    \"#31a354\",  # bright green\n]))\n\npolyominoes = []\nfor node in G.nodes():\n    x0, y0 = node\n    for offset,name,id in OFFSETS:\n        T = [(x0 + dx, y0 + dy) for (dx, dy) in offset]\n        if all(G.has_node(v) for v in T): \n            P=G.subgraph(T).copy()\n            P.graph[\"type\"] = name\n            P.graph[\"color\"] = COLORS[id]\n            polyominoes.append(P)\npolyominoes_dict = dict(zip([i for i in range(len(polyominoes))],polyominoes))\n\n\n# create problem\nprob = pulp.LpProblem(\"touching_polyominoes\", pulp.LpMinimize)\n\n# x[p] = 1 pentamino p is used\nx = pulp.LpVariable.dicts(\"x\",polyominoes_dict,cat=pulp.LpBinary)\n\n# dummy objective\nprob+= 0 \n\n# one polyomino of each type\nfor p_type in P_TYPES:\n    prob+= pulp.lpSum(x[p] for p in polyominoes_dict if polyominoes_dict[p].graph[\"type\"]==p_type) == 1\n\n# no overlap\nfor (r,c) in G.nodes():\n    prob+= pulp.lpSum(x[p] for p in polyominoes_dict if (r,c) in polyominoes_dict[p].nodes()) &lt;= 1\n\n# two non adjacent polyominoes cannot be selected simultaneously\nfor p in polyominoes_dict:\n    for q in polyominoes_dict:\n        if p!=q:\n            P = polyominoes_dict[p]\n            Q = polyominoes_dict[q]\n            boundary_p = nx.node_boundary(G, P)\n            if boundary_p.isdisjoint(Q):\n                prob+= x[p]+x[q] &lt;= 1\n\n# optional constraints to center the resulting configuration in the middle\nprob += pulp.lpSum(x[p] for p in polyominoes_dict if (1,1) in polyominoes_dict[p].nodes()) == 1\nprob += pulp.lpSum(x[p] for p in polyominoes_dict if (3,3) in polyominoes_dict[p].nodes()) == 1\n\n\nprob.solve()\n\n1\n\n\n\npos = {(x, y): (x,-y) for x, y in G.nodes()} \nnx.draw(G, pos, node_size=250, node_color=\"white\",\n                edgecolors=\"black\",edge_color='grey')\nfor p in x:\n    if pulp.value(x[p])&gt;0.9:\n        P = polyominoes_dict[p]\n        nx.draw(P, pos, \n                node_color=P.graph[\"color\"],\n                edgecolors=\"black\",\n                edge_color=P.graph[\"color\"],\n                width=15)"
+  },
+  {
+    "objectID": "problems/pentominoes.html",
+    "href": "problems/pentominoes.html",
+    "title": "Pentominoes",
+    "section": "",
+    "text": "This puzzle, published by Mickaël Launay (Launay 2025), boils down to finding a tiling of a \\(5\\times 10\\) grid using different pentominoes.\nWe will represent the grid as 2d grid graph (where a cell is a node):\n\n\n\n\n\n\n\n\n\n\n\nSource: pentominoes.ipynb\n\nThe candidate pentominoes are the \\(8\\) Y pentominoes:\n\n\n\nIllustration from wikipedia"
+  },
+  {
+    "objectID": "problems/pentominoes.html#problem-description",
+    "href": "problems/pentominoes.html#problem-description",
+    "title": "Pentominoes",
+    "section": "",
+    "text": "This puzzle, published by Mickaël Launay (Launay 2025), boils down to finding a tiling of a \\(5\\times 10\\) grid using different pentominoes.\nWe will represent the grid as 2d grid graph (where a cell is a node):\n\n\n\n\n\n\n\n\n\n\n\nSource: pentominoes.ipynb\n\nThe candidate pentominoes are the \\(8\\) Y pentominoes:\n\n\n\nIllustration from wikipedia"
+  },
+  {
+    "objectID": "problems/pentominoes.html#mip-model",
+    "href": "problems/pentominoes.html#mip-model",
+    "title": "Pentominoes",
     "section": "MIP model",
-    "text": "MIP model\n\nParameters\n\n\\(N=\\{1,\\dots,n\\}\\): set of houses\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i,j} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if houses \\(i\\) and \\(j\\) are served consecutively, \\(i\\neq j\\)\n\\(\\textcolor{blue}{r}_{i} \\in N\\): rank of house \\(i\\in N\\) in the delivery order\n\\(\\textcolor{blue}{\\ell}_{i} \\in N\\): label of house \\(i\\in N\\)\n\n\n\nObjective function\nAs this is a feasibility problem, any dummy objective function is suitable:\n\\[\n\\min 0\n\\]\nsubject to:\n\n\nConstraints\n\nAll houses must be served:\n\n\\[\\begin{align}\n\\sum_{j \\in N, j\\neq i} \\textcolor{blue}{x}_{i,j}&=1 \\quad \\forall i \\in N \\\\\n\\sum_{j \\in N , j\\neq i} \\textcolor{blue}{x}_{j,i}&=1 \\quad \\forall i \\in N\n\\end{align}\\]\n\nNo subtours:\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{j} &\\ge \\textcolor{blue}{r}_{i}+1-n(1-\\textcolor{blue}{x}_{i,j})\\quad \\forall i\\neq j, j&gt;1 \\\\\n\\end{align}\\]\nThe above (MTZ) constraints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\implies \\textcolor{blue}{r}_{j}=\\textcolor{blue}{r}_{i}+1\\).\n\nAll houses must be relabeled:\n\n\\[\n\\sum_{k \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall i \\in N\n\\]\n\nA label can only be used once:\n\n\\[\n\\sum_{i \\in N} \\textcolor{blue}{y}_{i,k}=1 \\quad \\forall k \\in N\n\\]\n\nLabels and successors must be consistent:\n\n\\[\\begin{align}\n\\textcolor{blue}{x}_{i,j} &= \\textcolor{blue}{y}_{i,j-i} &\\forall i&lt;j, \\; j&gt;1 \\\\\n\\textcolor{blue}{x}_{i,j} &= \\textcolor{blue}{y}_{i,j-i+n} &\\forall i&gt;j, \\; j&gt;1\n\\end{align}\\]\nThe above constaints enforce \\(\\textcolor{blue}{x}_{i,j}=1 \\Leftrightarrow \\textcolor{blue}{y}_{i,j-i\\pmod{n}}=1\\).\n\nHouse \\(1\\) is first (rank and label):\n\n\\[\\begin{align}\n\\textcolor{blue}{r}_{1} &= 1 \\\\\n\\textcolor{blue}{y}_{1,1} &=1\n\\end{align}\\]"
+    "text": "MIP model\n\nParameters\n\n\\(C\\): set of cells of the grid\n\\(P\\): set of candidate pentominoes. A pentomino \\(p\\) is defined as a subgraph of the grid; therefore it is defined not only by its shape, but also by the set of nodes it covers.\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if pentomino \\(p\\in P\\) is used\n\n\n\nObjective function\nAs this is a feasibility problem, any dummy objective function is suitable:\n\\[\n\\min 0\n\\]\nsubject to:\n\n\nConstraints\n\nEach cell (node) of the grid (graph) must be covered exactly once, by one of the candidate pentaminoes:\n\n\\[\\begin{align}\n\\sum_{p \\in P|c \\in p}\\textcolor{blue}{x}_{p}=1 \\quad \\forall c \\in C \\\\\n\\end{align}\\]"
   },
   {
-    "objectID": "problems/postman.html#solution",
-    "href": "problems/postman.html#solution",
-    "title": "Postman",
+    "objectID": "problems/pentominoes.html#solution",
+    "href": "problems/pentominoes.html#solution",
+    "title": "Pentominoes",
     "section": "Solution",
-    "text": "Solution\nSolving this problem with \\(n=6\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\nSolving this problem with \\(n=12\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\n\n\n\n\n\nSource: postman.ipynb"
+    "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields:"
+  },
+  {
+    "objectID": "problems/saint_exupery_ruler.html",
+    "href": "problems/saint_exupery_ruler.html",
+    "title": "The Saint-Exupéry Ruler",
+    "section": "",
+    "text": "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.\n— Antoine de Saint-Exupéry\n\nThe problem is to design a ruler of \\(n\\) units using the fewest possible graduations, such that all possible integer lengths appear on the ruler. This puzzle was published by Mickaël Launay (Launay 2025). An example with \\(n=6\\) is displayed in the Figure below:\n\n\n\nIllustration from (Launay 2025)\n\n\nLength \\(1\\) can be measured with marks \\(0\\) and \\(1\\), length \\(2\\) with marks \\(4\\) and \\(6\\), length \\(3\\) with marks \\(1\\) and \\(4\\), length \\(4\\) with marks \\(0\\) and \\(4\\), length \\(5\\) with marks \\(6\\) and \\(1\\), and length \\(6\\) with marks \\(0\\) and \\(6\\)."
+  },
+  {
+    "objectID": "problems/saint_exupery_ruler.html#problem-description",
+    "href": "problems/saint_exupery_ruler.html#problem-description",
+    "title": "The Saint-Exupéry Ruler",
+    "section": "",
+    "text": "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.\n— Antoine de Saint-Exupéry\n\nThe problem is to design a ruler of \\(n\\) units using the fewest possible graduations, such that all possible integer lengths appear on the ruler. This puzzle was published by Mickaël Launay (Launay 2025). An example with \\(n=6\\) is displayed in the Figure below:\n\n\n\nIllustration from (Launay 2025)\n\n\nLength \\(1\\) can be measured with marks \\(0\\) and \\(1\\), length \\(2\\) with marks \\(4\\) and \\(6\\), length \\(3\\) with marks \\(1\\) and \\(4\\), length \\(4\\) with marks \\(0\\) and \\(4\\), length \\(5\\) with marks \\(6\\) and \\(1\\), and length \\(6\\) with marks \\(0\\) and \\(6\\)."
+  },
+  {
+    "objectID": "problems/saint_exupery_ruler.html#mip-model",
+    "href": "problems/saint_exupery_ruler.html#mip-model",
+    "title": "The Saint-Exupéry Ruler",
+    "section": "MIP model",
+    "text": "MIP model\n\nParameters\n\n\\(N = \\{0,1,\\dots,n\\}\\): set of units of the ruler\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_i \\in \\{0,1\\}\\): takes value \\(1\\) if and only if there is a mark on unit \\(i\\in N\\)\n\\(\\textcolor{blue}{y}_{i,j} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if there are marks on units \\(i\\in N\\) and \\(j\\in N\\), \\(i&lt; j\\)\n\n\n\nObjective function\nThe problem is to minimize the number of marks:\n\\[\n\\min \\sum_{i \\in N} \\textcolor{blue}{x}_i\n\\]\nsubject to:\n\n\nConstraints\n\nAll possible integer lengths must appear somehow on the ruler:\n\n\\[\n\\sum_{i&lt;j, \\;j-i=k} \\textcolor{blue}{y}_{i,j} \\ge 1 \\quad \\forall k \\in N, k&gt;0 \\tag{1}\n\\]\n\nVariables \\(\\textcolor{blue}{x}_i\\) and \\(\\textcolor{blue}{y}_{i,j}\\) must be consistent:\n\n\\[\\begin{align}\n\\textcolor{blue}{y}_{i,j} &\\le \\textcolor{blue}{x}_i &\\forall i&lt;j \\tag{2}\\\\\n\\textcolor{blue}{y}_{i,j} &\\le \\textcolor{blue}{x}_j &\\forall i&lt;j  \\tag{3}\\\\\n\\textcolor{blue}{x}_i+\\textcolor{blue}{x}_j &\\le \\textcolor{blue}{y}_{i,j}+1\n&\\forall i&lt;j \\tag{4} \\\\\n\\end{align}\\]\nConstraints \\((2)\\) and \\((3)\\) enforce \\(\\textcolor{blue}{y}_{i,j}=1\\implies \\textcolor{blue}{x}_i=1\\) and \\(\\textcolor{blue}{x}_j=1\\), constraints \\((4)\\) enforce the reciprocal relationship."
+  },
+  {
+    "objectID": "problems/saint_exupery_ruler.html#solution",
+    "href": "problems/saint_exupery_ruler.html#solution",
+    "title": "The Saint-Exupéry Ruler",
+    "section": "Solution",
+    "text": "Solution\nSolving this problem with \\(n=20\\) takes less than a second with the default solver in PuLP (CBC) and yields:\n\n\n\n\n\nSo the 20 unit ruler can be designed with \\(8\\) marks. We can check that all integer lengths do appear on the ruler (some lengths appear multiple times):\n\n\n\nlength -&gt; endpoints\n-------------------\n1 -&gt; 1 0\n1 -&gt; 19 18\n1 -&gt; 20 19\n2 -&gt; 6 4\n2 -&gt; 20 18\n3 -&gt; 4 1\n4 -&gt; 4 0\n5 -&gt; 6 1\n5 -&gt; 11 6\n6 -&gt; 6 0\n7 -&gt; 11 4\n7 -&gt; 18 11\n8 -&gt; 19 11\n9 -&gt; 20 11\n10 -&gt; 11 1\n11 -&gt; 11 0\n12 -&gt; 18 6\n13 -&gt; 19 6\n14 -&gt; 18 4\n14 -&gt; 20 6\n15 -&gt; 19 4\n16 -&gt; 20 4\n17 -&gt; 18 1\n18 -&gt; 18 0\n18 -&gt; 19 1\n19 -&gt; 19 0\n19 -&gt; 20 1\n20 -&gt; 20 0\n\n\nSource: Saint‑Exupéry ruler"
+  },
+  {
+    "objectID": "problems/tiered_cake.html",
+    "href": "problems/tiered_cake.html",
+    "title": "Tiered Cake",
+    "section": "",
+    "text": "This puzzle, published by Mickaël Launay and Dominique Souder (Souder and Launay 2002), reads as follows.\nA tiered cake has a total of \\(2004\\) candles. The top tier contains some number of candles, and each tier below it has \\(k\\) more candles than the tier directly above. If the cake is built to have the maximum possible number of tiers, how many candles are on the top tier?"
+  },
+  {
+    "objectID": "problems/tiered_cake.html#problem-description",
+    "href": "problems/tiered_cake.html#problem-description",
+    "title": "Tiered Cake",
+    "section": "",
+    "text": "This puzzle, published by Mickaël Launay and Dominique Souder (Souder and Launay 2002), reads as follows.\nA tiered cake has a total of \\(2004\\) candles. The top tier contains some number of candles, and each tier below it has \\(k\\) more candles than the tier directly above. If the cake is built to have the maximum possible number of tiers, how many candles are on the top tier?"
+  },
+  {
+    "objectID": "problems/tiered_cake.html#mip-model",
+    "href": "problems/tiered_cake.html#mip-model",
+    "title": "Tiered Cake",
+    "section": "MIP model",
+    "text": "MIP model\nIn this model, no logical reasoning is derived from the problem statement, except for the fact that there cannot be more than \\(63\\) layers, because \\(1+2+\\dots+63=2016&gt;2004\\). Otherwise, an obvious upper bound is \\(2004\\).\n\nParameters\n\n\\(L=\\{1,\\dots,63\\}\\): set of potential layers (the top layer is layer \\(1\\))\n\n\n\nVariables\n\n\\(\\textcolor{blue}{x}_{i} \\in \\mathbb{N}\\): number of candles on layer \\(i\\in L\\)\n\\(\\textcolor{blue}{y}_{i} \\in \\{0,1\\}\\): takes value \\(1\\) if and only if layer \\(i \\in L\\) exists\n\\(\\textcolor{blue}{k} \\in \\mathbb{N}\\): difference of candles between two consecutive layers\n\n\n\nObjective function\nThe cake has a maximum number of layers:\n\\[\n\\max \\sum_{i \\in L} \\textcolor{blue}{y}_{i}\n\\]\nsubject to:\n\n\nConstraints\n\nThe total number of candles is \\(2004\\):\n\n\\[\n\\sum_{i \\in L} \\textcolor{blue}{x}_{i}= 2004 \\\\\n\\]\n\nBetween two layers, the difference is \\(\\textcolor{blue}{k}\\):\n\n\\[\\begin{align}\n- M(1-\\textcolor{blue}{y}_{i})+\\textcolor{blue}{k}  \\le  \\textcolor{blue}{x}_{i}-\\textcolor{blue}{x}_{i-1} \\le \\textcolor{blue}{k} + M(1-\\textcolor{blue}{y}_{i}) \\quad \\forall i\\in L,\\; i&gt;1\n\\end{align}\\]\n\\(M\\) can be set to \\(2004\\).\n\nThe difference is at least equal to \\(1\\)\n\n\\[\n\\textcolor{blue}{k} \\ge 1:\n\\]\n\nA layer that does not exist cannot have any candles:\n\n\\[\n\\textcolor{blue}{x}_{i} \\le M \\;\\textcolor{blue}{y}_{i}\n\\]\n\\(M\\) can be set to \\(2004\\).\n\nIf a layer does not exist, then layers beneath do not exist either:\n\n\\[\n\\textcolor{blue}{y}_{i} \\le \\textcolor{blue}{y}_{i-1} \\quad \\forall i \\in L, \\; i&gt;1\n\\]"
+  },
+  {
+    "objectID": "problems/tiered_cake.html#solution",
+    "href": "problems/tiered_cake.html#solution",
+    "title": "Tiered Cake",
+    "section": "Solution",
+    "text": "Solution\nSolving this problem takes less than \\(4\\) seconds with the default solver in PuLP (CBC) and yields:\n\n\n\nnumber of layers =  24.0\nnumber of candles on first layer =  72.0\nk =  1.0\n\n\nSource: tiered_cake.ipynb\nNote that the solution is not unique, the set of optimal solutions is \\((k,n)\\in\\{(1,72),(3,49),(5,26),(7,3)\\}\\).\nWith a bit of reasoning, one can determine that the number of layers is necessarily \\(24\\). In this case, the variables \\(\\textcolor{blue}{y}_i\\)​ can be omitted, along with the last two sets of constraints."
   }
 ]
