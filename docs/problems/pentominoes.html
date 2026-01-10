@@ -200,20 +200,6 @@ window.Quarto = {
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
 <p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2025polychoco">(<a href="#ref-lemonde2025polychoco" role="doc-biblioref">Launay 2025</a>)</span>, boils down to finding a tiling of a <span class="math inline">\(5\times 10\)</span> grid using different <a href="https://en.wikipedia.org/wiki/Pentomino">pentominoes</a>.</p>
-<p>We will represent the grid as 2d grid graph (where a cell is a node):</p>
-<div class="embed-scale-50">
-<div class="quarto-embed-nb-cell">
-<div id="e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="pentominoes_files/figure-html/notebooks-pentominoes-cell-3-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<a class="quarto-notebook-link" id="nblink-1" href="notebooks\pentominoes-preview.html#e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4">Source: pentominoes.ipynb</a></div>
-</div>
 <p>The candidate pentominoes are the <span class="math inline">\(8\)</span> Y pentominoes:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -228,7 +214,7 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <ul>
 <li><span class="math inline">\(C\)</span>: set of cells of the grid</li>
-<li><span class="math inline">\(P\)</span>: set of candidate pentominoes. A pentomino <span class="math inline">\(p\)</span> is defined as a subgraph of the grid; therefore it is defined not only by its shape, but also by the set of nodes it covers.</li>
+<li><span class="math inline">\(P\)</span>: set of candidate pentominoes. A pentomino <span class="math inline">\(p\)</span> is defined as a subgraph of the grid; therefore it is defined not only by its shape, but also by the set of cells it covers.</li>
 </ul>
 </section>
 <section id="variables" class="level4">
@@ -248,7 +234,7 @@ window.Quarto = {
 <section id="constraints" class="level4">
 <h4 class="anchored" data-anchor-id="constraints">Constraints</h4>
 <ul>
-<li>Each cell (node) of the grid (graph) must be covered exactly once, by one of the candidate pentaminoes:</li>
+<li>Each cell of the grid must be covered exactly once, by one of the candidate pentaminoes:</li>
 </ul>
 <p><span class="math display">\[\begin{align}
 \sum_{p \in P|c \in p}\textcolor{blue}{x}_{p}=1 \quad \forall c \in C \\
@@ -259,7 +245,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="solution">Solution</h2>
 <p>Solving this problem takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
 <div class="quarto-embed-nb-cell">
-<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="6">
+<div id="15e8a499-66e4-4e23-9228-86d3f1ff1b73" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -268,7 +254,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\pentominoes-preview.html#15e8a499-66e4-4e23-9228-86d3f1ff1b73">Source: pentominoes.ipynb</a></div>
 
 
 

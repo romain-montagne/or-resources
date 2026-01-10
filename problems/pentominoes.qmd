@@ -14,12 +14,6 @@ image: images/gemini/polyominos.png
 This puzzle, published by Mickaël Launay [@lemonde2025polychoco], boils down to finding a tiling of a $5\times 10$
 grid using different [pentominoes](https://en.wikipedia.org/wiki/Pentomino).
 
-We will represent the grid as 2d grid graph (where a cell is a node):
-
-<div class="embed-scale-50">
-{{< embed notebooks/pentominoes.ipynb#e9eb5cf4-fb11-4653-b958-e7a95b6e5ff4 >}}
-</div>
-
 The candidate pentominoes are the $8$ Y pentominoes:
 
 ![Illustration from [wikipedia](https://en.wikipedia.org/wiki/Pentomino)](images/y_pentominoes.svg){width=60% fig-align="center"}
@@ -32,7 +26,7 @@ The candidate pentominoes are the $8$ Y pentominoes:
 
 - $C$: set of cells of the grid
 - $P$: set of candidate pentominoes. A pentomino $p$ is defined as a subgraph of the grid; 
-therefore it is defined not only by its shape, but also by the set of nodes it covers. 
+therefore it is defined not only by its shape, but also by the set of cells it covers. 
 
 #### Variables
 
@@ -50,7 +44,7 @@ subject to:
 
 #### Constraints
 
-- Each cell (node) of the grid (graph) must be covered exactly once, 
+- Each cell of the grid must be covered exactly once, 
 by one of the candidate pentaminoes:
 
 \begin{align}
@@ -63,5 +57,5 @@ by one of the candidate pentaminoes:
 Solving this problem takes less than a second with the default solver
 in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
-{{< embed notebooks/pentominoes.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}
 
+{{< embed notebooks/pentominoes.ipynb#15e8a499-66e4-4e23-9228-86d3f1ff1b73 >}}
