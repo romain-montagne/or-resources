@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Touching Polyominoes – OR Resources</title>
+<title>Starred Dominoes – OR Resources</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,14 +167,14 @@ window.Quarto = {
   <li><a href="#mip-model" id="toc-mip-model" class="nav-link" data-scroll-target="#mip-model">MIP model</a></li>
   <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   </ul>
-<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\touching_polyominoes-preview.html"><i class="bi bi-journal-code"></i>touching_polyominoes.ipynb</a></li></ul></div></nav>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\starred_dominoes-preview.html"><i class="bi bi-journal-code"></i>starred_dominoes.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Touching Polyominoes</h1>
+<h1 class="title">Starred Dominoes</h1>
   <div class="quarto-categories">
     <div class="quarto-category">puzzle</div>
     <div class="quarto-category">modeling</div>
@@ -199,23 +199,17 @@ window.Quarto = {
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
-<p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2024quatre">(<a href="#ref-lemonde2024quatre" role="doc-biblioref">Launay 2024</a>)</span>, reads as follows:</p>
-<p>Using the four polyominoes shown in the illustration below, arrange them so that:</p>
+<p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2025dominos">(<a href="#ref-lemonde2025dominos" role="doc-biblioref">Launay 2025</a>)</span>, reads as follows:</p>
+<p>The problem is to tile the grid shown in the illustration below with dominoes, each covering two squares (vertical or horizontal), such that:</p>
 <ul>
-<li>each shape touches all three of the others along at least one edge (corner-to-corner contact does not count);</li>
-<li>no cell is covered by more than one polyomino (the shapes may not overlap).</li>
+<li><p>the dominoes do not overlap;</p></li>
+<li><p>every domino either covers a star or is adjacent to a domino that covers a star.</p></li>
 </ul>
+<p>Two dominoes are considered adjacent if they share a side, but not if they touch only at a corner.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/4touching_polyominoes.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>Illustration from <span class="citation" data-cites="lemonde2024quatre">(<a href="#ref-lemonde2024quatre" role="doc-biblioref">Launay 2024</a>)</span></figcaption>
-</figure>
-</div>
-<p>Then, arrange the L <span class="math inline">\(6 \times 3\)</span> octominoes (see illustration below) under the same conditions.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/Loctominoes.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>Illustration from <span class="citation" data-cites="lemonde2024quatre">(<a href="#ref-lemonde2024quatre" role="doc-biblioref">Launay 2024</a>)</span></figcaption>
+<p><img src="images/star_dominoes.png" class="img-fluid figure-img" style="width:30.0%"></p>
+<figcaption>Illustration from <span class="citation" data-cites="lemonde2025dominos">(<a href="#ref-lemonde2025dominos" role="doc-biblioref">Launay 2025</a>)</span></figcaption>
 </figure>
 </div>
 </section>
@@ -225,16 +219,15 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <ul>
 <li><span class="math inline">\(C\)</span>: set of cells of the grid</li>
-<li><span class="math inline">\(K=\{1,2,3,4\}\)</span>: set of polyomino types</li>
-<li><span class="math inline">\(P_k\)</span>: set of candidate polyominoes of type <span class="math inline">\(k\in K\)</span>. A polyomino <span class="math inline">\(p\in P_k\)</span> is defined as a “subgrid” of the grid; therefore it is defined not only by its shape, but also by the set of cells it covers.</li>
-<li><span class="math inline">\(P=\bigcup_{k\in K} P_k\)</span>: set of all candidate polyominoes</li>
-<li><span class="math inline">\(N(p)\)</span>: set of cells adjacent to <span class="math inline">\(p\in P\)</span> in the grid</li>
+<li><span class="math inline">\(P\)</span>: set of candidate dominoes. A domino <span class="math inline">\(p\in P\)</span> is defined as a “subgrid” of the grid; therefore it is defined not only by its shape, but also by the set of cells it covers.</li>
+<li><span class="math inline">\(P^*\subset P\)</span>: set of dominoes which cover a star</li>
+<li><span class="math inline">\(S(p)\subset P^*\)</span>: set of adjacent dominoes of <span class="math inline">\(p\not\in P^*\)</span> which cover a star</li>
 </ul>
 </section>
 <section id="variables" class="level4">
 <h4 class="anchored" data-anchor-id="variables">Variables</h4>
 <ul>
-<li><span class="math inline">\(\textcolor{blue}{x}_{i} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if polyomino <span class="math inline">\(p\in P\)</span> is used</li>
+<li><span class="math inline">\(\textcolor{blue}{x}_{i} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if domino <span class="math inline">\(p\in P\)</span> is used</li>
 </ul>
 </section>
 <section id="objective-function" class="level4">
@@ -248,60 +241,41 @@ window.Quarto = {
 <section id="constraints" class="level4">
 <h4 class="anchored" data-anchor-id="constraints">Constraints</h4>
 <ul>
-<li>Each polyomino type should appear exactly once:</li>
-</ul>
-<p><span class="math display">\[
-\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 1 \quad \forall k \in K \tag{1}
-\]</span></p>
-<ul>
-<li>A cell of the grid can be covered at most once, by one of the candidate polyominoes:</li>
+<li>A cell of the grid must be covered exactly once by one of the candidate polyominoes (no overlapping):</li>
 </ul>
 <p><span class="math display">\[\begin{align}
-\sum_{k \in K}\sum_{p \in P_k|c \in p}\textcolor{blue}{x}_{p}\le 1 \quad \forall c \in C \\
+\sum_{p \in P|c \in p}\textcolor{blue}{x}_{p}= 1 \quad \forall c \in C \\
 \end{align}\]</span></p>
 <ul>
-<li>All four polyominoes must be in contact, so every pair of non touching polyominoes cannot be selected simultaneously:</li>
+<li>If a domino that does not cover a start is selected, one of its adjacent dominoes covering a start must also be selected:</li>
 </ul>
 <p><span class="math display">\[
-\textcolor{blue}{x}_{p}+\textcolor{blue}{x}_{q} \le 1 \quad \forall (p,q) \in P \times P, \; N(p)\cap q = \emptyset
+x_p\le \sum_{q \in S(p)}\textcolor{blue}{x}_{q} \quad \forall p \not \in P^*
 \]</span></p>
 </section>
 </section>
 <section id="solution" class="level2">
 <h2 class="anchored" data-anchor-id="solution">Solution</h2>
-<p>The background grid is represented as 2d grid graph (where a cell is a node).</p>
-<p>Solving this problem takes less than <span class="math inline">\(10\)</span> seconds with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
+<p>Solving this problem takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
 <div class="quarto-embed-nb-cell">
-<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="6">
+<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="touching_polyominoes_files/figure-html/notebooks-touching_polyominoes-cell-7-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="starred_dominoes_files/figure-html/notebooks-starred_dominoes-cell-7-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<a class="quarto-notebook-link" id="nblink-1" href="notebooks\touching_polyominoes-preview.html#75251953-f8df-4818-bdbd-9c2e93b00a20">Source: touching_polyominoes.ipynb</a></div>
-<p>Note that the computation time increases with the size of the 2d grid.</p>
-<p>If the set of polyominoes is the L <span class="math inline">\(6\times 3\)</span> octominoes, <span class="math inline">\(|K|=1\)</span>, and constraints <span class="math inline">\((1)\)</span> are adjusted as follows to enforce <span class="math inline">\(4\)</span> polynominoes:</p>
-<p><span class="math display">\[
-\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 4\quad \forall k\in K
-\]</span></p>
-<p>A solution is to arrange the octominoes as follows:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/Loctominoes_touching.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption>4 touching L <span class="math inline">\(6\times 3\)</span> octominoes</figcaption>
-</figure>
-</div>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\starred_dominoes-preview.html#75251953-f8df-4818-bdbd-9c2e93b00a20">Source: starred_dominoes.ipynb</a></div>
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-lemonde2024quatre" class="csl-entry" role="listitem">
-Launay, Mickaël. 2024. <span>“L’énigme Maths Du « Monde » n° 10 : Quatre Qui Touchent.”</span> 2024. <a href="https://www.lemonde.fr/sciences/article/2024/04/20/quatre-qui-touchent-l-enigme-maths-du-monde-n-10_6228918_1650684.html">https://www.lemonde.fr/sciences/article/2024/04/20/quatre-qui-touchent-l-enigme-maths-du-monde-n-10_6228918_1650684.html</a>.
+<div id="ref-lemonde2025dominos" class="csl-entry" role="listitem">
+Launay, Mickaël. 2025. <span>“Les Dominos Étoilés, l’énigme Maths Du « Monde » n° 73.”</span> 2025. <a href="https://www.lemonde.fr/sciences/article/2025/10/18/les-dominos-etoiles-l-enigme-maths-du-monde-n-73_6647997_1650684.html">https://www.lemonde.fr/sciences/article/2025/10/18/les-dominos-etoiles-l-enigme-maths-du-monde-n-73_6647997_1650684.html</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script src="https://giscus.app/client.js" data-repo="romain-montagne/or-resources" data-repo-id="R_kgDOQyHv8A" data-category="General" data-category-id="DIC_kwDOQyHv8M4C0fuo" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" async="">

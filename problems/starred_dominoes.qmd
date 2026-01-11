@@ -1,0 +1,74 @@
+---
+title: Starred Dominoes
+categories: [puzzle,modeling,grid,tilings]
+tags: [combinatorial-optimization,integer-programming]
+bibliography: references.bib
+image: images/gemini/starred_dominoes.png
+#source: 
+#  - Les énigmes maths du Monde
+#  - Yet Another Math Programming Consultant 
+---
+
+## Problem description
+
+This puzzle, published by Mickaël Launay [@lemonde2025dominos], reads as follows:
+
+The problem is to tile the grid shown in the illustration below with dominoes, each covering two squares
+(vertical or horizontal), such that:
+
+- the dominoes do not overlap;
+
+- every domino either covers a star or is adjacent to a domino that covers a star.
+
+Two dominoes are considered adjacent if they share a side, but not if they touch only at a corner.
+
+![Illustration from [@lemonde2025dominos]](images/star_dominoes.png){width=30% fig-align="center"}
+
+
+## MIP model
+
+#### Parameters
+
+- $C$: set of cells of the grid
+- $P$: set of candidate dominoes. A domino $p\in P$ is defined as a "subgrid" of the grid; 
+therefore it is defined not only by its shape, but also by the set of cells it covers. 
+- $P^*\subset P$: set of dominoes which cover a star
+- $S(p)\subset P^*$: set of adjacent dominoes of $p\not\in P^*$ which cover a star
+
+#### Variables
+
+- $\textcolor{blue}{x}_{i} \in \{0,1\}$: takes value $1$ if and only if domino $p\in P$ is used
+
+#### Objective function
+
+As this is a feasibility problem, any dummy objective function is suitable:
+
+$$
+\min 0
+$$
+
+subject to:
+
+#### Constraints
+
+- A cell of the grid must be covered exactly once 
+by one of the candidate polyominoes (no overlapping):
+
+\begin{align}
+\sum_{p \in P|c \in p}\textcolor{blue}{x}_{p}= 1 \quad \forall c \in C \\
+\end{align}
+
+- If a domino that does not cover a start is selected, one of its adjacent 
+dominoes covering a start must also be selected:
+
+$$
+x_p\le \sum_{q \in S(p)}\textcolor{blue}{x}_{q} \quad \forall p \not \in P^*
+$$
+
+
+## Solution
+
+Solving this problem takes less than a second with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
+
+{{< embed notebooks/starred_dominoes.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}

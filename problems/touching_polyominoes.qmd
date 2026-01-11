@@ -72,7 +72,7 @@ by one of the candidate polyominoes:
 so every pair of non touching polyominoes cannot be selected simultaneously:
 
 $$
-x_p+x_q \le 1 \quad \forall (p,q) \in P \times P, \; N(p)\cap q = \emptyset
+\textcolor{blue}{x}_{p}+\textcolor{blue}{x}_{q} \le 1 \quad \forall (p,q) \in P \times P, \; N(p)\cap q = \emptyset
 $$
 
 
@@ -87,11 +87,11 @@ in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
 
 Note that the computation time increases with the size of the 2d grid.
 
-If the set of polyominoes are the L $6\times 3$ octominoes, $|K|=1$, and constraints $(1)$ 
+If the set of polyominoes is the L $6\times 3$ octominoes, $|K|=1$, and constraints $(1)$ 
 are adjusted as follows to enforce $4$ polynominoes:
 
 $$
-\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 4
+\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 4\quad \forall k\in K
 $$
 
 A solution is to arrange the octominoes as follows:
