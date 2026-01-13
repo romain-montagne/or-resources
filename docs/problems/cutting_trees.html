@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Touching Polyominoes – OR Resources</title>
+<title>Saving Trees – OR Resources</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,14 +167,14 @@ window.Quarto = {
   <li><a href="#mip-model" id="toc-mip-model" class="nav-link" data-scroll-target="#mip-model">MIP model</a></li>
   <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   </ul>
-<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\touching_polyominoes-preview.html"><i class="bi bi-journal-code"></i>touching_polyominoes.ipynb</a></li></ul></div></nav>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\cut_trees-preview.html"><i class="bi bi-journal-code"></i>cut_trees.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Touching Polyominoes</h1>
+<h1 class="title">Saving Trees</h1>
   <div class="quarto-categories">
     <div class="quarto-category">puzzle</div>
     <div class="quarto-category">modeling</div>
@@ -199,100 +199,84 @@ window.Quarto = {
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
-<p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2024quatre">(<a href="#ref-lemonde2024quatre" role="doc-biblioref">Launay 2024</a>)</span>, reads as follows:</p>
-<p>Using the four polyominoes shown in the illustration below, arrange them so that:</p>
-<ul>
-<li>each shape touches all three of the others along at least one edge (corner-to-corner contact does not count);</li>
-<li>no cell is covered by more than one polyomino (the shapes may not overlap).</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
+<p>This puzzle, from <span class="citation" data-cites="OR2021trees">(<a href="#ref-OR2021trees" role="doc-biblioref">Pratt 2021</a>)</span>, reads as follows:</p>
+<p>In the illustration below, the green field is the empty area, the dark green 2x2 blocks are trees and the white area is the off area. The following blocks must be placed on the area: 55 3x3 blocks, 5 4x4 blocks, and 4 5x5 blocks. How to place the blocks, while cutting the least amount of trees? A tree (4 cells) is cut if at least one of its cells is covered by a block.</p>
+<div class="quarto-embed-nb-cell">
+<div id="e1b935e1-3ad3-4b90-bfb2-eaa70e66b1fc" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div>
 <figure class="figure">
-<p><img src="images/4touching_polyominoes.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>Illustration from <span class="citation" data-cites="lemonde2024quatre">(<a href="#ref-lemonde2024quatre" role="doc-biblioref">Launay 2024</a>)</span></figcaption>
+<p><img src="cutting_trees_files/figure-html/notebooks-cut_trees-cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
-<p>Then, arrange the L <span class="math inline">\(6 \times 3\)</span> octominoes (see illustration below) under the same conditions.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/Loctominoes.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>Illustration from <span class="citation" data-cites="lemonde2024quatre">(<a href="#ref-lemonde2024quatre" role="doc-biblioref">Launay 2024</a>)</span></figcaption>
-</figure>
 </div>
+</div>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\cut_trees-preview.html#e1b935e1-3ad3-4b90-bfb2-eaa70e66b1fc">Source: cut_trees.ipynb</a></div>
 </section>
 <section id="mip-model" class="level2">
 <h2 class="anchored" data-anchor-id="mip-model">MIP model</h2>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <ul>
-<li><span class="math inline">\(C\)</span>: set of cells of the grid</li>
-<li><span class="math inline">\(K=\{1,2,3,4\}\)</span>: set of polyomino types</li>
-<li><span class="math inline">\(P_k\)</span>: set of candidate polyominoes of type <span class="math inline">\(k\in K\)</span>. A polyomino <span class="math inline">\(p\in P_k\)</span> is defined as a “subgrid” of the grid; therefore it is defined not only by its shape, but also by the set of cells it covers.</li>
-<li><span class="math inline">\(P=\bigcup_{k\in K} P_k\)</span>: set of all candidate polyominoes</li>
-<li><span class="math inline">\(N(p)\)</span>: set of cells adjacent to <span class="math inline">\(p\in P\)</span> in the grid</li>
+<li><span class="math inline">\(C\)</span>: set of cells of the area (grid)</li>
+<li><span class="math inline">\(T\)</span>: set of trees</li>
+<li><span class="math inline">\(C_t \subset C\)</span>: set of cells covered by tree <span class="math inline">\(t \in T\)</span></li>
+<li><span class="math inline">\(K=\{1,2,3\}\)</span>: set of sizes of blocks</li>
+<li><span class="math inline">\(n_k \in \mathbb{N}\)</span>: number of blocks of size <span class="math inline">\(k \in K\)</span> to place on the grid</li>
+<li><span class="math inline">\(B_k\)</span>: set of candidate blocks of size <span class="math inline">\(k\in K\)</span>. A block <span class="math inline">\(p\in B_k\)</span> is defined as a “subgrid” of the grid; therefore it is defined not only by its shape, but also by the set of cells it covers.</li>
 </ul>
 </section>
 <section id="variables" class="level4">
 <h4 class="anchored" data-anchor-id="variables">Variables</h4>
 <ul>
-<li><span class="math inline">\(\textcolor{blue}{x}_{p} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if polyomino <span class="math inline">\(p\in P\)</span> is used</li>
+<li><span class="math inline">\(\textcolor{blue}{x}_{p,k} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if block <span class="math inline">\(p\in B_k\)</span> is placed</li>
+<li><span class="math inline">\(\textcolor{blue}{y}_{c} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only cell <span class="math inline">\(c \in C\)</span> is covered by some block</li>
+<li><span class="math inline">\(\textcolor{blue}{z}_{t} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if tree <span class="math inline">\(t \in T\)</span> is cut</li>
 </ul>
 </section>
 <section id="objective-function" class="level4">
 <h4 class="anchored" data-anchor-id="objective-function">Objective function</h4>
-<p>As this is a feasibility problem, any dummy objective function is suitable:</p>
+<p>The problem is to minimize the number of trees that are cut:</p>
 <p><span class="math display">\[
-\min 0
+\min \sum_{t \in T} \textcolor{blue}{z}_{t}
 \]</span></p>
 <p>subject to:</p>
 </section>
 <section id="constraints" class="level4">
 <h4 class="anchored" data-anchor-id="constraints">Constraints</h4>
 <ul>
-<li>Each polyomino type should appear exactly once:</li>
+<li>All blocks of size <span class="math inline">\(k\)</span> should be placed:</li>
 </ul>
 <p><span class="math display">\[
-\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 1 \quad \forall k \in K \tag{1}
+\sum_{p \in B_k}\textcolor{blue}{x}_{p,k} = n_k \quad \forall k \in K
 \]</span></p>
 <ul>
-<li>A cell of the grid can be covered at most once, by one of the candidate polyominoes:</li>
+<li>A cell of the grid can be covered at most once, by one of the candidate blocks:</li>
 </ul>
 <p><span class="math display">\[\begin{align}
-\sum_{k \in K}\sum_{p \in P_k|c \in p}\textcolor{blue}{x}_{p}\le 1 \quad \forall c \in C \\
+\sum_{k \in K}\sum_{p \in B_k|c \in p}\textcolor{blue}{x}_{p,k}=\textcolor{blue}{y}_{c} \quad \forall c \in C \\
 \end{align}\]</span></p>
 <ul>
-<li>All four polyominoes must be in contact, so every pair of non touching polyominoes cannot be selected simultaneously:</li>
+<li>A tree is cut if one of its cells is covered by a block:</li>
 </ul>
 <p><span class="math display">\[
-\textcolor{blue}{x}_{p}+\textcolor{blue}{x}_{q} \le 1 \quad \forall (p,q) \in P \times P, \; N(p)\cap q = \emptyset
+\textcolor{blue}{y}_{c}\le \textcolor{blue}{z}_{t} \quad \forall c \in C_t, \; \forall t\in T
 \]</span></p>
 </section>
 </section>
 <section id="solution" class="level2">
 <h2 class="anchored" data-anchor-id="solution">Solution</h2>
-<p>The background grid is represented as 2d grid graph (where a cell is a node).</p>
-<p>Solving this problem takes less than <span class="math inline">\(10\)</span> seconds with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
+<p>Solving this problem takes less than <span class="math inline">\(3\)</span> seconds with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields <span class="math inline">\(13\)</span> cut trees:</p>
 <div class="quarto-embed-nb-cell">
-<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="6">
+<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="touching_polyominoes_files/figure-html/notebooks-touching_polyominoes-cell-7-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="cutting_trees_files/figure-html/notebooks-cut_trees-cell-9-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<a class="quarto-notebook-link" id="nblink-1" href="notebooks\touching_polyominoes-preview.html#75251953-f8df-4818-bdbd-9c2e93b00a20">Source: touching_polyominoes.ipynb</a></div>
-<p>Note that the computation time increases with the size of the 2d grid.</p>
-<p>If the set of polyominoes is the L <span class="math inline">\(6\times 3\)</span> octominoes, <span class="math inline">\(|K|=1\)</span>, and constraints <span class="math inline">\((1)\)</span> are adjusted as follows to enforce <span class="math inline">\(4\)</span> polynominoes:</p>
-<p><span class="math display">\[
-\sum_{p \in P_k}\textcolor{blue}{x}_{p} = 4\quad \forall k\in K
-\]</span></p>
-<p>A solution is to arrange the octominoes as follows:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/Loctominoes_touching.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption>4 touching L <span class="math inline">\(6\times 3\)</span> octominoes</figcaption>
-</figure>
 </div>
 
 
@@ -300,8 +284,8 @@ window.Quarto = {
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-lemonde2024quatre" class="csl-entry" role="listitem">
-Launay, Mickaël. 2024. <span>“L’énigme Maths Du « Monde » n° 10 : Quatre Qui Touchent.”</span> 2024. <a href="https://www.lemonde.fr/sciences/article/2024/04/20/quatre-qui-touchent-l-enigme-maths-du-monde-n-10_6228918_1650684.html">https://www.lemonde.fr/sciences/article/2024/04/20/quatre-qui-touchent-l-enigme-maths-du-monde-n-10_6228918_1650684.html</a>.
+<div id="ref-OR2021trees" class="csl-entry" role="listitem">
+Pratt, Rob. 2021. <span>“Square Packing Variant.”</span> Operations Research Stack Exchange. <a href="https://or.stackexchange.com/q/5701">https://or.stackexchange.com/q/5701</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script src="https://giscus.app/client.js" data-repo="romain-montagne/or-resources" data-repo-id="R_kgDOQyHv8A" data-category="General" data-category-id="DIC_kwDOQyHv8M4C0fuo" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" async="">

@@ -40,7 +40,7 @@ therefore it is defined not only by its shape, but also by the set of cells it c
 
 #### Variables
 
-- $\textcolor{blue}{x}_{i} \in \{0,1\}$: takes value $1$ if and only if polyomino $p\in P$ is used
+- $\textcolor{blue}{x}_{p} \in \{0,1\}$: takes value $1$ if and only if polyomino $p\in P$ is used
 
 #### Objective function
 

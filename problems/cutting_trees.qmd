@@ -1,0 +1,82 @@
+---
+title: Saving Trees
+categories: [puzzle,modeling,grid,tilings]
+tags: [combinatorial-optimization,integer-programming]
+bibliography: references.bib
+image: images/gemini/cut_tree.png
+#source: 
+#  - Les énigmes maths du Monde
+#  - Yet Another Math Programming Consultant 
+---
+
+## Problem description
+
+This puzzle, from [@OR2021trees], reads as follows:
+
+In the illustration below, the green field is the empty area, 
+the dark green 2x2 blocks are trees and the white area is the off area.
+The following blocks must be placed on the area: 55 3x3 blocks, 5 4x4 blocks, and 4 5x5 blocks. 
+How to place the blocks, while cutting the least amount of trees? A tree (4 cells) is cut
+if at least one of its cells is covered by a block.
+
+{{< embed notebooks/cut_trees.ipynb#e1b935e1-3ad3-4b90-bfb2-eaa70e66b1fc >}}
+
+
+## MIP model
+
+#### Parameters
+
+- $C$: set of cells of the area (grid)
+- $T$: set of trees 
+- $C_t \subset C$: set of cells covered by tree $t \in T$
+- $K=\{1,2,3\}$: set of sizes of blocks 
+- $n_k \in \mathbb{N}$: number of blocks of size $k \in K$ to place on the grid
+- $B_k$: set of candidate blocks of size $k\in K$. A block $p\in B_k$ is defined as a "subgrid" of the grid; 
+therefore it is defined not only by its shape, but also by the set of cells it covers.
+
+#### Variables
+
+- $\textcolor{blue}{x}_{p,k} \in \{0,1\}$: takes value $1$ if and only if block $p\in B_k$ is placed
+- $\textcolor{blue}{y}_{c} \in \{0,1\}$: takes value $1$ if and only cell $c \in C$ is covered by some block
+- $\textcolor{blue}{z}_{t} \in \{0,1\}$: takes value $1$ if and only if tree $t \in T$ is cut
+
+#### Objective function
+
+The problem is to minimize the number of trees that are cut:
+
+$$
+\min \sum_{t \in T} \textcolor{blue}{z}_{t}
+$$
+
+subject to:
+
+#### Constraints
+
+- All blocks of size $k$ should be placed: 
+
+$$
+\sum_{p \in B_k}\textcolor{blue}{x}_{p,k} = n_k \quad \forall k \in K 
+$$
+
+
+- A cell of the grid can be covered at most once, 
+by one of the candidate blocks:
+
+\begin{align}
+\sum_{k \in K}\sum_{p \in B_k|c \in p}\textcolor{blue}{x}_{p,k}=\textcolor{blue}{y}_{c} \quad \forall c \in C \\
+\end{align}
+
+- A tree is cut if one of its cells is covered by a block:
+
+$$
+\textcolor{blue}{y}_{c}\le \textcolor{blue}{z}_{t} \quad \forall c \in C_t, \; \forall t\in T
+$$
+
+
+## Solution
+
+
+Solving this problem takes less than $3$ seconds with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields $13$ cut trees (marked by an X):
+
+{{< embed notebooks/cut_trees.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}

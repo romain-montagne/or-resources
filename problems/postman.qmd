@@ -40,7 +40,7 @@ The problem is to relabel the houses such that all houses are served.
 - $\textcolor{blue}{x}_{i,j} \in \{0,1\}$: takes value $1$ if and only if houses $i$ and $j$ are
 served consecutively, $i\neq j$
 - $\textcolor{blue}{r}_{i} \in N$: rank of house $i\in N$ in the delivery order
-- $\textcolor{blue}{\ell}_{i} \in N$: label of house $i\in N$
+- $\textcolor{blue}{y}_{i,k} \in \{0,1\}$: takes value $1$ if and only if label of house $i\in N$ takes values $k \in N$
 
 #### Objective function
 
