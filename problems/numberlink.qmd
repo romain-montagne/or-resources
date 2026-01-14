@@ -25,7 +25,7 @@ The initial grid is illustrated below (the endpoints have different symbols but 
 We will represent this data as the following 2d grid graph (where a cell is a node):
 
 <div class="embed-scale-50">
-{{< embed notebooks/numberlink.ipynb#785df5d0-66c1-46f4-8676-1c29d23f1f33 >}}
+{{< embed notebooks/numberlink.ipynb#09a05cf9-9ebf-40a5-95b3-20408cb9033e >}}
 </div>
 
 ## MIP model
@@ -69,6 +69,12 @@ $$
 \textcolor{blue}{x}_{p,k}=1 \quad \forall p \in E_k, \; \forall k \in K
 $$
 
+- If cell $p$ is an endpoint with value $k$, then one of its neighbors must take value $k$:
+
+$$
+\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} = 1 \quad \forall p \in E_k, \; \forall k \in K 
+$$
+
 - If cell $p$ is not an endpoint and takes value $k$, then two of its neighbors must also take value $k$: 
 
 $$
@@ -79,12 +85,6 @@ $$
 
 Since a cell has at most $4$ neighbors, $U_p$ is bounded by $2$. $L_p$ can be set to $2$ for every cell.
 
-
-- If cell $p$ is an endpoint with value $k$, then one of its neighbors must take value $k$:
-
-$$
-\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} = 1 \quad \forall p \in E_k, \; \forall k \in K 
-$$
 
 ## Solution
 

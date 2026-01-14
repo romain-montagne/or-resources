@@ -213,7 +213,7 @@ window.Quarto = {
 <p>We will represent this data as the following 2d grid graph (where a cell is a node):</p>
 <div class="embed-scale-50">
 <div class="quarto-embed-nb-cell">
-<div id="785df5d0-66c1-46f4-8676-1c29d23f1f33" class="cell" data-execution_count="2">
+<div id="09a05cf9-9ebf-40a5-95b3-20408cb9033e" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -222,7 +222,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<a class="quarto-notebook-link" id="nblink-1" href="notebooks\numberlink-preview.html#785df5d0-66c1-46f4-8676-1c29d23f1f33">Source: numberlink.ipynb</a></div>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\numberlink-preview.html#09a05cf9-9ebf-40a5-95b3-20408cb9033e">Source: numberlink.ipynb</a></div>
 </div>
 </section>
 <section id="mip-model" class="level2">
@@ -267,6 +267,12 @@ window.Quarto = {
 \textcolor{blue}{x}_{p,k}=1 \quad \forall p \in E_k, \; \forall k \in K
 \]</span></p>
 <ul>
+<li>If cell <span class="math inline">\(p\)</span> is an endpoint with value <span class="math inline">\(k\)</span>, then one of its neighbors must take value <span class="math inline">\(k\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} = 1 \quad \forall p \in E_k, \; \forall k \in K
+\]</span></p>
+<ul>
 <li>If cell <span class="math inline">\(p\)</span> is not an endpoint and takes value <span class="math inline">\(k\)</span>, then two of its neighbors must also take value <span class="math inline">\(k\)</span>:</li>
 </ul>
 <p><span class="math display">\[
@@ -275,12 +281,6 @@ window.Quarto = {
 \le 2 +U_p(1-\textcolor{blue}{x}_{p,k}) \quad \forall p \in F
 \]</span></p>
 <p>Since a cell has at most <span class="math inline">\(4\)</span> neighbors, <span class="math inline">\(U_p\)</span> is bounded by <span class="math inline">\(2\)</span>. <span class="math inline">\(L_p\)</span> can be set to <span class="math inline">\(2\)</span> for every cell.</p>
-<ul>
-<li>If cell <span class="math inline">\(p\)</span> is an endpoint with value <span class="math inline">\(k\)</span>, then one of its neighbors must take value <span class="math inline">\(k\)</span>:</li>
-</ul>
-<p><span class="math display">\[
-\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} = 1 \quad \forall p \in E_k, \; \forall k \in K
-\]</span></p>
 </section>
 </section>
 <section id="solution" class="level2">
