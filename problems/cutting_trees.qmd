@@ -13,11 +13,11 @@ image: images/gemini/cut_tree.png
 
 This puzzle, from [@OR2021trees], reads as follows:
 
-In the illustration below, the green field is the empty area, 
-the dark green 2x2 blocks are trees and the white area is the off area.
-The following blocks must be placed on the area: 55 3x3 blocks, 5 4x4 blocks, and 4 5x5 blocks. 
-How to place the blocks, while cutting the least amount of trees? A tree (4 cells) is cut
-if at least one of its cells is covered by a block.
+In the illustration below, the grid consists of empty green space, dark green $2\times 2$ 'trees,' 
+and restricted white areas. 
+The problem is to place $55$ ($3\times 3$), $5$ ($4\times 4$), and $4$ ($5\times 5$) blocks 
+on the grid while minimizing the number of trees cut. 
+Overlapping even a single cell of a $2\times 2$ tree counts as cutting the entire tree.
 
 {{< embed notebooks/cut_trees.ipynb#e1b935e1-3ad3-4b90-bfb2-eaa70e66b1fc >}}
 
@@ -33,10 +33,11 @@ if at least one of its cells is covered by a block.
 - $n_k \in \mathbb{N}$: number of blocks of size $k \in K$ to place on the grid
 - $B_k$: set of candidate blocks of size $k\in K$. A block $p\in B_k$ is defined as a "subgrid" of the grid; 
 therefore it is defined not only by its shape, but also by the set of cells it covers.
+- $B=\bigcup_{k\in K} B_k$: set of all candidate blocks
 
 #### Variables
 
-- $\textcolor{blue}{x}_{p,k} \in \{0,1\}$: takes value $1$ if and only if block $p\in B_k$ is placed
+- $\textcolor{blue}{x}_{p} \in \{0,1\}$: takes value $1$ if and only if block $p\in B$
 - $\textcolor{blue}{y}_{c} \in \{0,1\}$: takes value $1$ if and only cell $c \in C$ is covered by some block
 - $\textcolor{blue}{z}_{t} \in \{0,1\}$: takes value $1$ if and only if tree $t \in T$ is cut
 
@@ -55,7 +56,7 @@ subject to:
 - All blocks of size $k$ should be placed: 
 
 $$
-\sum_{p \in B_k}\textcolor{blue}{x}_{p,k} = n_k \quad \forall k \in K 
+\sum_{p \in B_k}\textcolor{blue}{x}_{p} = n_k \quad \forall k \in K 
 $$
 
 
@@ -63,7 +64,7 @@ $$
 by one of the candidate blocks:
 
 \begin{align}
-\sum_{k \in K}\sum_{p \in B_k|c \in p}\textcolor{blue}{x}_{p,k}=\textcolor{blue}{y}_{c} \quad \forall c \in C \\
+\sum_{p \in B|c \in p}\textcolor{blue}{x}_{p}=\textcolor{blue}{y}_{c} \quad \forall c \in C \\
 \end{align}
 
 - A tree is cut if one of its cells is covered by a block:

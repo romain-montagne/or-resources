@@ -65,7 +65,7 @@ $$
 by one of the candidate polyominoes:
 
 \begin{align}
-\sum_{k \in K}\sum_{p \in P_k|c \in p}\textcolor{blue}{x}_{p}\le 1 \quad \forall c \in C \\
+\sum_{p \in P|c \in p}\textcolor{blue}{x}_{p}\le 1 \quad \forall c \in C \\
 \end{align}
 
 - All four polyominoes must be in contact, 

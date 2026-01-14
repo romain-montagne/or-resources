@@ -227,7 +227,7 @@ window.Quarto = {
 <section id="variables" class="level4">
 <h4 class="anchored" data-anchor-id="variables">Variables</h4>
 <ul>
-<li><span class="math inline">\(\textcolor{blue}{x}_{i} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if domino <span class="math inline">\(p\in P\)</span> is used</li>
+<li><span class="math inline">\(\textcolor{blue}{x}_{p} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if domino <span class="math inline">\(p\in P\)</span> is used</li>
 </ul>
 </section>
 <section id="objective-function" class="level4">
@@ -250,7 +250,7 @@ window.Quarto = {
 <li>If a domino that does not cover a start is selected, one of its adjacent dominoes covering a start must also be selected:</li>
 </ul>
 <p><span class="math display">\[
-x_p\le \sum_{q \in S(p)}\textcolor{blue}{x}_{q} \quad \forall p \not \in P^*
+\textcolor{blue}{x}_{p} \le \sum_{q \in S(p)}\textcolor{blue}{x}_{q} \quad \forall p \not \in P^*
 \]</span></p>
 </section>
 </section>
