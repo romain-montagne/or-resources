@@ -1,0 +1,91 @@
+---
+title: From one generation to the next
+categories: [puzzle,modeling]
+tags: [combinatorial-optimization,integer-programming,combinatorics,number-theory]
+bibliography: references.bib
+image: images/gemini/family_tree.png
+#source: 
+#  - Les énigmes maths du Monde
+#  - Yet Another Math Programming Consultant 
+---
+
+## Problem description
+
+This puzzle, published by Mickaël Launay [@lemonde2026génération], reads as follows:
+
+>Exactly one year ago, on my birthday, I noticed that reversing the two digits of my age gave me my father’s age. 
+>And today, precisely one year later, I realize that reversing the two digits of my age now gives me my daughter’s age. 
+>What’s more, the age gap between my father and me is the same as the gap between me and my daughter.
+
+The problem is to determine the ages of the father, the daughter, and the grandfather.
+
+## MIP model
+
+In this model, no logical reasoning is derived from the conditions. 
+
+#### Variables
+
+- $\textcolor{blue}{D} \in \mathbb{N}$: daughter's age
+- $\textcolor{blue}{F} \in \mathbb{N}$: father's age
+- $\textcolor{blue}{x}_F \in \{0,\dots,9\}$: first digit of $\textcolor{blue}{F}$
+- $\textcolor{blue}{y}_F \in \{0,\dots,9\}$: second digit of $\textcolor{blue}{F}$
+- $\textcolor{blue}{F}_{-1} \in \mathbb{N}$: father's age one year ago
+- $\textcolor{blue}{x}_{F_{-1}} \in \{0,\dots,9\}$: first digit of $\textcolor{blue}{F}_{-1}$
+- $\textcolor{blue}{y}_{F_{-1}} \in \{0,\dots,9\}$: second digit of $\textcolor{blue}{F}_{-1}$
+- $\textcolor{blue}{GF} \in \mathbb{N}$: grandfather's age
+- $\textcolor{blue}{GF}_{-1} \in \mathbb{N}$: grandfather's age one year ago
+
+
+#### Objective function
+
+As this is a feasibility problem, any dummy objective function is suitable:
+
+$$
+\min 0
+$$
+
+subject to:
+
+#### Constraints
+
+- Definition of father's age:
+
+$$
+\textcolor{blue}{F} = 10\textcolor{blue}{y}_F + \textcolor{blue}{x}_F
+$$
+
+- Definition of father's age one year ago:
+
+\begin{align*}
+\textcolor{blue}{F}_{-1} &= 10\textcolor{blue}{y}_{F_{-1}} + \textcolor{blue}{x}_{F_{-1}} \\
+\textcolor{blue}{F}_{-1} &= \textcolor{blue}{F} -1
+\end{align*}
+
+- Definition of daughter's age (reverse digits):
+
+$$
+\textcolor{blue}{D} = 10\textcolor{blue}{x}_F + \textcolor{blue}{y}_F
+$$
+
+- Definition of grandfather's age one year ago (reverse digits and subtract $1$):
+
+\begin{align*}
+\textcolor{blue}{GF}_{-1} &= 10\textcolor{blue}{x}_{F_{-1}} + \textcolor{blue}{y}_{F_{-1}} \\
+\textcolor{blue}{GF}_{-1} &= \textcolor{blue}{GF}-1
+\end{align*}
+
+- The age gap is constant:
+
+$$
+\textcolor{blue}{GF}-\textcolor{blue}{F}=\textcolor{blue}{F}-\textcolor{blue}{D}
+$$
+
+## Solution
+
+Solving this problem takes less than a second with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields:
+
+{{< embed notebooks/age_riddle.ipynb#75251953-f8df-4818-bdbd-9c2e93b00a20 >}}
+
+Note that the father's age one year ago cannot be written directly as $10\textcolor{blue}{y}_F + \textcolor{blue}{x}_F-1$,
+as this yields incorrect results when switching digits if the first digit is $0$.

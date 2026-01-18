@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Problems – OR Resources</title>
+<title>From one generation to the next – OR Resources</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,8 +50,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -70,35 +88,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-categories','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -169,16 +158,28 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#problem-description" id="toc-problem-description" class="nav-link active" data-scroll-target="#problem-description">Problem description</a></li>
+  <li><a href="#mip-model" id="toc-mip-model" class="nav-link" data-scroll-target="#mip-model">MIP model</a></li>
+  <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
+  </ul>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\age_riddle-preview.html"><i class="bi bi-journal-code"></i>age_riddle.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Problems</h1>
-</div>
+<h1 class="title">From one generation to the next</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">puzzle</div>
+    <div class="quarto-category">modeling</div>
+  </div>
+  </div>
 
 
 
@@ -194,243 +195,96 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="listing-actions-group">
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="cHV6emxlJTJDbW9kZWxpbmc=" data-listing-file-modified-sort="1768752272589" data-listing-reading-time-sort="2" data-listing-word-count-sort="281">
-<a href="../problems/age_riddle.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/family_tree.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-From one generation to the next
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="cHV6emxlJTJDbW9kZWxpbmclMkNncmlk" data-listing-file-modified-sort="1768415228753" data-listing-reading-time-sort="2" data-listing-word-count-sort="327">
-<a href="../problems/numberlink.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/numberlink.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Numberlink
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZA=='); return false;">grid</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="cHV6emxlJTJDbW9kZWxpbmclMkNncmlkJTJDdGlsaW5ncw==" data-listing-file-modified-sort="1768380167542" data-listing-reading-time-sort="1" data-listing-word-count-sort="152">
-<a href="../problems/pentominoes.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/polyominos.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Pentominoes
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZA=='); return false;">grid</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGlsaW5ncw=='); return false;">tilings</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="3" data-categories="cHV6emxlJTJDbW9kZWxpbmclMkNyb3V0aW5n" data-listing-file-modified-sort="1768247524461" data-listing-reading-time-sort="2" data-listing-word-count-sort="356">
-<a href="../problems/postman.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/six_houses.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Postman
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cm91dGluZw=='); return false;">routing</div>
-
+<section id="problem-description" class="level2">
+<h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
+<p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2026génération">(<a href="#ref-lemonde2026génération" role="doc-biblioref">Launay 2026</a>)</span>, reads as follows:</p>
+<blockquote class="blockquote">
+<p>Exactly one year ago, on my birthday, I noticed that reversing the two digits of my age gave me my father’s age. And today, precisely one year later, I realize that reversing the two digits of my age now gives me my daughter’s age. What’s more, the age gap between my father and me is the same as the gap between me and my daughter.</p>
+</blockquote>
+<p>The problem is to determine the ages of the father, the daughter, and the grandfather.</p>
+</section>
+<section id="mip-model" class="level2">
+<h2 class="anchored" data-anchor-id="mip-model">MIP model</h2>
+<p>In this model, no logical reasoning is derived from the conditions.</p>
+<section id="variables" class="level4">
+<h4 class="anchored" data-anchor-id="variables">Variables</h4>
+<ul>
+<li><span class="math inline">\(\textcolor{blue}{D} \in \mathbb{N}\)</span>: daughter’s age</li>
+<li><span class="math inline">\(\textcolor{blue}{F} \in \mathbb{N}\)</span>: father’s age</li>
+<li><span class="math inline">\(\textcolor{blue}{x}_F \in \{0,\dots,9\}\)</span>: first digit of <span class="math inline">\(\textcolor{blue}{F}\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{y}_F \in \{0,\dots,9\}\)</span>: second digit of <span class="math inline">\(\textcolor{blue}{F}\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{F}_{-1} \in \mathbb{N}\)</span>: father’s age one year ago</li>
+<li><span class="math inline">\(\textcolor{blue}{x}_{F_{-1}} \in \{0,\dots,9\}\)</span>: first digit of <span class="math inline">\(\textcolor{blue}{F}_{-1}\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{y}_{F_{-1}} \in \{0,\dots,9\}\)</span>: second digit of <span class="math inline">\(\textcolor{blue}{F}_{-1}\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{GF} \in \mathbb{N}\)</span>: grandfather’s age</li>
+<li><span class="math inline">\(\textcolor{blue}{GF}_{-1} \in \mathbb{N}\)</span>: grandfather’s age one year ago</li>
+</ul>
+</section>
+<section id="objective-function" class="level4">
+<h4 class="anchored" data-anchor-id="objective-function">Objective function</h4>
+<p>As this is a feasibility problem, any dummy objective function is suitable:</p>
+<p><span class="math display">\[
+\min 0
+\]</span></p>
+<p>subject to:</p>
+</section>
+<section id="constraints" class="level4">
+<h4 class="anchored" data-anchor-id="constraints">Constraints</h4>
+<ul>
+<li>Definition of father’s age:</li>
+</ul>
+<p><span class="math display">\[
+\textcolor{blue}{F} = 10\textcolor{blue}{y}_F + \textcolor{blue}{x}_F
+\]</span></p>
+<ul>
+<li>Definition of father’s age one year ago:</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\textcolor{blue}{F}_{-1} &amp;= 10\textcolor{blue}{y}_{F_{-1}} + \textcolor{blue}{x}_{F_{-1}} \\
+\textcolor{blue}{F}_{-1} &amp;= \textcolor{blue}{F} -1
+\end{align*}\]</span></p>
+<ul>
+<li>Definition of daughter’s age (reverse digits):</li>
+</ul>
+<p><span class="math display">\[
+\textcolor{blue}{D} = 10\textcolor{blue}{x}_F + \textcolor{blue}{y}_F
+\]</span></p>
+<ul>
+<li>Definition of grandfather’s age one year ago (reverse digits and subtract <span class="math inline">\(1\)</span>):</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\textcolor{blue}{GF}_{-1} &amp;= 10\textcolor{blue}{x}_{F_{-1}} + \textcolor{blue}{y}_{F_{-1}} \\
+\textcolor{blue}{GF}_{-1} &amp;= \textcolor{blue}{GF}-1
+\end{align*}\]</span></p>
+<ul>
+<li>The age gap is constant:</li>
+</ul>
+<p><span class="math display">\[
+\textcolor{blue}{GF}-\textcolor{blue}{F}=\textcolor{blue}{F}-\textcolor{blue}{D}
+\]</span></p>
+</section>
+</section>
+<section id="solution" class="level2">
+<h2 class="anchored" data-anchor-id="solution">Solution</h2>
+<p>Solving this problem takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
+<div class="quarto-embed-nb-cell">
+<div id="75251953-f8df-4818-bdbd-9c2e93b00a20" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-stdout">
+<pre><code>(F,P,GP)= (5.0, 50.0, 95.0)</code></pre>
 </div>
 </div>
-</div></a>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\age_riddle-preview.html#75251953-f8df-4818-bdbd-9c2e93b00a20">Source: age_riddle.ipynb</a></div>
+<p>Note that the father’s age one year ago cannot be written directly as <span class="math inline">\(10\textcolor{blue}{y}_F + \textcolor{blue}{x}_F-1\)</span>, as this yields incorrect results when switching digits if the first digit is <span class="math inline">\(0\)</span>.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-lemonde2026génération" class="csl-entry" role="listitem">
+Launay, Mickaël. 2026. <span>“D’une Génération à l’autre, l’énigme Maths Du « Monde » Nᵒ 84.”</span> 2026. <a href="https://www.lemonde.fr/sciences/article/2026/01/17/d-une-generation-a-l-autre-l-enigme-maths-du-monde-n-84_6662927_1650684.html#:~:text=Comme%20j'ai%20le%20m%C3%AAme,de%20f%C3%AAter%20mes%2050%20ans%20!">https://www.lemonde.fr/sciences/article/2026/01/17/d-une-generation-a-l-autre-l-enigme-maths-du-monde-n-84_6662927_1650684.html#:~:text=Comme%20j'ai%20le%20m%C3%AAme,de%20f%C3%AAter%20mes%2050%20ans%20!</a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="cHV6emxlJTJDbW9kZWxpbmclMkNncmlkJTJDdGlsaW5ncw==" data-listing-file-modified-sort="1768380033516" data-listing-reading-time-sort="2" data-listing-word-count-sort="332">
-<a href="../problems/cutting_trees.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/cut_tree.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Saving Trees
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZA=='); return false;">grid</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGlsaW5ncw=='); return false;">tilings</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="5" data-categories="cHV6emxlJTJDbW9kZWxpbmclMkNzZWNyZXQtY29kZQ==" data-listing-file-modified-sort="1767887097647" data-listing-reading-time-sort="2" data-listing-word-count-sort="362">
-<a href="../problems/secret_code.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/secret_code.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Secret Code
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c2VjcmV0LWNvZGU='); return false;">secret-code</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="6" data-categories="cHV6emxlJTJDbW9kZWxpbmclMkNncmlkJTJDdGlsaW5ncw==" data-listing-file-modified-sort="1768379465575" data-listing-reading-time-sort="2" data-listing-word-count-sort="254">
-<a href="../problems/starred_dominoes.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/starred_dominoes.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Starred Dominoes
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZA=='); return false;">grid</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGlsaW5ncw=='); return false;">tilings</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="7" data-categories="cHV6emxlJTJDbW9kZWxpbmc=" data-listing-file-modified-sort="1767780927254" data-listing-reading-time-sort="2" data-listing-word-count-sort="293">
-<a href="../problems/saint_exupery_ruler.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/ruler.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-The Saint-Exupéry Ruler
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="8" data-categories="cHV6emxlJTJDbW9kZWxpbmc=" data-listing-file-modified-sort="1767860413559" data-listing-reading-time-sort="2" data-listing-word-count-sort="312">
-<a href="../problems/tiered_cake.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/cake.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Tiered Cake
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="9" data-categories="cHV6emxlJTJDbW9kZWxpbmclMkNncmlkJTJDdGlsaW5ncw==" data-listing-file-modified-sort="1768380224291" data-listing-reading-time-sort="2" data-listing-word-count-sort="344">
-<a href="../problems/touching_polyominoes.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../problems/images/gemini/touching_octominoes.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Touching Polyominoes
-</h5>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('cHV6emxl'); return false;">puzzle</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('bW9kZWxpbmc='); return false;">modeling</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Z3JpZA=='); return false;">grid</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGlsaW5ncw=='); return false;">tilings</div>
-
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</div></section></div></main> <!-- /main -->
 <script src="https://giscus.app/client.js" data-repo="romain-montagne/or-resources" data-repo-id="R_kgDOQyHv8A" data-category="General" data-category-id="DIC_kwDOQyHv8M4C0fuo" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" async="">
 
 </script>

@@ -2,6 +2,7 @@
   {
     "listing": "/problems/index.html",
     "items": [
+      "/problems/age_riddle.html",
       "/problems/numberlink.html",
       "/problems/pentominoes.html",
       "/problems/postman.html",
