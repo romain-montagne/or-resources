@@ -1,0 +1,93 @@
+---
+title: Rhombic jungle
+categories: [puzzle,modeling,grid]
+tags: [combinatorial-optimization,integer-programming]
+bibliography: references.bib
+image: images/gemini/jungle.png
+#source: 
+#  - Les énigmes maths du Monde
+#  - Yet Another Math Programming Consultant 
+---
+
+## Problem description
+
+This puzzle, published by Mickaël Launay [@lemonde2026jungle], reads as follows. 
+
+Players $A$ and $B$ are initially on different starting nodes, on the following graph:
+
+![Illustration from [@lemonde2026jungle]](images/jungle.png){width=50% fig-align="center"}
+
+The goal is to find the minimum time and the meeting node such that:
+
+- at each time step $t \to t+1$, both players must move to an adjacent node (stationary waiting is prohibited);
+- each edge traversal represents exactly one unit of time;
+- when meeting, both players must occupy the same node;
+- passing each other on a trail is not a valid meeting, the rendez-vous must occur at a node.
+
+
+## MIP model
+
+#### Parameters
+
+- $K=\{A,B\}$: set of players 
+- $V$: nodes of the graph
+- $N(v)$: set of adjacent nodes of node $v \in V$
+- $s(k) \in V$: starting point of player $k \in K$
+- $T$: set of days
+
+#### Variables
+
+- $\textcolor{blue}{x}_{v,t}^k \in \{0,1\}$: takes value $1$ if and only if player $k\in K$ is on node $v\in V$ on day $t\in T$
+- $\textcolor{blue}{z}_{v,t} \in \{0,1\}$: takes value $1$ if and only if players meet on node $v\in V$ on day $t\in T$
+- $\textcolor{blue}{y}_{t} \in \{0,1\}$: takes value $1$ if and only if players meet on day $t\in T$
+
+#### Objective function
+
+To find the earlist meeting day, we maximize the meeting time:
+
+$$
+\max \sum_{t \in T}\textcolor{blue}{y}_t
+$$
+
+subject to:
+
+#### Constraints
+
+- On each day, players are on exactly one node:
+
+$$
+\sum_{v \in V} \textcolor{blue}{x}_{v,t}^k=1 \quad \forall t \in T, \forall k\in K
+$$
+
+- Enforce the starting points:
+
+$$
+\textcolor{blue}{x}_{s(k),1}^k=1 \quad \forall k \in K
+$$
+
+- Connexity rules: if a node $v$ is reached on day $t$, then it must have been on one of its neighbors the day before:
+
+$$
+\textcolor{blue}{x}_{v,t}^k \le \sum_{u \in N(v)} \textcolor{blue}{x}_{u,t-1}^k \quad \forall k \in K, \forall t>1
+$$
+
+- If node $v$ is a meeting day on day $t$, then $A$ and $B$ must meet there, at that time: 
+
+$$
+\textcolor{blue}{z}_{v,t} \le \textcolor{blue}{x}_{v,t}^k \quad \forall v \in V,\forall t \in T, \forall k \in K
+$$
+
+- If day $t$ is a meeting day, then one of the nodes must be a meeting point on that day:
+
+$$
+\textcolor{blue}{y}_{t} \le \sum_{v \in V} \textcolor{blue}{z}_{v,t} \quad \forall t \in T
+$$
+
+## Solution
+
+Solving this problem takes less than a second with the default solver
+in [PuLP](https://coin-or.github.io/pulp/) (CBC) and yields 7 days before meeting:
+
+<div class="embed-scale-50">
+{{< embed notebooks/rhombic_jungle.ipynb#8a0c87b7-b71c-407c-9960-91c39ca0880d >}}
+</div>

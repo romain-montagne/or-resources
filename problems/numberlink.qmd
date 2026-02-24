@@ -72,14 +72,14 @@ $$
 - If cell $p$ is an endpoint with value $k$, then one of its neighbors must take value $k$:
 
 $$
-\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} = 1 \quad \forall p \in E_k, \; \forall k \in K 
+\sum_{q\in N(p)} \textcolor{blue}{x}_{q,k} = 1 \quad \forall p \in E_k, \; \forall k \in K 
 $$
 
 - If cell $p$ is not an endpoint and takes value $k$, then two of its neighbors must also take value $k$: 
 
 $$
 -L_p(1-\textcolor{blue}{x}_{p,k})+2 \le
-\sum_{q\in N(p)} \textcolor{blue}{x}_{p,k} 
+\sum_{q\in N(p)} \textcolor{blue}{x}_{q,k} 
 \le 2 +U_p(1-\textcolor{blue}{x}_{p,k}) \quad \forall p \in F 
 $$
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Numberlink – OR Resources</title>
+<title>Rhombic jungle – OR Resources</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,14 +167,14 @@ window.Quarto = {
   <li><a href="#mip-model" id="toc-mip-model" class="nav-link" data-scroll-target="#mip-model">MIP model</a></li>
   <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   </ul>
-<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\numberlink-preview.html"><i class="bi bi-journal-code"></i>numberlink.ipynb</a></li></ul></div></nav>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks\rhombic_jungle-preview.html"><i class="bi bi-journal-code"></i>rhombic_jungle.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Numberlink</h1>
+<h1 class="title">Rhombic jungle</h1>
   <div class="quarto-categories">
     <div class="quarto-category">puzzle</div>
     <div class="quarto-category">modeling</div>
@@ -198,106 +198,99 @@ window.Quarto = {
 
 <section id="problem-description" class="level2">
 <h2 class="anchored" data-anchor-id="problem-description">Problem description</h2>
-<p>This puzzle was published by Mickaël Launay <span class="citation" data-cites="lemonde2024trois">(<a href="#ref-lemonde2024trois" role="doc-biblioref">Launay 2024</a>)</span>, but it is actually a well known problem called a <a href="https://en.wikipedia.org/wiki/Numberlink">Numberlink</a> puzzle. We need to connect endpoints by paths over a board with cells such that:</p>
-<ul>
-<li>each cell is part of a path;</li>
-<li>paths do not cross.</li>
-</ul>
-<p>The initial grid is illustrated below (the endpoints have different symbols but the same color):</p>
+<p>This puzzle, published by Mickaël Launay <span class="citation" data-cites="lemonde2026jungle">(<a href="#ref-lemonde2026jungle" role="doc-biblioref">Launay 2026</a>)</span>, reads as follows.</p>
+<p>A and B are initially on different starting nodes, on the following graph:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/numberlink.png" class="img-fluid figure-img" style="width:30.0%"></p>
-<figcaption>Illustration from <span class="citation" data-cites="lemonde2024trois">(<a href="#ref-lemonde2024trois" role="doc-biblioref">Launay 2024</a>)</span></figcaption>
+<p><img src="images/jungle.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Illustration from <span class="citation" data-cites="lemonde2026jungle">(<a href="#ref-lemonde2026jungle" role="doc-biblioref">Launay 2026</a>)</span></figcaption>
 </figure>
 </div>
-<p>We will represent this data as the following 2d grid graph (where a cell is a node):</p>
-<div class="embed-scale-50">
-<div class="quarto-embed-nb-cell">
-<div id="09a05cf9-9ebf-40a5-95b3-20408cb9033e" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="numberlink_files/figure-html/notebooks-numberlink-cell-3-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<a class="quarto-notebook-link" id="nblink-1" href="notebooks\numberlink-preview.html#09a05cf9-9ebf-40a5-95b3-20408cb9033e">Source: numberlink.ipynb</a></div>
-</div>
+<p>The goal is to find the minimum time and the meeting node such that:</p>
+<ul>
+<li>at each time step <span class="math inline">\(t \to t+1\)</span>, both players must move to an adjacent node (stationary waiting is prohibited);</li>
+<li>each edge traversal represents exactly one unit of time;</li>
+<li>when meeting, both players must occupy the same node;</li>
+<li>passing each other on a trail is not a valid meeting, the rendez-vous must occur at a node.</li>
+</ul>
 </section>
 <section id="mip-model" class="level2">
 <h2 class="anchored" data-anchor-id="mip-model">MIP model</h2>
-<p>Erwin Kalvelagen posted a great article <span class="citation" data-cites="numberlink2017">(<a href="#ref-numberlink2017" role="doc-biblioref">Kalvelagen 2017</a>)</span> on this topic. I will use one of the models described in the post to solve the problem.</p>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <ul>
-<li><span class="math inline">\(K\)</span>: set of values in the cells</li>
-<li><span class="math inline">\(C\)</span>: set of cells</li>
-<li><span class="math inline">\(F \subset C\)</span>: set of free cells</li>
-<li><span class="math inline">\(E_k \subset C\)</span>: set of endpoint cells with value <span class="math inline">\(k\)</span></li>
-<li><span class="math inline">\(N(p)\)</span>: set of adjacent (up, down, left, right) cells of cell <span class="math inline">\(p \in C\)</span></li>
+<li><span class="math inline">\(K=\{A,B\}\)</span>: set of players</li>
+<li><span class="math inline">\(V\)</span>: nodes of the graph</li>
+<li><span class="math inline">\(N(v)\)</span>: set of adjacent nodes of node <span class="math inline">\(v \in V\)</span></li>
+<li><span class="math inline">\(s(k) \in V\)</span>: starting point of player <span class="math inline">\(k \in K\)</span></li>
+<li><span class="math inline">\(T\)</span>: set of days</li>
 </ul>
 </section>
 <section id="variables" class="level4">
 <h4 class="anchored" data-anchor-id="variables">Variables</h4>
 <ul>
-<li><span class="math inline">\(\textcolor{blue}{x}_{p,k} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if value <span class="math inline">\(k\in K\)</span> is assigned to cell <span class="math inline">\(p\in C\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{x}_{v,t}^k \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if player <span class="math inline">\(k\in K\)</span> is on node <span class="math inline">\(v\in V\)</span> on day <span class="math inline">\(t\in T\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{z}_{v,t} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if players meet on node <span class="math inline">\(v\in V\)</span> on day <span class="math inline">\(t\in T\)</span></li>
+<li><span class="math inline">\(\textcolor{blue}{y}_{t} \in \{0,1\}\)</span>: takes value <span class="math inline">\(1\)</span> if and only if players meet on day <span class="math inline">\(t\in T\)</span></li>
 </ul>
 </section>
 <section id="objective-function" class="level4">
 <h4 class="anchored" data-anchor-id="objective-function">Objective function</h4>
-<p>As this is a feasibility problem, any dummy objective function is suitable:</p>
+<p>To find the earlist meeting day, we maximize the meeting time:</p>
 <p><span class="math display">\[
-\min 0
+\max \sum_{t \in T}\textcolor{blue}{y}_t
 \]</span></p>
 <p>subject to:</p>
 </section>
 <section id="constraints" class="level4">
 <h4 class="anchored" data-anchor-id="constraints">Constraints</h4>
 <ul>
-<li>All free cells must be assigned exactly one value:</li>
+<li>On each day, players are on exactly one node:</li>
 </ul>
 <p><span class="math display">\[
-\sum_{k \in K} \textcolor{blue}{x}_{p,k}=1 \quad \forall p \in F
+\sum_{v \in V} \textcolor{blue}{x}_{v,t}^k=1 \quad \forall t \in T, \forall k\in K
 \]</span></p>
 <ul>
-<li>All endpoints must be assigned their given value:</li>
+<li>Enforce the starting points:</li>
 </ul>
 <p><span class="math display">\[
-\textcolor{blue}{x}_{p,k}=1 \quad \forall p \in E_k, \; \forall k \in K
+\textcolor{blue}{x}_{s(k),1}^k=1 \quad \forall k \in K
 \]</span></p>
 <ul>
-<li>If cell <span class="math inline">\(p\)</span> is an endpoint with value <span class="math inline">\(k\)</span>, then one of its neighbors must take value <span class="math inline">\(k\)</span>:</li>
+<li>Connexity rules: if a node <span class="math inline">\(v\)</span> is reached on day <span class="math inline">\(t\)</span>, then it must have been on one of its neighbors the day before:</li>
 </ul>
 <p><span class="math display">\[
-\sum_{q\in N(p)} \textcolor{blue}{x}_{q,k} = 1 \quad \forall p \in E_k, \; \forall k \in K
+\textcolor{blue}{x}_{v,t}^k \le \sum_{u \in N(v)} \textcolor{blue}{x}_{u,t-1}^k \quad \forall k \in K, \forall t&gt;1
 \]</span></p>
 <ul>
-<li>If cell <span class="math inline">\(p\)</span> is not an endpoint and takes value <span class="math inline">\(k\)</span>, then two of its neighbors must also take value <span class="math inline">\(k\)</span>:</li>
+<li>If node <span class="math inline">\(v\)</span> is a meeting day on day <span class="math inline">\(t\)</span>, then <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> must meet there, at that time:</li>
 </ul>
 <p><span class="math display">\[
--L_p(1-\textcolor{blue}{x}_{p,k})+2 \le
-\sum_{q\in N(p)} \textcolor{blue}{x}_{q,k}
-\le 2 +U_p(1-\textcolor{blue}{x}_{p,k}) \quad \forall p \in F
+\textcolor{blue}{z}_{v,t} \le \textcolor{blue}{x}_{v,t}^k \quad \forall v \in V,\forall t \in T, \forall k \in K
 \]</span></p>
-<p>Since a cell has at most <span class="math inline">\(4\)</span> neighbors, <span class="math inline">\(U_p\)</span> is bounded by <span class="math inline">\(2\)</span>. <span class="math inline">\(L_p\)</span> can be set to <span class="math inline">\(2\)</span> for every cell.</p>
+<ul>
+<li>If day <span class="math inline">\(t\)</span> is a meeting day, then one of the nodes must be a meeting point on that day:</li>
+</ul>
+<p><span class="math display">\[
+\textcolor{blue}{y}_{t} \le \sum_{v \in V} \textcolor{blue}{z}_{v,t} \quad \forall t \in T
+\]</span></p>
 </section>
 </section>
 <section id="solution" class="level2">
 <h2 class="anchored" data-anchor-id="solution">Solution</h2>
-<p>Solving this problem takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields:</p>
+<p>Solving this problem takes less than a second with the default solver in <a href="https://coin-or.github.io/pulp/">PuLP</a> (CBC) and yields 8 days:</p>
 <div class="embed-scale-50">
 <div class="quarto-embed-nb-cell">
-<div id="26c45c07" class="cell" data-execution_count="6">
+<div id="8a0c87b7-b71c-407c-9960-91c39ca0880d" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="numberlink_files/figure-html/notebooks-numberlink-cell-7-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="rhombic_jungle_files/figure-html/notebooks-rhombic_jungle-cell-10-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks\rhombic_jungle-preview.html#8a0c87b7-b71c-407c-9960-91c39ca0880d">Source: rhombic_jungle.ipynb</a></div>
 </div>
 
 
@@ -305,11 +298,8 @@ window.Quarto = {
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-numberlink2017" class="csl-entry" role="listitem">
-Kalvelagen, Erwin. 2017. <span>“Yet Another Math Programming Consultant, Numberlink Models.”</span> 2017. <a href="https://yetanothermathprogrammingconsultant.blogspot.com/2017/09/numberlink-models.html">https://yetanothermathprogrammingconsultant.blogspot.com/2017/09/numberlink-models.html</a>.
-</div>
-<div id="ref-lemonde2024trois" class="csl-entry" role="listitem">
-Launay, Mickaël. 2024. <span>“La Règle Saint-Exupérienne : L’énigme Maths Du Monde n°36.”</span> 2024. <a href="https://www.lemonde.fr/sciences/article/2024/11/30/les-trois-chemins-l-enigme-maths-du-monde-n-36_6421925_1650684.html">https://www.lemonde.fr/sciences/article/2024/11/30/les-trois-chemins-l-enigme-maths-du-monde-n-36_6421925_1650684.html</a>.
+<div id="ref-lemonde2026jungle" class="csl-entry" role="listitem">
+Launay, Mickaël. 2026. <span>“La Jungle Rhombique, l’énigme Maths Du « Monde » Nᵒ 89.”</span> 2026. <a href="https://www.lemonde.fr/sciences/article/2026/02/21/la-jungle-rhombique-l-enigme-maths-du-monde-n-89_6667689_1650684.html">https://www.lemonde.fr/sciences/article/2026/02/21/la-jungle-rhombique-l-enigme-maths-du-monde-n-89_6667689_1650684.html</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script src="https://giscus.app/client.js" data-repo="romain-montagne/or-resources" data-repo-id="R_kgDOQyHv8A" data-category="General" data-category-id="DIC_kwDOQyHv8M4C0fuo" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" crossorigin="anonymous" async="">
