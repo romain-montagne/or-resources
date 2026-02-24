@@ -326,14 +326,14 @@
     "href": "problems/rhombic_jungle.html",
     "title": "Rhombic jungle",
     "section": "",
-    "text": "This puzzle, published by Mickaël Launay (Launay 2026), reads as follows.\nA and B are initially on different starting nodes, on the following graph:\n\n\n\nIllustration from (Launay 2026)\n\n\nThe goal is to find the minimum time and the meeting node such that:\n\nat each time step \\(t \\to t+1\\), both players must move to an adjacent node (stationary waiting is prohibited);\neach edge traversal represents exactly one unit of time;\nwhen meeting, both players must occupy the same node;\npassing each other on a trail is not a valid meeting, the rendez-vous must occur at a node."
+    "text": "This puzzle, published by Mickaël Launay (Launay 2026), reads as follows.\nPlayers \\(A\\) and \\(B\\) are initially on different starting nodes, on the following graph:\n\n\n\nIllustration from (Launay 2026)\n\n\nThe goal is to find the minimum time and the meeting node such that:\n\nat each time step \\(t \\to t+1\\), both players must move to an adjacent node (stationary waiting is prohibited);\neach edge traversal represents exactly one unit of time;\nwhen meeting, both players must occupy the same node;\npassing each other on a trail is not a valid meeting, the rendez-vous must occur at a node."
   },
   {
     "objectID": "problems/rhombic_jungle.html#problem-description",
     "href": "problems/rhombic_jungle.html#problem-description",
     "title": "Rhombic jungle",
     "section": "",
-    "text": "This puzzle, published by Mickaël Launay (Launay 2026), reads as follows.\nA and B are initially on different starting nodes, on the following graph:\n\n\n\nIllustration from (Launay 2026)\n\n\nThe goal is to find the minimum time and the meeting node such that:\n\nat each time step \\(t \\to t+1\\), both players must move to an adjacent node (stationary waiting is prohibited);\neach edge traversal represents exactly one unit of time;\nwhen meeting, both players must occupy the same node;\npassing each other on a trail is not a valid meeting, the rendez-vous must occur at a node."
+    "text": "This puzzle, published by Mickaël Launay (Launay 2026), reads as follows.\nPlayers \\(A\\) and \\(B\\) are initially on different starting nodes, on the following graph:\n\n\n\nIllustration from (Launay 2026)\n\n\nThe goal is to find the minimum time and the meeting node such that:\n\nat each time step \\(t \\to t+1\\), both players must move to an adjacent node (stationary waiting is prohibited);\neach edge traversal represents exactly one unit of time;\nwhen meeting, both players must occupy the same node;\npassing each other on a trail is not a valid meeting, the rendez-vous must occur at a node."
   },
   {
     "objectID": "problems/rhombic_jungle.html#mip-model",
@@ -347,7 +347,7 @@
     "href": "problems/rhombic_jungle.html#solution",
     "title": "Rhombic jungle",
     "section": "Solution",
-    "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields 8 days:\n\n\n\n\n\n\n\n\n\n\n\nSource: rhombic_jungle.ipynb"
+    "text": "Solution\nSolving this problem takes less than a second with the default solver in PuLP (CBC) and yields 7 days before meeting:\n\n\n\n\n\n\n\n\n\n\n\nSource: rhombic_jungle.ipynb"
   },
   {
     "objectID": "problems/secret_code.html",
